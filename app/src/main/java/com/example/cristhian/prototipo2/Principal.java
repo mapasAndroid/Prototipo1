@@ -58,7 +58,7 @@ public class Principal extends ActionBarActivity {
     public void IniciarSesion(View view) throws NoSuchAlgorithmException {
         EditText pass = (EditText)findViewById(R.id.editTextContrasenia);
 
-        Toast.makeText(this, sha1(pass.getText().toString()), Toast.LENGTH_LONG).show();
+        Log.i("mais",sha1(pass.getText().toString()));
 
 
     }
