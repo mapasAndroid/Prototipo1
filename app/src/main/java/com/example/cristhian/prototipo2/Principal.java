@@ -8,6 +8,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -57,8 +58,7 @@ public class Principal extends ActionBarActivity {
     public void IniciarSesion(View view) throws NoSuchAlgorithmException {
         EditText pass = (EditText)findViewById(R.id.editTextContrasenia);
 
-        Log.i("PASSWORD", sha1(pass.getText().toString()));
-        Log.i("PASSWORD", sha1(pass.getText().toString()));
+        Toast.makeText(this, sha1(pass.getText().toString()), Toast.LENGTH_LONG).show();
 
 
     }
