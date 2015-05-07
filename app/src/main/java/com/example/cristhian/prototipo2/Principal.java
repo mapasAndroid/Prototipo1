@@ -57,9 +57,7 @@ public class Principal extends ActionBarActivity {
     public void IniciarSesion(View view) throws NoSuchAlgorithmException {
         EditText pass = (EditText)findViewById(R.id.editTextContrasenia);
 
-        Log.i("PASS", sha1(pass.getText().toString()));
-        Log.i("PASS", sha1(pass.getText().toString()));
-        Log.i("PASS", sha1(pass.getText().toString()));
+        Log.i("PASSWORD", sha1(pass.getText().toString()));
 
 
     }
