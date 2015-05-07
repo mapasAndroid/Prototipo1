@@ -58,6 +58,8 @@ public class Principal extends ActionBarActivity {
         EditText pass = (EditText)findViewById(R.id.editTextContrasenia);
 
         Log.i("PASS", sha1(pass.getText().toString()));
+        Log.i("PASS", sha1(pass.getText().toString()));
+        Log.i("PASS", sha1(pass.getText().toString()));
 
 
     }
