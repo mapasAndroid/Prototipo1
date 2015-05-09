@@ -3,6 +3,17 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
-    <string name="registro">Registrarse</string>
+    <string name="Registro">Registrarse</string>
     <string name="iniciar">Iniciar</string>
+    <string name="REGISTRO">Registro</string>
+    <string name="Sitios">Sitios</string>
+
+    <string name="title_section1">Centros Comerciales</string>
+    <string name="title_section2">Restaurantes</string>
+    <string name="title_section3">Mas</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_example">Example action</string>
 </resources>

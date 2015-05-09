@@ -1,5 +1,6 @@
 package com.example.cristhian.prototipo2;
 
+import android.content.Intent;
 import android.preference.EditTextPreference;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
@@ -14,7 +15,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 
-public class Principal extends ActionBarActivity {
+public class Inicio extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +61,13 @@ public class Principal extends ActionBarActivity {
 
         Log.i("mais",sha1(pass.getText().toString()));
 
+        Intent i = new Intent(Inicio.this, Sitios.class);
+        startActivity(i); 
 
+    }
+
+    public void Registrarse(View view) {
+        Intent i = new Intent(Inicio.this, Registro.class);
+        startActivity(i);
     }
 }
