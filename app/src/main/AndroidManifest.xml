@@ -27,10 +27,9 @@
 
         <activity
             android:name=".Sitios"
-            android:label="@string/Sitios"
-            android:parentActivityName=".Inicio" >
+            android:label="@string/Sitios">
             <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
+                android:name="android.intent.category.DEFAULT"
                 android:value="com.example.cristhian.prototipo2.Inicio" />
         </activity>
 
