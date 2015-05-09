@@ -126,6 +126,7 @@ public class Sitios extends ActionBarActivity
         public PlaceholderFragment() {
         }
 
+
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
