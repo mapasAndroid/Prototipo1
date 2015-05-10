@@ -1,7 +1,10 @@
 package com.example.cristhian.prototipo2;
 
+import android.annotation.TargetApi;
+import android.app.Dialog;
 import android.content.Intent;
-import android.preference.EditTextPreference;
+import android.os.AsyncTask;
+import android.os.Build;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,13 +12,28 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.HttpContext;
+import org.apache.http.util.EntityUtils;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
+import java.util.List;
 
 
 public class Inicio extends ActionBarActivity {
+
+    AsistenteMensajes asistente = new AsistenteMensajes();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,13 +74,23 @@ public class Inicio extends ActionBarActivity {
         return sb.toString();
     }
 
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public void IniciarSesion(View view) throws NoSuchAlgorithmException {
+
+        //extrae los datos de la vista
+        EditText usuario = (EditText)findViewById(R.id.editTextUsuario);
         EditText pass = (EditText)findViewById(R.id.editTextContrasenia);
 
-        Log.i("mais",sha1(pass.getText().toString()));
+        //si tiene campos vacios
+        if(usuario.getText().toString().isEmpty() || pass.getText().toString().isEmpty()){
+            asistente.imprimir(getFragmentManager(), "Campos vacios, verifique nuevamente");
+            return;
+        }
+        //valida que exista en la base de datos
+        Validador validador = new Validador();
+        validador.execute(usuario.getText().toString(), sha1(pass.getText().toString()));
 
-        Intent i = new Intent(Inicio.this, Sitios.class);
-        startActivity(i); 
 
     }
 
@@ -70,4 +98,50 @@ public class Inicio extends ActionBarActivity {
         Intent i = new Intent(Inicio.this, Registro.class);
         startActivity(i);
     }
+
+    public class Validador extends AsyncTask<String, String, String>{
+
+        @Override
+        protected void onPostExecute(String s) {
+            //si la respuesta del servidor es vacia, avise al usuario
+            if(s.isEmpty()){
+                asistente.imprimir(getFragmentManager(), "Usuario o contraseña no coinciden");
+            }else{
+                //si existe en la base de datos, sigue a la vista principal
+                Intent i = new Intent(Inicio.this, Sitios.class);
+                //se lleva el nombre de usuario para nombrarlo mas adelante
+                i.putExtra("usuario",s);
+                startActivity(i);
+            }
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            return enviarPost(params[0], params[1]);
+        }
+
+        public String enviarPost(String usuario, String contrasenia) {
+
+            HttpClient httpClient = new DefaultHttpClient();
+            HttpContext localContext = new BasicHttpContext();
+            HttpPost httpPost = new HttpPost(
+                    "http://pruebasleon.zz.mu/validarUsuario.php");//http://pruebasleon.zz.mu/
+            HttpResponse response = null;
+            String resultado = "";
+            try {
+                List<NameValuePair> params = new ArrayList<NameValuePair>(3);
+                params.add(new BasicNameValuePair("usuario", usuario));
+                params.add(new BasicNameValuePair("contrasenia", contrasenia));
+                httpPost.setEntity(new UrlEncodedFormEntity(params));
+                response = httpClient.execute(httpPost, localContext);
+                HttpEntity httpEntity = response.getEntity();
+                resultado = EntityUtils.toString(httpEntity, "UTF-8");
+            } catch (Exception e) {
+                Log.d("MyApp", e.toString());
+            }
+            return resultado;
+
+        }
+    }
+
 }
