@@ -104,7 +104,7 @@ public class Inicio extends ActionBarActivity {
         @Override
         protected void onPostExecute(String s) {
             //si la respuesta del servidor es vacia, avise al usuario
-            if(s.isEmpty()){
+            if(s.equals("0")){
                 asistente.imprimir(getFragmentManager(), "Usuario o contraseña no coinciden");
             }else{
                 //si existe en la base de datos, sigue a la vista principal
