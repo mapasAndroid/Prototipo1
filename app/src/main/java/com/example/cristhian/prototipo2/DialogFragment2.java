@@ -17,12 +17,18 @@ public class DialogFragment2 extends DialogFragment{
 
 
     String mensaje;
+    int tipo;
+
     public DialogFragment2(){
         this.mensaje = "";
     }
 
     public void setMensaje(String nuevo){
         this.mensaje = nuevo;
+    }
+
+    public void setTipo(int id){
+        this.tipo = id;
     }
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
@@ -31,8 +37,22 @@ public class DialogFragment2 extends DialogFragment{
         builder.setMessage(mensaje)
                 .setPositiveButton(R.string.fire, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        EditText x = (EditText) getActivity().findViewById(R.id.editTextContrasenia);
-                        x.setText("");
+                        hagaAlgo();
+                    }
+
+                    //filtra de que vista viene, segun el entero
+                    private void hagaAlgo() {
+                        switch (tipo){
+                            case 0:
+                                break;
+                            case 1:
+                                EditText texto = (EditText) getActivity().findViewById(R.id.editTextContrasenia);
+                                texto.setText("");
+                                break;
+                            case 2:
+                                break;
+
+                        }
                     }
                 });
                 /*.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {

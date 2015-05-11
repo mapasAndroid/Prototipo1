@@ -1,12 +1,11 @@
 package com.example.cristhian.prototipo2;
 
 import android.annotation.TargetApi;
-import android.app.Dialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -25,7 +24,6 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +31,9 @@ import java.util.List;
 
 public class Inicio extends ActionBarActivity {
 
+    //variables globales que siempre actuaran en el activity
     AsistenteMensajes asistente = new AsistenteMensajes();
+    Encriptador encriptador = new Encriptador();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,34 +63,22 @@ public class Inicio extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    static String sha1(String input) throws NoSuchAlgorithmException {
-        MessageDigest mDigest = MessageDigest.getInstance("SHA1");
-        byte[] result = mDigest.digest(input.getBytes());
-        StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < result.length; i++) {
-            sb.append(Integer.toString((result[i] & 0xff) + 0x100, 16).substring(1));
-        }
-
-        return sb.toString();
-    }
-
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public void IniciarSesion(View view) throws NoSuchAlgorithmException {
 
         //extrae los datos de la vista
-        EditText usuario = (EditText)findViewById(R.id.editTextUsuario);
-        EditText pass = (EditText)findViewById(R.id.editTextContrasenia);
+        String usuario = ((EditText)findViewById(R.id.editTextUsuario)).getText().toString();
+        String pass = ((EditText)findViewById(R.id.editTextContrasenia)).getText().toString();
 
-        //si tiene campos vacios
-        if(usuario.getText().toString().isEmpty() || pass.getText().toString().isEmpty()){
-            asistente.imprimir(getFragmentManager(), "Campos vacios, verifique nuevamente");
+        //si tiene campos vacios avisele
+        if(usuario.isEmpty() || pass.isEmpty()){
+            asistente.imprimir(getFragmentManager(), "Campos vacios, verifique nuevamente",1);
             return;
         }
         //valida que exista en la base de datos
         Validador validador = new Validador();
-        validador.execute(usuario.getText().toString(), sha1(pass.getText().toString()));
-
+        validador.execute(usuario, encriptador.getSha1(pass));
 
     }
 
@@ -103,15 +91,16 @@ public class Inicio extends ActionBarActivity {
 
         @Override
         protected void onPostExecute(String s) {
-            //si la respuesta del servidor es vacia, avise al usuario
+            //si la respuesta del servidor es 0, avise al usuario
             if(s.equals("0")){
-                asistente.imprimir(getFragmentManager(), "Usuario o contraseña no coinciden");
+                asistente.imprimir(getFragmentManager(), "Usuario o contraseña no coinciden", 1);
             }else{
                 //si existe en la base de datos, sigue a la vista principal
-                Intent i = new Intent(Inicio.this, Sitios.class);
+              //  Intent i = new Intent(Inicio.this, Sitios.class);
                 //se lleva el nombre de usuario para nombrarlo mas adelante
-                i.putExtra("usuario",s);
-                startActivity(i);
+                //i.putExtra("usuario",s);
+                //startActivity(i);
+                asistente.imprimir(getFragmentManager(), s, 1);
             }
         }
 

@@ -10,48 +10,60 @@
     android:orientation="vertical"
     >
 
-    <EditText
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Email o Usuario"
-        android:id="@+id/editTextUsuario"
-        android:layout_marginTop="10dp"
-        android:inputType="text"
-        />
-
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Contraseña"
-        android:id="@+id/editTextContrasenia"
-        android:layout_marginTop="10dp"
-        android:inputType="textPassword"
-        />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginTop="10dp"
-        android:weightSum="10"
+        android:layout_height="match_parent"
         >
-        <Button
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/Registro"
-            android:layout_weight="5"
-            android:onClick="Registrarse"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Email o Usuario"
+                android:id="@+id/editTextUsuario"
+                android:layout_marginTop="10dp"
+                android:inputType="text"
+                />
 
-            />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Contraseña"
+                android:id="@+id/editTextContrasenia"
+                android:layout_marginTop="10dp"
+                android:inputType="textPassword"
+                />
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/iniciar"
-            android:layout_weight="5"
-            android:onClick="IniciarSesion"
-            />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:weightSum="10"
+                >
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/Registro"
+                    android:layout_weight="5"
+                    android:onClick="Registrarse"
 
-    </LinearLayout>
+                    />
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/iniciar"
+                    android:layout_weight="5"
+                    android:onClick="IniciarSesion"
+                    />
+
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

@@ -1,14 +1,8 @@
 package com.example.cristhian.prototipo2;
 
 import android.annotation.TargetApi;
-import android.app.Dialog;
-import android.app.DialogFragment;
 import android.app.FragmentManager;
-import android.content.DialogInterface;
 import android.os.Build;
-import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
-import android.widget.EditText;
 
 /**
  * Created by cristhian on 5/10/15.
@@ -23,8 +17,10 @@ public class AsistenteMensajes {
     }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public void imprimir(FragmentManager fm , String mensaje){
+    public void imprimir(FragmentManager fm , String mensaje, int bnd){
+        //bnd 1: para vista principal, 2: para registro.. etc
         mensajeria.setMensaje(mensaje);
+        mensajeria.setTipo(bnd);
         mensajeria.show(fm, mensaje);
     }
 

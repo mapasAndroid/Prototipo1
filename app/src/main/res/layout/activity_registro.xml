@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:fb="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -10,49 +9,68 @@
     android:paddingBottom="@dimen/activity_vertical_margin">
 
 
-    <EditText
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Usuario"
-        android:id="@+id/editTextUsuario1"
-        android:layout_marginTop="10dp"
-        android:inputType="text"
-        />
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Usuario"
+                android:id="@+id/editTextUsuario1"
+                android:layout_marginTop="10dp"
+                android:inputType="text"
+                />
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Nombre"
-        android:id="@+id/editTextUsuario2"
-        android:layout_marginTop="10dp"
-        android:inputType="text"
-        />
-    
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Nombre"
+                android:id="@+id/editTextUsuario2"
+                android:layout_marginTop="10dp"
+                android:inputType="text"
+                />
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Correo Electronico"
-        android:id="@+id/editTextUsuario3"
-        android:layout_marginTop="10dp"
-        android:inputType="text"
-        />
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Contraseña"
-        android:id="@+id/editTextUsuario4"
-        android:layout_marginTop="10dp"
-        android:inputType="text"
-        />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Correo Electronico"
+                android:id="@+id/editTextUsuario3"
+                android:layout_marginTop="10dp"
+                android:inputType="textEmailAddress"
+                />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Registrar"
-            android:layout_gravity="center"
-            android:onClick="Enviar"
-            />
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Contraseña"
+                android:id="@+id/editTextUsuario4"
+                android:layout_marginTop="10dp"
+                android:inputType="textVisiblePassword"
+                />
+
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Telefono"
+                android:id="@+id/editTextUsuario5"
+                android:layout_marginTop="10dp"
+                android:inputType="text"
+                />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Registrar"
+                android:layout_gravity="center"
+                android:onClick="Enviar"
+                />
+        </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>
