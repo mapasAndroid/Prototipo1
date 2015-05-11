@@ -26,6 +26,8 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.cristhian.prototipo2.Inicio" />
         </activity>
+        <meta-data android:name="com.facebook.sdk.ApplicationId"
+            android:value= "@string/app_id" />
 
         <activity
             android:name=".Sitios"
