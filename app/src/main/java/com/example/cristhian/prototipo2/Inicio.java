@@ -11,6 +11,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -34,11 +35,15 @@ public class Inicio extends ActionBarActivity {
     //variables globales que siempre actuaran en el activity
     AsistenteMensajes asistente = new AsistenteMensajes();
     Encriptador encriptador = new Encriptador();
+    LinearLayout layout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal);
+
+        this.layout = (LinearLayout) findViewById(R.id.linlaHeaderProgress);
+
     }
 
     @Override
@@ -76,9 +81,10 @@ public class Inicio extends ActionBarActivity {
             asistente.imprimir(getFragmentManager(), "Campos vacios, verifique nuevamente",1);
             return;
         }
-        //valida que exista en la base de datos
+
+        //valida que el usuario exista en la base de datos
         Validador validador = new Validador();
-        validador.execute(usuario, encriptador.getSha1(pass));
+        validador.execute(usuario, this.encriptador.getSha1(pass));
 
     }
 
@@ -87,20 +93,29 @@ public class Inicio extends ActionBarActivity {
         startActivity(i);
     }
 
+
     public class Validador extends AsyncTask<String, String, String>{
 
         @Override
+        protected void onPreExecute() {
+            layout.setVisibility(View.VISIBLE);
+            super.onPreExecute();
+        }
+
+        @Override
         protected void onPostExecute(String s) {
+            //oculta el progress bar
+            layout.setVisibility(View.GONE);
+
             //si la respuesta del servidor es 0, avise al usuario
             if(s.equals("0")){
                 asistente.imprimir(getFragmentManager(), "Usuario o contraseña no coinciden", 1);
             }else{
                 //si existe en la base de datos, sigue a la vista principal
-              //  Intent i = new Intent(Inicio.this, Sitios.class);
+                Intent i = new Intent(Inicio.this, Sitios.class);
                 //se lleva el nombre de usuario para nombrarlo mas adelante
                 //i.putExtra("usuario",s);
-                //startActivity(i);
-                asistente.imprimir(getFragmentManager(), s, 1);
+                startActivity(i);
             }
         }
 
