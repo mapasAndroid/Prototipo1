@@ -1,6 +1,7 @@
 package com.example.cristhian.prototipo2;
 
 import android.annotation.TargetApi;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -33,14 +34,17 @@ public class Registro extends ActionBarActivity{
 
     AsistenteMensajes asistente = new AsistenteMensajes();
     Encriptador encriptador = new Encriptador();
+    ProgressDialog progres;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registro);
+        progres = new ProgressDialog(this);
 
     }
+
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public void Enviar(View view) {
@@ -66,6 +70,9 @@ public class Registro extends ActionBarActivity{
 
         @Override
         protected void onPostExecute(String s) {
+
+            //oculta la barra d progreso
+            progres.hide();
             //si la respuesta del servidor es 0, avise al usuario
             if(s.equals("0")){
                 asistente.imprimir(getFragmentManager(), "No se pudo registrar, intentelo nuevamente", 2);
@@ -74,6 +81,17 @@ public class Registro extends ActionBarActivity{
                 Intent i = new Intent(Registro.this, Sitios.class);
                 startActivity(i);
             }
+        }
+
+        @Override
+        protected void onPreExecute() {
+            //barra de progreso
+            progres.setMessage("Procesando...");
+            progres.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progres.setIndeterminate(true);
+            progres.show();
+            super.onPreExecute();
+            super.onPreExecute();
         }
 
         @Override

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Prototipo2</string>
+    <string name="app_name">BusOn</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
@@ -19,7 +19,7 @@
     <string name="fire">Aceptar</string>
     <string name="cancel">cancelar</string>
     <string name="app_id">464748477014722</string>
-
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_splash">Splash</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content"></string>
 </resources>

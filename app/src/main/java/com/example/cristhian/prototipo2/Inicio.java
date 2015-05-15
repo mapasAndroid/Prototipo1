@@ -1,6 +1,7 @@
 package com.example.cristhian.prototipo2;
 
 import android.annotation.TargetApi;
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -11,7 +12,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -35,14 +35,15 @@ public class Inicio extends ActionBarActivity {
     //variables globales que siempre actuaran en el activity
     AsistenteMensajes asistente = new AsistenteMensajes();
     Encriptador encriptador = new Encriptador();
-    LinearLayout layout;
+    ProgressDialog progres;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal);
 
-        this.layout = (LinearLayout) findViewById(R.id.linlaHeaderProgress);
+        progres = new ProgressDialog(this);
+
 
     }
 
@@ -72,6 +73,7 @@ public class Inicio extends ActionBarActivity {
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public void IniciarSesion(View view) throws NoSuchAlgorithmException {
 
+
         //extrae los datos de la vista
         String usuario = ((EditText)findViewById(R.id.editTextUsuario)).getText().toString();
         String pass = ((EditText)findViewById(R.id.editTextContrasenia)).getText().toString();
@@ -98,14 +100,19 @@ public class Inicio extends ActionBarActivity {
 
         @Override
         protected void onPreExecute() {
-            layout.setVisibility(View.VISIBLE);
+            //barra de progreso
+            progres.setMessage("Procesando...");
+            progres.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progres.setIndeterminate(true);
+            progres.show();
             super.onPreExecute();
         }
 
         @Override
         protected void onPostExecute(String s) {
-            //oculta el progress bar
-            layout.setVisibility(View.GONE);
+
+            //oculta la barra de progreso
+            progres.hide();
 
             //si la respuesta del servidor es 0, avise al usuario
             if(s.equals("0")){
