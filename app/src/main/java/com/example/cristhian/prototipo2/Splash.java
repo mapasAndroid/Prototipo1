@@ -3,6 +3,7 @@ package com.example.cristhian.prototipo2;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.example.cristhian.prototipo2.util.SystemUiHider;
 
@@ -22,6 +24,11 @@ import com.example.cristhian.prototipo2.util.SystemUiHider;
  * @see SystemUiHider
  */
 public class Splash extends Activity {
+
+    /**
+     * Fuente Roboto
+     */
+    Typeface roboto;
 
     /**
      * Whether or not the system UI should be auto-hidden after
@@ -58,7 +65,17 @@ public class Splash extends Activity {
         setContentView(R.layout.activity_splash);
 
         final View controlsView = findViewById(R.id.fullscreen_content_controls);
-        final View contentView = findViewById(R.id.fullscreen_content);
+        final View contentView = findViewById(R.id.tituloBus);
+
+        //mostrar el logo
+        ImageView logoLocale = (ImageView) findViewById(R.id.logoLocale);
+        logoLocale.setVisibility(View.VISIBLE);
+
+
+        //poner fuente al titulo
+        TextView titulo = (TextView) findViewById(R.id.tituloBus);
+        roboto = Typeface.createFromAsset(getAssets(), "fonts/RobotoCondensed-Bold.ttf");
+        titulo.setTypeface(roboto);
 
         // Set up an instance of SystemUiHider to control the system UI for
         // this activity.
@@ -120,15 +137,16 @@ public class Splash extends Activity {
         //findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
 
 
-        mover();
+        animacionLogo();
+        titulo.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.alpha));
         delayScreenSplash();
 
     }
 
 
-    private void mover() {
+    private void animacionLogo() {
 
-        final ImageView myImage = (ImageView)findViewById(R.id.imagen);
+        final ImageView myImage = (ImageView) findViewById(R.id.logoLocale);
         final Animation myRotation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.iniciar);
         myImage.startAnimation(myRotation);
     }
@@ -144,6 +162,7 @@ public class Splash extends Activity {
                 /* Create an Intent that will start the Menu-Activity. */
                 Intent mainIntent = new Intent(Splash.this, Inicio.class);
                 Splash.this.startActivity(mainIntent);
+                overridePendingTransition(R.anim.zoom_forward_in, R.anim.zoom_forward_out);
                 Splash.this.finish();
             }
         }, 4000);
