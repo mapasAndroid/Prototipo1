@@ -7,45 +7,126 @@
 
 
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/vertical">
-
-        <LinearLayout
+     <ScrollView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:id="@+id/vertical">
 
     <GridLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:columnCount="2"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center">
 
 
-    <ImageView
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:background="#f0f"
-        android:layout_marginLeft="30dp"
-        android:layout_marginBottom="10dp"
+        <ImageButton
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/ic_action_discard"
+            android:layout_marginLeft="8dp"
+            android:layout_marginBottom="5dp"
+            android:onClick="Enviarmapa"
+            android:id="@+id/i1"
 
-        />
+            />
+        <ImageButton
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/ic_action_discard"
+            android:layout_marginLeft="5dp"
+            android:layout_marginBottom="10dp"
+            android:onClick="EnviarMapa"
+            android:id="@+id/i2"
+            />
 
-    <ImageView
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:background="#f7f"
-        android:layout_marginLeft="25dp"
-        android:layout_marginBottom="10dp"
-        />
+        <ImageButton
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/ic_action_discard"
+            android:layout_marginLeft="8dp"
+            android:layout_marginBottom="10dp"
+            android:onClick="EnviarMapa"
+            android:id="@+id/i3"
+            />
+
+        <ImageButton
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/ic_action_discard"
+            android:layout_marginLeft="5dp"
+            android:layout_marginBottom="10dp"
+            android:onClick="EnviarMapa"
+            android:id="@+id/i4"
+            />
+
+        <ImageButton
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/ic_action_discard"
+            android:layout_marginLeft="8dp"
+            android:layout_marginBottom="10dp"
+            android:onClick="EnviarMapa"
+            android:id="@+id/i5"
+            />
+
+        <ImageButton
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/ic_action_discard"
+            android:layout_marginLeft="5dp"
+            android:layout_marginBottom="10dp"
+            android:onClick="EnviarMapa"
+            android:id="@+id/i6"
+            />
+
+        <ImageButton
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/ic_action_discard"
+            android:layout_marginLeft="8dp"
+            android:layout_marginBottom="10dp"
+            android:onClick="EnviarMapa"
+            android:id="@+id/i7"
+            />
+
+        <ImageButton
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/ic_action_discard"
+            android:layout_marginLeft="5dp"
+            android:layout_marginBottom="10dp"
+            android:onClick="EnviarMapa"
+            android:id="@+id/i8"
+            />
+
+        <ImageButton
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/ic_action_discard"
+            android:layout_marginLeft="8dp"
+            android:layout_marginBottom="10dp"
+            android:onClick="EnviarMapa"
+            android:id="@+id/i9"
+            />
+
+        <ImageButton
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/ic_action_discard"
+            android:layout_marginLeft="5dp"
+            android:layout_marginBottom="10dp"
+            android:onClick="EnviarMapa"
+            android:id="@+id/i10"
+            />
+
 
     </GridLayout>
-        </LinearLayout>
 
-    </ScrollView>
+ </ScrollView>
 
 
 
 </LinearLayout>
+
+
