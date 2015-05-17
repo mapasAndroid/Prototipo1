@@ -45,6 +45,12 @@ public class Registro extends ActionBarActivity{
 
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.left_in, R.anim.left_out);
+    }
+
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public void Enviar(View view) {

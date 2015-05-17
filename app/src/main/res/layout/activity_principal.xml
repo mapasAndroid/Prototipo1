@@ -2,43 +2,72 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:descendantFocusability="beforeDescendants"
+    android:focusableInTouchMode="true"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context=".Principal"
-    android:orientation="vertical"
-    >
+    tools:context=".Principal">
 
 
     <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
+        android:layout_height="match_parent">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="vertical"
-            >
-            <EditText
-                android:layout_width="match_parent"
+            android:orientation="vertical">
+
+            <ImageView
+                android:id="@+id/logoAzul"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:hint="Email o Usuario"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/logoazul" />
+
+
+            <EditText
                 android:id="@+id/editTextUsuario"
-                android:layout_marginTop="10dp"
-                android:inputType="text"
-                />
-
-            <EditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Contraseña"
+                android:layout_marginTop="20dp"
+                android:drawableLeft="@drawable/ic_action_user"
+                android:hint="Email o Usuario"
+                android:inputType="text" />
+
+            <EditText
                 android:id="@+id/editTextContrasenia"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:inputType="textPassword"
+                android:drawableLeft="@drawable/ic_action_key"
+                android:hint="Contraseña"
+                android:inputType="textPassword" />
+
+            <Button
+                android:id="@+id/iniciarsesion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:onClick="IniciarSesion"
+                android:text="@string/iniciar" />
+
+            <Button
+                android:id="@+id/registrarse"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:onClick="Registrarse"
+                android:text="@string/Registro"
+
                 />
 
-            <LinearLayout
+
+            <!--<LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -48,21 +77,22 @@
                 <Button
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/Registro"
+                    android:text="Me gusta"
                     android:layout_weight="5"
                     android:onClick="Registrarse"
-
+                    android:drawableRight="@drawable/ic_action_like"
                     />
 
                 <Button
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/iniciar"
+                    android:text="Seguir"
                     android:layout_weight="5"
                     android:onClick="IniciarSesion"
+
                     />
 
-            </LinearLayout>
+            </LinearLayout>-->
 
         </LinearLayout>
     </ScrollView>

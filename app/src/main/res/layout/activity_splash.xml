@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#0099cc"
+    android:background="#3F51B5"
     android:gravity="center"
     android:orientation="vertical"
     tools:context="com.example.cristhian.prototipo2.Splash">
@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/logolocale"
         android:scaleType="centerInside"
-        android:visibility="gone" />
+        android:visibility="visible" />
 
     <!-- The primary full-screen view. This can be replaced with whatever view
          is needed to present your content, e.g. VideoView, SurfaceView,
@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="@string/app_name"
-        android:textColor="#33b5e5"
+        android:textColor="#fff"
         android:textSize="50sp" />
 
     <LinearLayout

@@ -7,7 +7,6 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -44,6 +43,8 @@ public class Inicio extends ActionBarActivity {
 
         progres = new ProgressDialog(this);
 
+        //ocultar barra de iconos
+        getSupportActionBar().hide();
 
     }
 
@@ -75,12 +76,12 @@ public class Inicio extends ActionBarActivity {
 
 
         //extrae los datos de la vista
-        String usuario = ((EditText)findViewById(R.id.editTextUsuario)).getText().toString();
-        String pass = ((EditText)findViewById(R.id.editTextContrasenia)).getText().toString();
+        String usuario = ((EditText) findViewById(R.id.editTextUsuario)).getText().toString();
+        String pass = ((EditText) findViewById(R.id.editTextContrasenia)).getText().toString();
 
         //si tiene campos vacios avisele
-        if(usuario.isEmpty() || pass.isEmpty()){
-            asistente.imprimir(getFragmentManager(), "Campos vacios, verifique nuevamente",1);
+        if (usuario.isEmpty() || pass.isEmpty()) {
+            asistente.imprimir(getFragmentManager(), "Campos vacios, verifique nuevamente", 1);
             return;
         }
 
@@ -91,12 +92,12 @@ public class Inicio extends ActionBarActivity {
     }
 
     public void Registrarse(View view) {
-        Intent i = new Intent(Inicio.this, Registro.class);
-        startActivity(i);
+        startActivity(new Intent(Inicio.this, Registro.class));
+        overridePendingTransition(R.anim.right_in, R.anim.right_out);
     }
 
 
-    public class Validador extends AsyncTask<String, String, String>{
+    public class Validador extends AsyncTask<String, String, String> {
 
         @Override
         protected void onPreExecute() {
@@ -115,15 +116,21 @@ public class Inicio extends ActionBarActivity {
             progres.hide();
 
             //si la respuesta del servidor es 0, avise al usuario
-            if(s.equals("0")){
+            if (s.equals("0")) {
                 asistente.imprimir(getFragmentManager(), "Usuario o contraseña no coinciden", 1);
-            }else{
-                //si existe en la base de datos, sigue a la vista principal
-                Intent i = new Intent(Inicio.this, Sitios.class);
-                //se lleva el nombre de usuario para nombrarlo mas adelante
-                //i.putExtra("usuario",s);
-                startActivity(i);
+                return;
             }
+            if (s.equals("nonet")) {
+                asistente.imprimir(getFragmentManager(), "Error de red, verifique su conexion", 1);
+                return;
+            }
+
+            //si existe en la base de datos, sigue a la vista principal
+            Intent i = new Intent(Inicio.this, Sitios.class);
+            //se lleva el nombre de usuario para nombrarlo mas adelante
+            //i.putExtra("usuario",s);
+            startActivity(i);
+
         }
 
         @Override
@@ -140,7 +147,7 @@ public class Inicio extends ActionBarActivity {
             HttpResponse response = null;
             String resultado = "";
             try {
-                List<NameValuePair> params = new ArrayList<NameValuePair>(3);
+                List<NameValuePair> params = new ArrayList<NameValuePair>(2);
                 params.add(new BasicNameValuePair("usuario", usuario));
                 params.add(new BasicNameValuePair("contrasenia", contrasenia));
                 httpPost.setEntity(new UrlEncodedFormEntity(params));
@@ -148,7 +155,7 @@ public class Inicio extends ActionBarActivity {
                 HttpEntity httpEntity = response.getEntity();
                 resultado = EntityUtils.toString(httpEntity, "UTF-8");
             } catch (Exception e) {
-                Log.d("MyApp", e.toString());
+                resultado = "nonet";
             }
             return resultado;
 
