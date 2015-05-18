@@ -66,6 +66,16 @@
 
                 />
 
+            <Button
+                android:id="@+id/mapa"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="5"
+                android:onClick="VerMapa"
+                android:text="@string/Mapa"
+
+                />
+
 
             <!--<LinearLayout
                 android:layout_width="match_parent"

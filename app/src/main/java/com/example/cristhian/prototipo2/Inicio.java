@@ -96,6 +96,12 @@ public class Inicio extends ActionBarActivity {
         overridePendingTransition(R.anim.right_in, R.anim.right_out);
     }
 
+    public void VerMapa(View view) {
+        Intent i = new Intent(Inicio.this, MapsActivity.class);
+        startActivity(i);
+
+    }
+
 
     public class Validador extends AsyncTask<String, String, String> {
 

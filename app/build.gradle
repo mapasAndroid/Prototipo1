@@ -1,9 +1,16 @@
 apply plugin: 'com.android.application'
 
 android {
+    signingConfigs {
+        debug {
+            keyAlias 'prueb'
+            keyPassword 'Alejandra1'
+            storeFile file('C:/Program Files/Java/jdk1.8.0_31/bin/prueba.keystore')
+            storePassword 'Alejandra1'
+        }
+    }
     compileSdkVersion 21
     buildToolsVersion "22.0.1"
-
     defaultConfig {
         applicationId "com.example.cristhian.prototipo2"
         minSdkVersion 10
@@ -16,11 +23,15 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        debug {
+            signingConfig signingConfigs.debug
+        }
     }
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:22.1.1'
     compile 'com.android.support:support-v4:22.1.1'
+    compile 'com.google.android.gms:play-services:7.3.0'
 }

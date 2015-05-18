@@ -22,4 +22,6 @@
 
     <string name="abierto">Abierto</string>
     <string name="cerrado">Cerrado</string>
+    <string name="title_activity_maps">Map</string>
+    <string name="Mapa">Mapa</string>
 </resources>
