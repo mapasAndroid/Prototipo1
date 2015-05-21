@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.util.Log;
 import android.view.View;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.AdapterView;
@@ -15,9 +16,10 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 
-public class Lugares extends ActionBarActivity{
+public class Sitios extends ActionBarActivity{
 
     private String [] opciones;
     private DrawerLayout drawerLayout;
@@ -34,7 +36,7 @@ public class Lugares extends ActionBarActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sitios);
 
-        opciones = new String[]{"Centros Comerciales", "Restaurantes", "Mas"};
+        opciones = new String[]{"Lugares recientes","Centros Comerciales", "Restaurantes", "Mas"};
         drawerLayout = (DrawerLayout) findViewById(R.id.contenedor_principal);
         listView = (ListView) findViewById(R.id.menuizquierdo);
 
@@ -48,15 +50,23 @@ public class Lugares extends ActionBarActivity{
                 Fragment fragment = null;
                 switch (position){
                     case 0:
-                        fragment = new Centro_comercial();
+                        fragment = new Recientes();
+                        findViewById(R.id.mostrarAdentro).setVisibility(View.VISIBLE);
                         break;
                     case 1:
-                        fragment = new Restaurante();
+                        fragment = new Centro_comercial();
+                        findViewById(R.id.mostrarAdentro).setVisibility(View.GONE);
                         break;
                     case 2:
+                        fragment = new Restaurante();
+                        findViewById(R.id.mostrarAdentro).setVisibility(View.GONE);
+                        break;
+                    case 3:
                         fragment = new Mas();
+                        findViewById(R.id.mostrarAdentro).setVisibility(View.GONE);
                         break;
                 }
+
 
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 fragmentManager.beginTransaction()
@@ -81,13 +91,13 @@ public class Lugares extends ActionBarActivity{
             @Override
             public void onDrawerClosed(View drawerView) {
                 super.onDrawerClosed(drawerView);
-                ActivityCompat.invalidateOptionsMenu(Lugares.this);
+                ActivityCompat.invalidateOptionsMenu(Sitios.this);
             }
 
             @Override
             public void onDrawerOpened(View drawerView) {
                 super.onDrawerOpened(drawerView);
-                ActivityCompat.invalidateOptionsMenu(Lugares.this);
+                ActivityCompat.invalidateOptionsMenu(Sitios.this);
             }
         };
         drawerLayout.setDrawerListener(drawerToggle);
@@ -134,6 +144,5 @@ public class Lugares extends ActionBarActivity{
         super.onConfigurationChanged(newConfig);
         drawerToggle.onConfigurationChanged(newConfig);
     }
-
 
 }

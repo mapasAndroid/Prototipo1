@@ -40,7 +40,7 @@
             android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyCkHFWOawtC73Zgq6CdDCi--pXUy_uL4g0" />
+            android:value="@string/google_maps_key" />
 
         <activity
             android:name=".MapsActivity"
@@ -61,7 +61,7 @@
         </activity>
 
         <activity
-            android:name=".Lugares"
+            android:name=".Sitios"
             android:label="@string/Sitios" >
             <meta-data
                 android:name="android.intent.category.DEFAULT"
