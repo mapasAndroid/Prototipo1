@@ -18,10 +18,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import java.util.ArrayList;
+
 
 public class Sitios extends ActionBarActivity{
 
     private String [] opciones;
+    private int [] icons;
     private DrawerLayout drawerLayout;
     private ListView listView;
     private ActionBarDrawerToggle drawerToggle;
@@ -37,6 +40,7 @@ public class Sitios extends ActionBarActivity{
         setContentView(R.layout.activity_sitios);
 
         opciones = new String[]{"Lugares recientes","Centros Comerciales", "Restaurantes", "Mas"};
+        icons= new int[]  {R.drawable.ic_action_edit,R.drawable.abc_btn_check_material,R.drawable.abc_ab_share_pack_mtrl_alpha,R.drawable.ic_action_edit};
         drawerLayout = (DrawerLayout) findViewById(R.id.contenedor_principal);
         listView = (ListView) findViewById(R.id.menuizquierdo);
 
@@ -66,6 +70,7 @@ public class Sitios extends ActionBarActivity{
                         findViewById(R.id.mostrarAdentro).setVisibility(View.GONE);
                         break;
                 }
+
 
 
                 FragmentManager fragmentManager = getSupportFragmentManager();
@@ -100,6 +105,8 @@ public class Sitios extends ActionBarActivity{
                 ActivityCompat.invalidateOptionsMenu(Sitios.this);
             }
         };
+
+
         drawerLayout.setDrawerListener(drawerToggle);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
@@ -130,6 +137,7 @@ public class Sitios extends ActionBarActivity{
         }
         return super.onOptionsItemSelected(item);
     }
+
 
 
     @Override
