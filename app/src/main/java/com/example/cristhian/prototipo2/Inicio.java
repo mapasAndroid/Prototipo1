@@ -132,7 +132,7 @@ public class Inicio extends ActionBarActivity {
             }
 
             //si existe en la base de datos, sigue a la vista principal
-            Intent i = new Intent(Inicio.this, Sitios.class);
+            Intent i = new Intent(Inicio.this, Lugares.class);
             //se lleva el nombre de usuario para nombrarlo mas adelante
             //i.putExtra("usuario",s);
             startActivity(i);

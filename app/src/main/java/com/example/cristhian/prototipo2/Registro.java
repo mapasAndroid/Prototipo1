@@ -84,7 +84,7 @@ public class Registro extends ActionBarActivity{
                 asistente.imprimir(getFragmentManager(), "No se pudo registrar, intentelo nuevamente", 2);
             }else{
                 //si pudo registrarlo
-                Intent i = new Intent(Registro.this, Sitios.class);
+                Intent i = new Intent(Registro.this, Lugares.class);
                 startActivity(i);
             }
         }
