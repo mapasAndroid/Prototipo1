@@ -34,7 +34,7 @@ public class Lugares extends ActionBarActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sitios);
 
-        opciones = new String[]{"Recientes", "Centros Comerciales", "Restaurantes", "Mas"};
+        opciones = new String[]{"Centros Comerciales", "Restaurantes", "Mas"};
         drawerLayout = (DrawerLayout) findViewById(R.id.contenedor_principal);
         listView = (ListView) findViewById(R.id.menuizquierdo);
 
@@ -48,15 +48,12 @@ public class Lugares extends ActionBarActivity{
                 Fragment fragment = null;
                 switch (position){
                     case 0:
-                        fragment = new Recientes();
-                        break;
-                    case 1:
                         fragment = new Centro_comercial();
                         break;
-                    case 2:
+                    case 1:
                         fragment = new Restaurante();
                         break;
-                    case 3:
+                    case 2:
                         fragment = new Mas();
                         break;
                 }

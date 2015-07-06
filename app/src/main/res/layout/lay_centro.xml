@@ -2,26 +2,22 @@
 
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#f00"
     android:orientation="vertical">
-
 
     <ScrollView
         android:id="@+id/vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        >
+        android:layout_height="wrap_content">
 
         <GridLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="center"
-            android:layout_marginTop="40dp"
-            android:columnCount="2"
-            tools:ignore="NewApi">
+            android:layout_marginTop="180dp"
+            android:columnCount="2">
 
 
             <ImageButton
@@ -30,9 +26,7 @@
                 android:layout_height="150dp"
                 android:layout_marginBottom="5dp"
                 android:layout_marginLeft="8dp"
-                android:src="@drawable/ic_action_discard"
-
-                />
+                android:src="@drawable/ic_action_discard" />
 
             <ImageButton
                 android:id="@+id/i2"
@@ -40,7 +34,6 @@
                 android:layout_height="150dp"
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="5dp"
-                android:onClick="EnviarMapa"
                 android:src="@drawable/ic_action_discard" />
 
             <ImageButton
@@ -49,7 +42,6 @@
                 android:layout_height="150dp"
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="8dp"
-                android:onClick="EnviarMapa"
                 android:src="@drawable/ic_action_discard" />
 
             <ImageButton
@@ -58,7 +50,6 @@
                 android:layout_height="150dp"
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="5dp"
-                android:onClick="EnviarMapa"
                 android:src="@drawable/ic_action_discard" />
 
             <ImageButton
@@ -67,7 +58,6 @@
                 android:layout_height="150dp"
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="8dp"
-                android:onClick="EnviarMapa"
                 android:src="@drawable/ic_action_discard" />
 
             <ImageButton
@@ -76,7 +66,6 @@
                 android:layout_height="150dp"
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="5dp"
-                android:onClick="EnviarMapa"
                 android:src="@drawable/ic_action_discard" />
 
             <ImageButton
@@ -85,7 +74,6 @@
                 android:layout_height="150dp"
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="8dp"
-                android:onClick="EnviarMapa"
                 android:src="@drawable/ic_action_discard" />
 
             <ImageButton
@@ -94,7 +82,6 @@
                 android:layout_height="150dp"
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="5dp"
-                android:onClick="EnviarMapa"
                 android:src="@drawable/ic_action_discard" />
 
             <ImageButton
@@ -103,7 +90,6 @@
                 android:layout_height="150dp"
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="8dp"
-                android:onClick="EnviarMapa"
                 android:src="@drawable/ic_action_discard" />
 
             <ImageButton
@@ -112,8 +98,7 @@
                 android:layout_height="150dp"
                 android:layout_marginBottom="10dp"
                 android:layout_marginLeft="5dp"
-                android:onClick="EnviarMapa"
-                android:src="@drawable/ic_action_discard" />
+                android:src="@drawable/ic_action_like" />
 
 
         </GridLayout>
@@ -122,5 +107,3 @@
 
 
 </LinearLayout>
-
-
