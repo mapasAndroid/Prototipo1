@@ -3,10 +3,13 @@ package com.example.cristhian.prototipo2;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -15,6 +18,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.cristhian.prototipo2.util.SystemUiHider;
+
+import java.io.File;
 
 
 /**
@@ -57,6 +62,8 @@ public class Splash extends Activity {
      * The instance of the {@link SystemUiHider} for this activity.
      */
     private SystemUiHider mSystemUiHider;
+
+    public static  boolean mostrarPrincipal = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -136,11 +143,43 @@ public class Splash extends Activity {
         // while interacting with the UI.
         //findViewById(R.id.dummy_button).setOnTouchListener(mDelayHideTouchListener);
 
-
+        checkDataBase();
         animacionLogo();
         titulo.startAnimation(AnimationUtils.loadAnimation(getApplicationContext(), R.anim.alpha));
         delayScreenSplash();
 
+    }
+
+    /**
+     * Check if the database exist
+     *
+     * @return true if it exists, false if it doesn't
+     */
+    private boolean checkDataBase() {
+        SQLiteDatabase checkDB = null;
+        try {
+            checkDB = SQLiteDatabase.openDatabase(db_full_path(), null,
+                    SQLiteDatabase.OPEN_READONLY);
+            /*if(hayusuario()){
+                mostrarPrincipal = false;
+            }else{
+                mostrarPrincipal = true;
+            }*/
+            checkDB.close();
+            Log.i("cm02", "si existe base de datos");
+        } catch (SQLiteException e) {
+            // database doesn't exist yet.
+            Log.i("cm01","no existe base de datos");
+            //crearBd();
+            mostrarPrincipal = true;
+        }
+        return checkDB != null;
+    }
+
+    public String db_full_path(){
+        File path=this.getDatabasePath("stopbus");
+        String db_path=path.getAbsolutePath();
+        return db_path;
     }
 
 
@@ -160,8 +199,14 @@ public class Splash extends Activity {
             @Override
             public void run() {
                 /* Create an Intent that will start the Menu-Activity. */
-                Intent mainIntent = new Intent(Splash.this, Inicio.class);
-                Splash.this.startActivity(mainIntent);
+                if(mostrarPrincipal){
+                    Intent mainIntent = new Intent(Splash.this, Inicio.class);
+                    Splash.this.startActivity(mainIntent);
+                }else{
+                    Intent mainIntent = new Intent(Splash.this, Lugares.class);
+                    Splash.this.startActivity(mainIntent);
+                }
+
                 overridePendingTransition(R.anim.zoom_forward_in, R.anim.zoom_forward_out);
                 Splash.this.finish();
             }
