@@ -61,7 +61,7 @@
         </activity>
 
         <activity
-            android:name=".Sitios"
+            android:name=".Lugares"
             android:label="@string/Sitios" >
             <meta-data
                 android:name="android.intent.category.DEFAULT"
