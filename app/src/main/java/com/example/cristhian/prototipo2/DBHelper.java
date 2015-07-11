@@ -106,7 +106,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + Bus.NOMBRE_TABLA);
         db.execSQL("DROP TABLE IF EXISTS " + PasajeroxBus.NOMBRE_TABLA);
 
-        //si no existe la crea
+        //si no existe la crea holaaaaaaaaaaaaaa
         onCreate(db);
 
     }

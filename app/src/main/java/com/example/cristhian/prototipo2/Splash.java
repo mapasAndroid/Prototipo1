@@ -193,7 +193,7 @@ public class Splash extends Activity {
             }
             return false;
         }
-    };
+    }; //holaaaaaaaaaaaaaaaaaaaa
 
     Handler mHideHandler = new Handler();
     Runnable mHideRunnable = new Runnable() {
