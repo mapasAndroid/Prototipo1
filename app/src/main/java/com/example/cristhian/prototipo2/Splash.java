@@ -7,7 +7,6 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -161,19 +160,7 @@ public class Splash extends Activity {
             @Override
             public void run() {
                 /* Create an Intent that will start the Menu-Activity. */
-
                 Intent mainIntent = new Intent(Splash.this, Inicio.class);
-                Log.i("CM01", "antes");
-                BaseDeDatos db = new BaseDeDatos(Splash.this.getBaseContext());
-                Log.i("CM01", "despues");
-
-                try{
-                    db.abrir();
-                    db.cerrar();
-                }catch (Exception e){
-                    Log.i("CM01", e.toString());
-                }
-
                 Splash.this.startActivity(mainIntent);
                 overridePendingTransition(R.anim.zoom_forward_in, R.anim.zoom_forward_out);
                 Splash.this.finish();
