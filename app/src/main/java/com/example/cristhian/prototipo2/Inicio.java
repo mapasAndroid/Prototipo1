@@ -3,6 +3,7 @@ package com.example.cristhian.prototipo2;
 import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -31,11 +32,24 @@ import java.util.List;
 
 public class Inicio extends ActionBarActivity {
 
-    //variables globales que siempre actuaran en el activity
-    AsistenteMensajes asistente = new AsistenteMensajes();
-    Encriptador encriptador = new Encriptador();
-    ProgressDialog progres;
+    /**
+     * ========== VARIABLES ===========
+     */
 
+    //Atributo que pinta los mensajes en la pantalla
+    private AsistenteMensajes asistente = new AsistenteMensajes();
+    //Atributo que encripta las contraseñas en sha1
+    private Encriptador encriptador = new Encriptador();
+    //Atributo que gestiona las conexiones a datos web
+    private WebHelper webHelper = new WebHelper();
+    //Ventana de espera para el usuario
+    protected ProgressDialog progres;
+
+
+    /**
+     * METODO PRINCIPAL ONCREATE
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,6 +59,10 @@ public class Inicio extends ActionBarActivity {
 
         //ocultar barra de iconos
         getSupportActionBar().hide();
+
+        //cambiar el tipo de letra a DEFAULT al edit text contraseña
+        EditText password = (EditText) findViewById( R.id.editTextContrasenia );
+        password.setTypeface(Typeface.DEFAULT);
 
     }
 
@@ -71,6 +89,11 @@ public class Inicio extends ActionBarActivity {
     }
 
 
+    /**
+     * METODO QUE INICIA SESION CONECTANDOSE CON UN ARCHIVO WEB
+     * @param view
+     * @throws NoSuchAlgorithmException
+     */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public void IniciarSesion(View view) throws NoSuchAlgorithmException {
 
@@ -79,15 +102,15 @@ public class Inicio extends ActionBarActivity {
         String usuario = ((EditText) findViewById(R.id.editTextUsuario)).getText().toString();
         String pass = ((EditText) findViewById(R.id.editTextContrasenia)).getText().toString();
 
-        //si tiene campos vacios avisele
+        //si tiene campos vacios notifiquele al usuario
         if (usuario.isEmpty() || pass.isEmpty()) {
             asistente.imprimir(getFragmentManager(), "Campos vacios, verifique nuevamente", 1);
             return;
         }
 
-        //valida que el usuario exista en la base de datos
         Validador validador = new Validador();
         validador.execute(usuario, this.encriptador.getSha1(pass));
+
 
     }
 
@@ -131,11 +154,12 @@ public class Inicio extends ActionBarActivity {
                 return;
             }
 
-            //si existe en la base de datos, sigue a la vista principal
+
             Intent i = new Intent(Inicio.this, Lugares.class);
             //se lleva el nombre de usuario para nombrarlo mas adelante
-            //i.putExtra("usuario",s);
+            i.putExtra("usuario",s);
             startActivity(i);
+
 
         }
 
@@ -149,7 +173,7 @@ public class Inicio extends ActionBarActivity {
             HttpClient httpClient = new DefaultHttpClient();
             HttpContext localContext = new BasicHttpContext();
             HttpPost httpPost = new HttpPost(
-                    "http://pruebasleon.zz.mu/validarUsuario.php");//http://pruebasleon.zz.mu/
+                    webHelper.getUrl() + webHelper.getUrlIniciarSesion());
             HttpResponse response = null;
             String resultado = "";
             try {

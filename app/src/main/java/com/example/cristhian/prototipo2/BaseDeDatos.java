@@ -26,4 +26,7 @@ public class BaseDeDatos {
     public void cerrar() {
         this.nDBHelper.close();
     }
+
+
+
 }

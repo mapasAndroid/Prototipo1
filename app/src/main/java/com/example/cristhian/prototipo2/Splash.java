@@ -161,7 +161,25 @@ public class Splash extends Activity {
             public void run() {
                 /* Create an Intent that will start the Menu-Activity. */
                 Intent mainIntent = new Intent(Splash.this, Inicio.class);
+                BaseDeDatos baseDeDatos = new BaseDeDatos(Splash.this.getBaseContext());
+                baseDeDatos.abrir();
+
+                baseDeDatos.cerrar();
+
+
+                /*File database=getApplicationContext().getDatabasePath("stopbus.db");
+
+                if (!database.exists()) {
+                    // Database does not exist so copy it from assets here
+                    Log.i("Database", "Not Found");
+                } else {
+                    Log.i("Database", "Found");
+                    database.delete();
+                }*/
+
+
                 Splash.this.startActivity(mainIntent);
+
                 overridePendingTransition(R.anim.zoom_forward_in, R.anim.zoom_forward_out);
                 Splash.this.finish();
             }
@@ -193,7 +211,7 @@ public class Splash extends Activity {
             }
             return false;
         }
-    }; //holaaaaaaaaaaaaaaaaaaaa
+    };
 
     Handler mHideHandler = new Handler();
     Runnable mHideRunnable = new Runnable() {
