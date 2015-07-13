@@ -32,9 +32,18 @@ import java.util.List;
 
 public class Registro extends ActionBarActivity{
 
-    AsistenteMensajes asistente = new AsistenteMensajes();
-    Encriptador encriptador = new Encriptador();
-    ProgressDialog progres;
+    /**
+     * ========== VARIABLES ===========
+     */
+
+    //Atributo que pinta los mensajes en la pantalla
+    private AsistenteMensajes asistente = new AsistenteMensajes();
+    //Atributo que encripta las contraseñas en sha1
+    private Encriptador encriptador = new Encriptador();
+    //Atributo que gestiona las conexiones a datos web
+    private WebHelper webHelper = new WebHelper();
+    //Ventana de espera para el usuario
+    protected ProgressDialog progres;
 
 
     @Override
@@ -77,16 +86,36 @@ public class Registro extends ActionBarActivity{
         @Override
         protected void onPostExecute(String s) {
 
-            //oculta la barra d progreso
+            //oculta la barra de progreso
             progres.hide();
+
+
             //si la respuesta del servidor es 0, avise al usuario
-            if(s.equals("0")){
-                asistente.imprimir(getFragmentManager(), "No se pudo registrar, intentelo nuevamente", 2);
-            }else{
-                //si pudo registrarlo
-                Intent i = new Intent(Registro.this, Lugares.class);
-                startActivity(i);
+            if (s.equals("0")) {
+                asistente.imprimir(getFragmentManager(), "Ocurrio algun error en el registro, intentelo nuevamente", 2);
+                return;
             }
+            if (s.equals("nonet")) {
+                asistente.imprimir(getFragmentManager(), "Error de red, verifique su conexion", 2);
+                return;
+            }
+
+            if(s.equals("email_duplicado")){
+                asistente.imprimir(getFragmentManager(), "Email ya existe", 2);
+                return;
+            }
+
+            if(s.equals("usuario_duplicado")){
+                asistente.imprimir(getFragmentManager(), "Usuario ya existe", 2);
+                return;
+            }
+
+            Intent i = new Intent(Registro.this, Lugares.class);
+            //se lleva el nombre de usuario para nombrarlo mas adelante
+            i.putExtra("usuario",s);
+            startActivity(i);
+
+
         }
 
         @Override
@@ -96,7 +125,6 @@ public class Registro extends ActionBarActivity{
             progres.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             progres.setIndeterminate(true);
             progres.show();
-            super.onPreExecute();
             super.onPreExecute();
         }
 
@@ -110,7 +138,7 @@ public class Registro extends ActionBarActivity{
             HttpClient httpClient = new DefaultHttpClient();
             HttpContext localContext = new BasicHttpContext();
             HttpPost httpPost = new HttpPost(
-                    "http://pruebasleon.zz.mu/registrarUsuario.php");//http://pruebasleon.zz.mu/
+                    webHelper.getUrl() + webHelper.getUrlRegistrarUsuario());
             HttpResponse response = null;
             String resultado = "";
             try {

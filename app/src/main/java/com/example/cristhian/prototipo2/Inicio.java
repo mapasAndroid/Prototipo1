@@ -154,7 +154,6 @@ public class Inicio extends ActionBarActivity {
                 return;
             }
 
-
             Intent i = new Intent(Inicio.this, Lugares.class);
             //se lleva el nombre de usuario para nombrarlo mas adelante
             i.putExtra("usuario",s);

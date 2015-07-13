@@ -32,4 +32,8 @@ public class WebHelper {
     public String getUrlIniciarSesion() {
         return urlIniciarSesion;
     }
+
+    public String getUrlRegistrarUsuario() {
+        return urlRegistrarUsuario;
+    }
 }
