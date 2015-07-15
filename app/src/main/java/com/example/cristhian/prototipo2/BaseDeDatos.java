@@ -1,6 +1,8 @@
 package com.example.cristhian.prototipo2;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 /**
@@ -28,5 +30,48 @@ public class BaseDeDatos {
     }
 
 
+    /**
+     * estos metodos son falsos xD
+     * solo son de prueba
+     * @param a
+     * @param b
+     * @param c
+     * @param d
+     */
+    public void insertar(String a, String b, String c, String d){
+        ContentValues values = new ContentValues();
 
+        values.put("nit", a);
+        values.put("nombre", b);
+        values.put("direccion", c);
+        values.put("telefono", d);
+
+        this.nBaseDatos.insert("empresa", null, values);
+    }
+
+
+
+
+
+    /**
+     * junto con este :P
+     * @return
+     */
+    public String consulta() {
+        String columnas [] = new String[]{"nit", "nombre"};
+        Cursor c = this.nBaseDatos.query("empresa", columnas, null, null,null,null, null, null);
+        String resultado = "";
+
+        int iNit = c.getColumnIndex("nit");
+        int iNombre = c.getColumnIndex("nombre");
+
+        for(c.moveToFirst(); !c.isAfterLast(); c.moveToNext()){
+            resultado += c.getString(iNit) + c.getString(iNombre) + "\n";
+        }
+
+        return resultado;
+
+
+    }
 }
+

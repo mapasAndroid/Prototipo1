@@ -3,7 +3,7 @@ package com.example.cristhian.prototipo2;
 import android.provider.BaseColumns;
 
 /**
- * Created by MAIS on 09/07/2015. holaaaaaaaaaaaaaa
+ * Created by MAIS on 09/07/2015.
  */
 public class StopBusContract {
 

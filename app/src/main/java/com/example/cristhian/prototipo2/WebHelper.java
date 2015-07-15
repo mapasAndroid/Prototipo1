@@ -25,13 +25,17 @@ public class WebHelper {
     }
 
 
-    public String getUrl() {
-        return url;
+    public String getUrl() {return url;}
+
+    public String getUrlIniciarSesion() {return urlIniciarSesion;}
+
+    public String getUsuario() {
+        return usuario;
     }
 
-    public String getUrlIniciarSesion() {
-        return urlIniciarSesion;
-    }
+    public String getPass(){return pass; }
+
+    public String getUrlCopiarDatos(){return urlCopiarDatos;}
 
     public String getUrlRegistrarUsuario() {
         return urlRegistrarUsuario;

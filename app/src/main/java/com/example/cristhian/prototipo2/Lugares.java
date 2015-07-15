@@ -12,16 +12,22 @@ import android.view.View;
 import android.support.v4.widget.DrawerLayout;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class Lugares extends ActionBarActivity{
 
-    private String [] opciones;
+    private String [] opciones, alista;
     private DrawerLayout drawerLayout;
-    private ListView listView;
+    private ListView listView, lista;
+    private EditText editable;
     private ActionBarDrawerToggle drawerToggle;
 
     private CharSequence tituloSec;
@@ -34,12 +40,22 @@ public class Lugares extends ActionBarActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sitios);
 
-        opciones = new String[]{"Centros Comerciales", "Restaurantes", "Mas"};
+
+        lista = (ListView) findViewById(R.id.lugaresRecientes);
+
+       //final ArrayList<String> alista = new ArrayList<String>();
+        alista = new String[]{"Parque Colon", "Davivienda", "River Plaza", "BBVA Av 6"};
+        final ArrayAdapter<String> aa = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1, alista);
+       lista.setAdapter(aa);
+
+        opciones = new String[]{"Parque", "Educacion", "Centro comercial", "Hotel", "Banco", "Cajero", "Restaurante"};
         drawerLayout = (DrawerLayout) findViewById(R.id.contenedor_principal);
         listView = (ListView) findViewById(R.id.menuizquierdo);
 
+
         listView.setAdapter(new ArrayAdapter<String>(getSupportActionBar().getThemedContext(),
                 android.R.layout.simple_list_item_1, opciones));
+
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -48,13 +64,25 @@ public class Lugares extends ActionBarActivity{
                 Fragment fragment = null;
                 switch (position){
                     case 0:
-                        fragment = new Centro_comercial();
+                        fragment = new Parque();
                         break;
                     case 1:
-                        fragment = new Restaurante();
+                        fragment = new Educacion();
                         break;
                     case 2:
-                        fragment = new Mas();
+                        fragment = new Centro_comercial();
+                        break;
+                    case 3:
+                        fragment = new Hotel();
+                        break;
+                    case 4:
+                        fragment = new Banco();
+                        break;
+                    case 5:
+                        fragment = new Cajero();
+                        break;
+                    case 6:
+                        fragment = new Restaurante();
                         break;
                 }
 
@@ -93,8 +121,6 @@ public class Lugares extends ActionBarActivity{
         drawerLayout.setDrawerListener(drawerToggle);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
-
-
 
 
 

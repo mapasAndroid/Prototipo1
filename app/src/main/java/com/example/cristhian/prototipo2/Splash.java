@@ -2,11 +2,15 @@ package com.example.cristhian.prototipo2;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Typeface;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -15,6 +19,15 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.cristhian.prototipo2.util.SystemUiHider;
+
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.nio.channels.FileChannel;
 
 
 /**
@@ -160,25 +173,63 @@ public class Splash extends Activity {
             @Override
             public void run() {
                 /* Create an Intent that will start the Menu-Activity. */
-                Intent mainIntent = new Intent(Splash.this, Inicio.class);
+
+
                 BaseDeDatos baseDeDatos = new BaseDeDatos(Splash.this.getBaseContext());
                 baseDeDatos.abrir();
 
+              /*  //String datosUsuario[] = baseDeDatos.existeUsuario();
+
+                //si no hay nada del usuario, se va para el inicio
+                if(datosUsuario == null){
+                    Intent mainIntent = new Intent(Splash.this, Inicio.class);
+                    Splash.this.startActivity(mainIntent);
+                    //matar esta actividad
+                    finish();
+
+                }
+
+                //si llega por aca, es porque SI HAY datos del usuario
+                String lugares = "";
+
+                //si hay actualizacion
+                if (datosUsuario[donde_esta_la_actualizacion] == "si") {
+                    //copia todos los datos y los duplica en la bd local usando el servicio web
+                    //cambiele a NO el espacio en la base de datos WEB Y LOCAL el campo de actualizacion
+                    baseDeDatos.updateActualizacion(datosUsuario[donde_esta_el_usuario]);
+                }
+
+                //le quite el else, porque siemre conculata los datos de la bd local,
+                //lo unico que cambia es que si tiene actualizacion copuelos de la bd web
+
+
+                //consulte los lugares recientes de ese usuario y todos los datos
+                //deben llegar todos separados por coma ',' eso de ponerlos con coma ',' es tarea de 'Base de Datos, no de Splas'
+                //por eso lo quite de aqui.
+               // String lugaresRecientes = baseDeDatos.getLugaresRecientes(datosUsuario[nose]);
+              //  String rutas = baseDeDatos.geRutas();
+             //   String paraderos = baseDeDatos.getParaderos();
+                String paraderoxRuta = baseDeDatos.getParaderoxRuta();
                 baseDeDatos.cerrar();
 
+                //nos vamos por fin a la actividad de los lugares, y le ponemos como 'extras'
+                //todos los datos que le vamos a mostrar por alla en lugares
+                Intent activityLugares = new Intent(Splash.this, Lugares.class);
+                activityLugares.putExtra("datosUsuario" , datosUsuario);
+                activityLugares.putExtra("lugaresrecientes" , lugaresRecientes);
+                activityLugares.putExtra("rutas" , rutas);
+                activityLugares.putExtra("paraderos" , paraderos);
+                activityLugares.putExtra("paraderparaderoxRutaos" , paraderoxRuta);
+                Splash.this.startActivity(activityLugares);
+                //matar esta actividad
+                finish();*/
 
-                /*File database=getApplicationContext().getDatabasePath("stopbus.db");
 
-                if (!database.exists()) {
-                    // Database does not exist so copy it from assets here
-                    Log.i("Database", "Not Found");
-                } else {
-                    Log.i("Database", "Found");
-                    database.delete();
-                }*/
+                //baseDeDatos.insertar("nit1","nombre1","direccion1","telefono1");
+                //Log.i("Database", baseDeDatos.consulta());
+                //borrarBd();
 
 
-                Splash.this.startActivity(mainIntent);
 
                 overridePendingTransition(R.anim.zoom_forward_in, R.anim.zoom_forward_out);
                 Splash.this.finish();
@@ -186,6 +237,21 @@ public class Splash extends Activity {
         }, 4000);
 
     }
+
+    private void borrarBd() {
+        File database = getApplicationContext().getDatabasePath("stopbus.db");
+        Log.i("Database", database.getFreeSpace() + "");
+
+        if (!database.exists()) {
+            // Database does not exist so copy it from assets here
+            Log.i("Database", "no encontrada");
+        } else {
+            Log.i("Database", "encontrada");
+            database.delete();
+            Log.i("Database", "borrada");
+        }
+    }
+
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {

@@ -110,11 +110,11 @@ public class Registro extends ActionBarActivity{
                 return;
             }
 
-            Intent i = new Intent(Registro.this, Lugares.class);
+            Intent i= new Intent(Registro.this, Lugares.class);
             //se lleva el nombre de usuario para nombrarlo mas adelante
             i.putExtra("usuario",s);
             startActivity(i);
-
+            finish();
 
         }
 
