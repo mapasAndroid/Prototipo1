@@ -1,6 +1,5 @@
 package com.example.cristhian.prototipo2;
 
-import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -28,7 +27,7 @@ public class Copia {
      * ========== VARIABLES ===========
      */
 
-    //Atributo que encripta las contraseñas en sha1
+    //Atributo que encripta las contrasenias en sha1
     private Encriptador encriptador = new Encriptador();
     //Atributo que gestiona las conexiones a datos web
     private WebHelper webHelper = new WebHelper();

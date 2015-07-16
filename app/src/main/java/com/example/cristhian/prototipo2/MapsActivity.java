@@ -128,7 +128,7 @@ public class MapsActivity extends FragmentActivity {
         agregueMarker(7.8881263,-72.5023979, "D7"); //pasteleria la mejor calle 9
         agregueMarker(7.8878918,-72.5044093, "D8"); //amaruc calle 10
         agregueMarker(7.8870899,-72.5035129, "D9"); //bancolombia av 5
-        agregueMarker(7.8878918,-72.5044093, "D10"); //pasteleria araña de oro calle 9
+        agregueMarker(7.8878918,-72.5044093, "D10"); //pasteleria ara de oro calle 9
         agregueMarker(7.8873253,-72.5047462, "D11"); //plaza de los andes av 6
         agregueMarker(7.8861056,-72.5045606, "D12"); //banco santander av 6
         agregueMarker(7.8833239,-72.50037893, "D14"); //copy copy calle 14

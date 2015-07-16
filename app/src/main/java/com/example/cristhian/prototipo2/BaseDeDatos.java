@@ -73,5 +73,23 @@ public class BaseDeDatos {
 
 
     }
+
+    public Cursor getDatosUsuario() {
+
+        String columnas [] = new String[]{
+                "usuario",
+                "nombre",
+                "correo",
+                "password",
+                "actualizacion"
+        };
+        Cursor c = this.nBaseDatos.query("pasajero", columnas, null, null,null,null, null, null);
+        if(c.getCount() == 0){
+            return null;
+        }
+
+        return c;
+
+    }
 }
 

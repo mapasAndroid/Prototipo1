@@ -2,13 +2,11 @@ package com.example.cristhian.prototipo2;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Typeface;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -21,13 +19,6 @@ import android.widget.TextView;
 import com.example.cristhian.prototipo2.util.SystemUiHider;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.nio.channels.FileChannel;
 
 
 /**
@@ -178,8 +169,20 @@ public class Splash extends Activity {
                 BaseDeDatos baseDeDatos = new BaseDeDatos(Splash.this.getBaseContext());
                 baseDeDatos.abrir();
 
-              /*  //String datosUsuario[] = baseDeDatos.existeUsuario();
+                Cursor datosUsuario = baseDeDatos.getDatosUsuario();
 
+                if(datosUsuario == null){
+                    Intent mainIntent = new Intent(Splash.this, Inicio.class);
+                    Splash.this.startActivity(mainIntent);
+                }
+
+                if(datosUsuario.getString(datosUsuario.getColumnIndex("actualizacion")).equals("si")){
+
+                }
+
+                baseDeDatos.cerrar();
+
+                /*
                 //si no hay nada del usuario, se va para el inicio
                 if(datosUsuario == null){
                     Intent mainIntent = new Intent(Splash.this, Inicio.class);
@@ -221,16 +224,15 @@ public class Splash extends Activity {
                 activityLugares.putExtra("paraderos" , paraderos);
                 activityLugares.putExtra("paraderparaderoxRutaos" , paraderoxRuta);
                 Splash.this.startActivity(activityLugares);
-                //matar esta actividad
-                finish();*/
 
 
                 //baseDeDatos.insertar("nit1","nombre1","direccion1","telefono1");
                 //Log.i("Database", baseDeDatos.consulta());
                 //borrarBd();
+                */
 
-
-
+                Intent mainIntent = new Intent(Splash.this, Inicio.class);
+                Splash.this.startActivity(mainIntent);
                 overridePendingTransition(R.anim.zoom_forward_in, R.anim.zoom_forward_out);
                 Splash.this.finish();
             }
