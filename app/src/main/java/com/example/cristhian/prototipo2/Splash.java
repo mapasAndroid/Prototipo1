@@ -8,6 +8,7 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -165,7 +166,6 @@ public class Splash extends Activity {
             public void run() {
                 /* Create an Intent that will start the Menu-Activity. */
 
-
                 BaseDeDatos baseDeDatos = new BaseDeDatos(Splash.this.getBaseContext());
                 baseDeDatos.abrir();
 
@@ -174,65 +174,39 @@ public class Splash extends Activity {
                 if(datosUsuario == null){
                     Intent mainIntent = new Intent(Splash.this, Inicio.class);
                     Splash.this.startActivity(mainIntent);
+                    Splash.this.finish();
+                    return;
                 }
 
-                if(datosUsuario.getString(datosUsuario.getColumnIndex("actualizacion")).equals("si")){
 
-                }
-
-                baseDeDatos.cerrar();
-
-                /*
-                //si no hay nada del usuario, se va para el inicio
-                if(datosUsuario == null){
-                    Intent mainIntent = new Intent(Splash.this, Inicio.class);
-                    Splash.this.startActivity(mainIntent);
-                    //matar esta actividad
-                    finish();
+                datosUsuario.moveToFirst();
+                if(datosUsuario.getString(datosUsuario.getColumnIndexOrThrow("actualizacion")).equals("si")){
+                    baseDeDatos.setNoActualizacion(datosUsuario.getString(datosUsuario.getColumnIndexOrThrow("actualizacion")));
+                    new Copia().copiarDatos(Splash.this.getBaseContext(),
+                            datosUsuario.getString(datosUsuario.getColumnIndexOrThrow("usuario")));
+                    //por si hay cambios en la tabla usuario
+                    datosUsuario = baseDeDatos.getDatosUsuario();
 
                 }
 
-                //si llega por aca, es porque SI HAY datos del usuario
-                String lugares = "";
 
-                //si hay actualizacion
-                if (datosUsuario[donde_esta_la_actualizacion] == "si") {
-                    //copia todos los datos y los duplica en la bd local usando el servicio web
-                    //cambiele a NO el espacio en la base de datos WEB Y LOCAL el campo de actualizacion
-                    baseDeDatos.updateActualizacion(datosUsuario[donde_esta_el_usuario]);
-                }
-
-                //le quite el else, porque siemre conculata los datos de la bd local,
-                //lo unico que cambia es que si tiene actualizacion copuelos de la bd web
+                String recientes = baseDeDatos.getRecientes(
+                        datosUsuario.getString(
+                                datosUsuario.getColumnIndexOrThrow("usuario")
+                        )
+                );
 
 
-                //consulte los lugares recientes de ese usuario y todos los datos
-                //deben llegar todos separados por coma ',' eso de ponerlos con coma ',' es tarea de 'Base de Datos, no de Splas'
-                //por eso lo quite de aqui.
-               // String lugaresRecientes = baseDeDatos.getLugaresRecientes(datosUsuario[nose]);
-              //  String rutas = baseDeDatos.geRutas();
-             //   String paraderos = baseDeDatos.getParaderos();
-                String paraderoxRuta = baseDeDatos.getParaderoxRuta();
-                baseDeDatos.cerrar();
+                String paraderos = baseDeDatos.getParaderos();
 
-                //nos vamos por fin a la actividad de los lugares, y le ponemos como 'extras'
-                //todos los datos que le vamos a mostrar por alla en lugares
                 Intent activityLugares = new Intent(Splash.this, Lugares.class);
-                activityLugares.putExtra("datosUsuario" , datosUsuario);
-                activityLugares.putExtra("lugaresrecientes" , lugaresRecientes);
-                activityLugares.putExtra("rutas" , rutas);
+                activityLugares.putExtra("datosUsuario" , (Parcelable) datosUsuario);
+                activityLugares.putExtra("lugaresrecientes" , recientes);
                 activityLugares.putExtra("paraderos" , paraderos);
-                activityLugares.putExtra("paraderparaderoxRutaos" , paraderoxRuta);
+
+                baseDeDatos.cerrar();
+
                 Splash.this.startActivity(activityLugares);
-
-
-                //baseDeDatos.insertar("nit1","nombre1","direccion1","telefono1");
-                //Log.i("Database", baseDeDatos.consulta());
-                //borrarBd();
-                */
-
-                Intent mainIntent = new Intent(Splash.this, Inicio.class);
-                Splash.this.startActivity(mainIntent);
                 overridePendingTransition(R.anim.zoom_forward_in, R.anim.zoom_forward_out);
                 Splash.this.finish();
             }

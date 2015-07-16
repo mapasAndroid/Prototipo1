@@ -1,5 +1,6 @@
 package com.example.cristhian.prototipo2;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 
@@ -32,30 +33,32 @@ public class Copia {
     //Atributo que gestiona las conexiones a datos web
     private WebHelper webHelper = new WebHelper();
 
+    Context contexto;
+
 
     /**
      * metodo que permite bajar todos los datos de la bd de la web
      */
-    public void copiarDatos() {
-        Copiado copiado = new Copiado();
-        copiado.execute(webHelper.getUsuario(), encriptador.getSha1(webHelper.getPass()));
+    public void copiarDatos(Context contexto, String usuario) {
+        this.contexto = contexto;
+        new Copiado().execute(usuario);
     }
 
     public class Copiado extends AsyncTask<String, String, String> {
 
         @Override
         protected void onPostExecute(String s) {
-            //aqui debemo sinsertar los datos en la bd local
-
-
-
+            BaseDeDatos baseDeDatos = new BaseDeDatos(contexto);
+            baseDeDatos.abrir();
+            baseDeDatos.duplicarEnLocal(s);
+            baseDeDatos.cerrar();
         }
 
         protected String doInBackground(String... params) {
-            return copiarDatosweb();
+            return copiarDatosweb(params[0]);
         }
 
-        public String copiarDatosweb() {
+        public String copiarDatosweb(String usuario) {
 
             HttpClient httpClient = new DefaultHttpClient();
             HttpContext localContext = new BasicHttpContext();
@@ -66,6 +69,7 @@ public class Copia {
                 List<NameValuePair> params = new ArrayList<NameValuePair>();
                 params.add(new BasicNameValuePair("usuario", webHelper.getUsuario()));
                 params.add(new BasicNameValuePair("contrasenia", webHelper.getPass()));
+                params.add(new BasicNameValuePair("nombreUsuario", usuario));
                 httpPost.setEntity(new UrlEncodedFormEntity(params));
                 response = httpClient.execute(httpPost, localContext);
                 HttpEntity httpEntity = response.getEntity();

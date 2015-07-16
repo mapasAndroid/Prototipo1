@@ -155,9 +155,11 @@ public class Inicio extends ActionBarActivity {
             }
 
             Intent i = new Intent(Inicio.this, Lugares.class);
-            //se lleva el nombre de usuario para nombrarlo mas adelante
+            new Copia().copiarDatos(Inicio.this.getBaseContext(), s);
+
             i.putExtra("usuario",s);
             startActivity(i);
+            Inicio.this.finish();
 
 
         }

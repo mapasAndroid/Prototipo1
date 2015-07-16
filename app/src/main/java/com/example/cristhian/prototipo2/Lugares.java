@@ -1,25 +1,21 @@
 package com.example.cristhian.prototipo2;
 
 import android.content.res.Configuration;
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.os.Bundle;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.view.View;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.widget.TextView;
-
-import java.util.ArrayList;
-import java.util.Arrays;
 
 
 public class Lugares extends ActionBarActivity{
