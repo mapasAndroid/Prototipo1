@@ -28,8 +28,7 @@ public class DBHelper extends SQLiteOpenHelper {
             Pasajero.P_USUARIO + " TEXT PRIMARY KEY, " +
             Pasajero.P_NOMBRE + " TEXT NOT NULL, " +
             Pasajero.P_CORREO + " TEXT NOT NULL, " +
-            Pasajero.P_PASSWORD + " TEXT NOT NULL, " +
-            Pasajero.P_ACTUALIZACION + " TEXT NOT NULL " + ");";
+            Pasajero.P_PASSWORD + " TEXT NOT NULL); ";
 
     public static final String CREATE_RECIENTES = "CREATE TABLE " + Recientess.NOMBRE_TABLA + "(" +
             Recientess.R_ID + " TEXT PRIMARY KEY, " +
@@ -82,8 +81,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase database) {
-        //solo se va a llamar la primera vez que se crea la base de datos
-        // cuando no hay base de datos sino salta al otro metodo onUpgrade
+
         database.execSQL(CREATE_EMPRESA);
         database.execSQL(CREATE_PASAJERO);
         database.execSQL(CREATE_RECIENTES);
@@ -96,7 +94,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-// vamos a checar que la tabla existe
+
         db.execSQL("DROP TABLE IF EXISTS " + Empresa.NOMBRE_TABLA);
         db.execSQL("DROP TABLE IF EXISTS " + Pasajero.NOMBRE_TABLA);
         db.execSQL("DROP TABLE IF EXISTS " + Recientess.NOMBRE_TABLA);
@@ -106,7 +104,6 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + Bus.NOMBRE_TABLA);
         db.execSQL("DROP TABLE IF EXISTS " + PasajeroxBus.NOMBRE_TABLA);
 
-        //si no existe la crea holaaaaaaaaaaaaaa
         onCreate(db);
 
     }

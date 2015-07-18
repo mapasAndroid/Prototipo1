@@ -21,7 +21,6 @@ public class StopBusContract {
         public static final String P_NOMBRE = "nombre";
         public static final String P_CORREO = "correo";
         public static final String P_PASSWORD = "password";
-        public static final String P_ACTUALIZACION = "actualizacion";
 
     }
 

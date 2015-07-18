@@ -8,7 +8,6 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -30,9 +29,7 @@ import java.io.File;
  */
 public class Splash extends Activity {
 
-    /**
-     * Fuente Roboto
-     */
+    //fuente roboto
     Typeface roboto;
 
     /**
@@ -148,7 +145,9 @@ public class Splash extends Activity {
 
     }
 
-
+    /**
+     * metodo que permite animar el logo del inicio
+     */
     private void animacionLogo() {
 
         final ImageView myImage = (ImageView) findViewById(R.id.logoLocale);
@@ -166,46 +165,38 @@ public class Splash extends Activity {
             public void run() {
                 /* Create an Intent that will start the Menu-Activity. */
 
+                //borrarBd();
                 BaseDeDatos baseDeDatos = new BaseDeDatos(Splash.this.getBaseContext());
                 baseDeDatos.abrir();
 
                 Cursor datosUsuario = baseDeDatos.getDatosUsuario();
 
-                if(datosUsuario == null){
+                if (datosUsuario == null) {
                     Intent mainIntent = new Intent(Splash.this, Inicio.class);
+                    baseDeDatos.cerrar();
                     Splash.this.startActivity(mainIntent);
                     Splash.this.finish();
                     return;
                 }
 
-
                 datosUsuario.moveToFirst();
-                if(datosUsuario.getString(datosUsuario.getColumnIndexOrThrow("actualizacion")).equals("si")){
-                    baseDeDatos.setNoActualizacion(datosUsuario.getString(datosUsuario.getColumnIndexOrThrow("actualizacion")));
-                    new Copia().copiarDatos(Splash.this.getBaseContext(),
-                            datosUsuario.getString(datosUsuario.getColumnIndexOrThrow("usuario")));
-                    //por si hay cambios en la tabla usuario
-                    datosUsuario = baseDeDatos.getDatosUsuario();
-
-                }
-
-
-                String recientes = baseDeDatos.getRecientes(
-                        datosUsuario.getString(
-                                datosUsuario.getColumnIndexOrThrow("usuario")
-                        )
+                String usuario = datosUsuario.getString(
+                        datosUsuario.getColumnIndexOrThrow("usuario")
                 );
 
-
-                String paraderos = baseDeDatos.getParaderos();
+                String recientes = baseDeDatos.getRecientes(usuario);
 
                 Intent activityLugares = new Intent(Splash.this, Lugares.class);
-                activityLugares.putExtra("datosUsuario" , (Parcelable) datosUsuario);
-                activityLugares.putExtra("lugaresrecientes" , recientes);
-                activityLugares.putExtra("paraderos" , paraderos);
-
                 baseDeDatos.cerrar();
+                new Copia().copiarDatos(
+                        Splash.this.getBaseContext(),
+                        usuario
+                );
 
+                String nombre = datosUsuario.getString(
+                        datosUsuario.getColumnIndexOrThrow("usuario")
+                );
+                activityLugares.putExtra("usuarioMensaje", "Hola de nuevo " + nombre);
                 Splash.this.startActivity(activityLugares);
                 overridePendingTransition(R.anim.zoom_forward_in, R.anim.zoom_forward_out);
                 Splash.this.finish();

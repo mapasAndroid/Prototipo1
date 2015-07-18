@@ -48,6 +48,7 @@ public class Inicio extends ActionBarActivity {
 
     /**
      * METODO PRINCIPAL ONCREATE
+     *
      * @param savedInstanceState
      */
     @Override
@@ -61,7 +62,7 @@ public class Inicio extends ActionBarActivity {
         getSupportActionBar().hide();
 
         //cambiar el tipo de letra a DEFAULT al edit text contraseña
-        EditText password = (EditText) findViewById( R.id.editTextContrasenia );
+        EditText password = (EditText) findViewById(R.id.editTextContrasenia);
         password.setTypeface(Typeface.DEFAULT);
 
     }
@@ -91,6 +92,7 @@ public class Inicio extends ActionBarActivity {
 
     /**
      * METODO QUE INICIA SESION CONECTANDOSE CON UN ARCHIVO WEB
+     *
      * @param view
      * @throws NoSuchAlgorithmException
      */
@@ -111,7 +113,6 @@ public class Inicio extends ActionBarActivity {
         Validador validador = new Validador();
         validador.execute(usuario, this.encriptador.getSha1(pass));
 
-
     }
 
     public void Registrarse(View view) {
@@ -131,7 +132,7 @@ public class Inicio extends ActionBarActivity {
         @Override
         protected void onPreExecute() {
             //barra de progreso
-            progres.setMessage("Procesando...");
+            progres.setMessage("Iniciando Sesion...");
             progres.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             progres.setIndeterminate(true);
             progres.show();
@@ -150,14 +151,13 @@ public class Inicio extends ActionBarActivity {
                 return;
             }
             if (s.equals("nonet")) {
-                asistente.imprimir(getFragmentManager(), "Error de red, verifique su conexion", 1);
+                asistente.imprimir(getFragmentManager(), "Error de red, verifica tu conexion", 1);
                 return;
             }
 
             Intent i = new Intent(Inicio.this, Lugares.class);
             new Copia().copiarDatos(Inicio.this.getBaseContext(), s);
-
-            i.putExtra("usuario",s);
+            i.putExtra("usuarioMensaje" , "Stopbus te estaba esperando "  + s);
             startActivity(i);
             Inicio.this.finish();
 

@@ -70,8 +70,9 @@ public class Registro extends ActionBarActivity{
         String pass = ((EditText)findViewById(R.id.editTextUsuario4)).getText().toString();
         String telef = ((EditText)findViewById(R.id.editTextUsuario5)).getText().toString();
 
-        if(usuario.isEmpty() || nombre.isEmpty() || correo.isEmpty() || pass.isEmpty()|| telef.isEmpty()){
-            asistente.imprimir(getFragmentManager(), "Campos vacios, verifique nuevamente", 2);
+        if(usuario.isEmpty() || nombre.isEmpty()
+                || correo.isEmpty() || pass.isEmpty()|| telef.isEmpty()){
+            asistente.imprimir(getFragmentManager(), "Campos vacios, verifica nuevamente", 2);
             return;
         }
 
@@ -92,11 +93,11 @@ public class Registro extends ActionBarActivity{
 
             //si la respuesta del servidor es 0, avise al usuario
             if (s.equals("0")) {
-                asistente.imprimir(getFragmentManager(), "Ocurrio algun error en el registro, intentelo nuevamente", 2);
+                asistente.imprimir(getFragmentManager(), "Ocurrio algun error en el registro, intentalo nuevamente", 2);
                 return;
             }
             if (s.equals("nonet")) {
-                asistente.imprimir(getFragmentManager(), "Error de red, verifique su conexion", 2);
+                asistente.imprimir(getFragmentManager(), "Error de red, verifica tu conexion", 2);
                 return;
             }
 
@@ -111,8 +112,8 @@ public class Registro extends ActionBarActivity{
             }
 
             Intent i= new Intent(Registro.this, Lugares.class);
-            //se lleva el nombre de usuario para nombrarlo mas adelante
-            i.putExtra("usuario",s);
+            new Copia().copiarDatos(Registro.this.getBaseContext(), s);
+            i.putExtra("usuarioMensaje" , "Stopbus te saluda "  + s + "!!");
             startActivity(i);
             finish();
 

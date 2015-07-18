@@ -75,7 +75,7 @@ public class Copia {
                 HttpEntity httpEntity = response.getEntity();
                 resultado = EntityUtils.toString(httpEntity, "UTF-8");
             } catch (Exception e) {
-                Log.d("MyApp", e.toString());
+                Log.i("cm01", e.toString());
             }
             return resultado;
 
