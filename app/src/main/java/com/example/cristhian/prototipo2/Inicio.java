@@ -155,10 +155,11 @@ public class Inicio extends ActionBarActivity {
                 return;
             }
 
-            Intent i = new Intent(Inicio.this, Lugares.class);
+            Intent activityLugares = new Intent(Inicio.this, Lugares.class);
             new Copia().copiarDatos(Inicio.this.getBaseContext(), s);
-            i.putExtra("usuarioMensaje" , "Stopbus te estaba esperando "  + s);
-            startActivity(i);
+            activityLugares.putExtra("usuario", s);
+            activityLugares.putExtra("desde", "inicio");
+            startActivity(activityLugares);
             Inicio.this.finish();
 
 

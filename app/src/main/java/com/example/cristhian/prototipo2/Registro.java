@@ -111,10 +111,11 @@ public class Registro extends ActionBarActivity{
                 return;
             }
 
-            Intent i= new Intent(Registro.this, Lugares.class);
+            Intent activityLugares= new Intent(Registro.this, Lugares.class);
             new Copia().copiarDatos(Registro.this.getBaseContext(), s);
-            i.putExtra("usuarioMensaje" , "Stopbus te saluda "  + s + "!!");
-            startActivity(i);
+            activityLugares.putExtra("usuario", s);
+            activityLugares.putExtra("desde", "registro");
+            startActivity(activityLugares);
             finish();
 
         }

@@ -77,6 +77,10 @@
             android:name=".menu2"
             android:label="@string/title_activity_menu2" >
         </activity>
+        <activity
+            android:name=".Prueba"
+            android:label="@string/title_activity_prueba" >
+        </activity>
     </application>
 
 </manifest>

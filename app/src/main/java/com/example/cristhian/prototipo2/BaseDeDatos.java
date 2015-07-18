@@ -282,21 +282,21 @@ public class BaseDeDatos {
      */
 
 
-    public String getRecientes(String user) {
+    public String getRecientes() {
         String columnas[] = new String[]{
                 "id",
                 "nombre"
         };
 
-        Cursor c = this.nBaseDatos.query("recientes", columnas, "usuario = '" + user + "'", null, null, null, null);
+        Cursor c = this.nBaseDatos.query("recientes", columnas, null, null,  null, null, null, null);
 
         if (c.getCount() == 0) {
             return "";
         }
         String res = "";
 
-        int id = c.getColumnIndexOrThrow("usuario");
-        int nombre = c.getColumnIndexOrThrow("correo");
+        int id = c.getColumnIndexOrThrow("id");
+        int nombre = c.getColumnIndexOrThrow("nombre");
 
         for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
             res += c.getString(id) + "$" + c.getString(nombre) + ",";

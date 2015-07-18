@@ -9,6 +9,7 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -23,6 +24,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -40,7 +42,8 @@ public class Lugares extends ActionBarActivity{
     private CharSequence tituloApp;
 
     private String paraderos;
-
+    private String recientes;
+    private String nombreUsuario;
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
@@ -52,21 +55,27 @@ public class Lugares extends ActionBarActivity{
         bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#3F51B5")));
 
 
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            Toast.makeText(this.getBaseContext(), extras.get("usuarioMensaje").toString(), Toast.LENGTH_LONG).show();
-        }
 
         if (!verificaConexion(this.getBaseContext())) {
             asistenteMensajes.imprimir(this.getFragmentManager(), "No tienes conexion a internet, Stopbus trabajara con los datos locales. Conectate a internet lo mas rapido posible.", 3);
         }
 
-        BaseDeDatos baseDeDatos = new BaseDeDatos(Lugares.this.getBaseContext());
-        baseDeDatos.abrir();
-        this.paraderos = baseDeDatos.getParaderos();
-        baseDeDatos.cerrar();
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            mostrarMensaje(extras.get("usuario").toString() , extras.get("desde").toString());
+            this.nombreUsuario = extras.get("usuario").toString();
+        }
 
-        llenarLista();
+        llenarParaderos();
+        llenarListaRecientes();
+
+        opciones = new String[]{"Lugares Recientes","Parques", "Educacion", "Centros comerciales", "Hoteles", "Bancos", "Cajeros", "Restaurantes"};
+        drawerLayout = (DrawerLayout) findViewById(R.id.contenedor_principal);
+        listView = (ListView) findViewById(R.id.menuizquierdo);
+
+
+        listView.setAdapter(new ArrayAdapter<String>(getSupportActionBar().getThemedContext(),
+                android.R.layout.simple_list_item_1, opciones));
 
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -74,27 +83,39 @@ public class Lugares extends ActionBarActivity{
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Fragment fragment = null;
+                boolean bnd = false;
                 switch (position) {
                     case 0:
-                        fragment = new Parque();
+                        bnd = false;
+                        fragment = new Recientes();
                         break;
                     case 1:
-                        fragment = new Educacion();
+                        fragment = new Parque();
+                        bnd = true;
                         break;
                     case 2:
-                        fragment = new Centro_comercial();
+                        fragment = new Educacion();
+                        bnd = true;
                         break;
                     case 3:
-                        fragment = new Hotel();
+                        fragment = new Centro_comercial();
+                        bnd = true;
                         break;
                     case 4:
-                        fragment = new Banco();
+                        fragment = new Hotel();
+                        bnd = true;
                         break;
                     case 5:
-                        fragment = new Cajero();
+                        fragment = new Banco();
+                        bnd = true;
                         break;
                     case 6:
+                        fragment = new Cajero();
+                        bnd = true;
+                        break;
+                    case 7:
                         fragment = new Restaurante();
+                        bnd = true;
                         break;
                 }
 
@@ -102,6 +123,10 @@ public class Lugares extends ActionBarActivity{
                 fragmentManager.beginTransaction()
                         .replace(R.id.contenedor_frame, fragment)
                         .commit();
+
+                if(bnd){
+                    ((LinearLayout) findViewById(R.id.mostrarAdentro)).setVisibility(View.GONE);
+                }
 
                 listView.setItemChecked(position, true);
                 tituloSec = opciones[position];
@@ -137,34 +162,52 @@ public class Lugares extends ActionBarActivity{
 
     }
 
-    private void llenarLista() {
+    private void llenarParaderos() {
+        BaseDeDatos baseDeDatos = new BaseDeDatos(Lugares.this.getBaseContext());
+        baseDeDatos.abrir();
+        this.paraderos = baseDeDatos.getParaderos();
+        baseDeDatos.cerrar();
+    }
+
+    private void mostrarMensaje(String usuario, String desde) {
+        String mensaje = "";
+        switch (desde){
+            case "inicio":
+                mensaje = "Stopbus te estaba esperando " + usuario;
+                break;
+            case "splash":
+                mensaje = "Hola de nuevo " + usuario;
+                break;
+            case "registro":
+                mensaje =  "Stopbus te saluda " + usuario + "!!" ;
+                break;
+        }
+
+        Toast.makeText(getBaseContext(), mensaje , Toast.LENGTH_LONG).show();
+    }
+
+    private void llenarListaRecientes() {
+
+        BaseDeDatos baseDeDatos = new BaseDeDatos(Lugares.this.getBaseContext());
+        baseDeDatos.abrir();
+        this.recientes = baseDeDatos.getRecientes();
+        baseDeDatos.cerrar();
 
         lista = (ListView) findViewById(R.id.lugaresRecientes);
 
-        if (!paraderos.isEmpty()) {
-            String[] para = this.paraderos.split(",");
+        if (!recientes.isEmpty()) {
+            String[] para = this.recientes.split(",");
             alista = new String[para.length];
 
             for (int i = 0; i < alista.length; i++) {
-                alista[i] = para[i].split("&")[1];
+                alista[i] = para[i].split("$")[1];
             }
         } else {
-            alista = new String[]{"No hay paraderos"};
+            alista = new String[]{"No hay lugares recientes"};
         }
-
-
-        //alista = new String[]{"Parque Colon", "Davivienda", "River Plaza", "BBVA Av 6"};
 
         final ArrayAdapter<String> aa = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, alista);
         lista.setAdapter(aa);
-
-        opciones = new String[]{"Parque", "Educacion", "Centro comercial", "Hotel", "Banco", "Cajero", "Restaurante"};
-        drawerLayout = (DrawerLayout) findViewById(R.id.contenedor_principal);
-        listView = (ListView) findViewById(R.id.menuizquierdo);
-
-
-        listView.setAdapter(new ArrayAdapter<String>(getSupportActionBar().getThemedContext(),
-                android.R.layout.simple_list_item_1, opciones));
 
     }
 
@@ -187,7 +230,16 @@ public class Lugares extends ActionBarActivity{
             Toast.makeText(this.getBaseContext(), "settings", Toast.LENGTH_LONG).show();
         }
         if(id == R.id.action_refresh){
-            Toast.makeText(this.getBaseContext(), "refresh", Toast.LENGTH_LONG).show();
+            Toast.makeText(this.getBaseContext(), "Actualizando...", Toast.LENGTH_LONG).show();
+            Copia copiaDatos = new Copia();
+            copiaDatos.copiarDatos(getBaseContext(), this.nombreUsuario);
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    llenarListaRecientes();
+                }
+            }, 5000);
+
         }
         return super.onOptionsItemSelected(item);
     }
