@@ -32,4 +32,15 @@
 
     <string name="action_refresh">Actualizar</string>
     <string name="title_activity_prueba">Prueba</string>
+
+    <string-array name="menu_izquierdo">
+        <item>Lugares Recientes</item>
+        <item>Parques</item>
+        <item>Educacion</item>
+        <item>Centros Comerciales</item>
+        <item>Hoteles</item>
+        <item>Bancos</item>
+        <item>Cajeros</item>
+        <item>Restaurantes</item>
+    </string-array>
 </resources>

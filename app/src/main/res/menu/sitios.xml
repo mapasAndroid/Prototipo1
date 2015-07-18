@@ -6,7 +6,7 @@
     <item android:id="@+id/action_example"
         android:title="@string/action_example"
         app:showAsAction="always"
-        android:icon="@drawable/ic_action_discard"
+        android:icon="@drawable/ic_action_like"
         />
 
     <item android:id="@+id/action_settings" android:title="@string/action_settings"

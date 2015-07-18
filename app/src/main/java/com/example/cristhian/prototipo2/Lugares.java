@@ -18,20 +18,25 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
-public class Lugares extends ActionBarActivity{
+public class Lugares extends ActionBarActivity {
 
-    private String[] opciones, alista;
+    private String[] alista;
     private DrawerLayout drawerLayout;
     private ListView listView, lista;
     private EditText editable;
@@ -44,6 +49,7 @@ public class Lugares extends ActionBarActivity{
     private String paraderos;
     private String recientes;
     private String nombreUsuario;
+    private MyAdapter myAdapter;
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
@@ -54,6 +60,8 @@ public class Lugares extends ActionBarActivity{
         ActionBar bar = getSupportActionBar();
         bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#3F51B5")));
 
+        this.myAdapter = new MyAdapter(this);
+        listView = (ListView) findViewById(R.id.menuizquierdo);
 
 
         if (!verificaConexion(this.getBaseContext())) {
@@ -62,24 +70,19 @@ public class Lugares extends ActionBarActivity{
 
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            mostrarMensaje(extras.get("usuario").toString() , extras.get("desde").toString());
+            mostrarMensaje(extras.get("usuario").toString(), extras.get("desde").toString());
             this.nombreUsuario = extras.get("usuario").toString();
         }
 
-        llenarParaderos();
+        obtenerParaderos();
         llenarListaRecientes();
 
-        opciones = new String[]{"Lugares Recientes","Parques", "Educacion", "Centros comerciales", "Hoteles", "Bancos", "Cajeros", "Restaurantes"};
         drawerLayout = (DrawerLayout) findViewById(R.id.contenedor_principal);
-        listView = (ListView) findViewById(R.id.menuizquierdo);
 
-
-        listView.setAdapter(new ArrayAdapter<String>(getSupportActionBar().getThemedContext(),
-                android.R.layout.simple_list_item_1, opciones));
-
-
+        this.listView.setAdapter(this.myAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
+            @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Fragment fragment = null;
@@ -124,17 +127,37 @@ public class Lugares extends ActionBarActivity{
                         .replace(R.id.contenedor_frame, fragment)
                         .commit();
 
-                if(bnd){
+                if (bnd) {
                     ((LinearLayout) findViewById(R.id.mostrarAdentro)).setVisibility(View.GONE);
                 }
 
                 listView.setItemChecked(position, true);
-                tituloSec = opciones[position];
+
+
+                //despintarTodosItems;
+                for (int i = 0; i < parent.getCount(); i++) {
+                    LinearLayout linear = (LinearLayout)parent.getChildAt(i);
+                    TextView texto = (TextView) linear.getChildAt(1);
+                    if (linear != null){
+                        linear.setBackground(new ColorDrawable(Color.parseColor("#FFFFFF")));
+                        texto.setTextColor(getResources().getColor(R.color.negro_defecto));
+                        //poner la imagen negra para todos
+                    }
+
+                }
+
+                LinearLayout linearFila = (LinearLayout) view.findViewById(R.id.linearFila);
+                linearFila.setBackground(new ColorDrawable(Color.parseColor("#F5F5F5")));
+                TextView texto = (TextView) view.findViewById(R.id.texto_fila_menu_izquierdo);
+                texto.setTextColor(new ColorDrawable(Color.parseColor("#3F51B5")).getColor());
+                //imagen azul
+                tituloSec = (getResources().getStringArray(R.array.menu_izquierdo))[position];
                 getSupportActionBar().setTitle(tituloSec);
                 drawerLayout.closeDrawer(listView);
 
 
             }
+
         });
 
         tituloSec = getTitle();
@@ -154,6 +177,7 @@ public class Lugares extends ActionBarActivity{
                 super.onDrawerOpened(drawerView);
                 ActivityCompat.invalidateOptionsMenu(Lugares.this);
             }
+
         };
         drawerLayout.setDrawerListener(drawerToggle);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -162,7 +186,7 @@ public class Lugares extends ActionBarActivity{
 
     }
 
-    private void llenarParaderos() {
+    private void obtenerParaderos() {
         BaseDeDatos baseDeDatos = new BaseDeDatos(Lugares.this.getBaseContext());
         baseDeDatos.abrir();
         this.paraderos = baseDeDatos.getParaderos();
@@ -171,7 +195,7 @@ public class Lugares extends ActionBarActivity{
 
     private void mostrarMensaje(String usuario, String desde) {
         String mensaje = "";
-        switch (desde){
+        switch (desde) {
             case "inicio":
                 mensaje = "Stopbus te estaba esperando " + usuario;
                 break;
@@ -179,11 +203,11 @@ public class Lugares extends ActionBarActivity{
                 mensaje = "Hola de nuevo " + usuario;
                 break;
             case "registro":
-                mensaje =  "Stopbus te saluda " + usuario + "!!" ;
+                mensaje = "Stopbus te saluda " + usuario + "!!";
                 break;
         }
 
-        Toast.makeText(getBaseContext(), mensaje , Toast.LENGTH_LONG).show();
+        Toast.makeText(getBaseContext(), mensaje, Toast.LENGTH_LONG).show();
     }
 
     private void llenarListaRecientes() {
@@ -229,7 +253,7 @@ public class Lugares extends ActionBarActivity{
         if (id == R.id.action_settings) {
             Toast.makeText(this.getBaseContext(), "settings", Toast.LENGTH_LONG).show();
         }
-        if(id == R.id.action_refresh){
+        if (id == R.id.action_refresh) {
             Toast.makeText(this.getBaseContext(), "Actualizando...", Toast.LENGTH_LONG).show();
             Copia copiaDatos = new Copia();
             copiaDatos.copiarDatos(getBaseContext(), this.nombreUsuario);
@@ -277,4 +301,55 @@ public class Lugares extends ActionBarActivity{
         return bConectado;
     }
 
+}
+
+class MyAdapter extends BaseAdapter {
+
+    private Context context;
+    String menuIzquierdo[];
+    int imagenes[] = {R.drawable.ic_action_clock, R.drawable.ic_action_bike,
+            R.drawable.ic_action_book, R.drawable.ic_action_cart,
+            R.drawable.ic_action_home, R.drawable.ic_action_creditcard,
+            R.drawable.ic_action_dialer, R.drawable.ic_action_restaurant
+    };
+
+    public MyAdapter(Context context) {
+        this.menuIzquierdo = context.getResources().getStringArray(R.array.menu_izquierdo);
+        this.context = context;
+    }
+
+    @Override
+    public int getCount() {
+        return menuIzquierdo.length;
+    }
+
+    @Override
+    public Object getItem(int position) {
+        return menuIzquierdo[position];
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        View fila = null;
+        if (convertView == null) {
+            LayoutInflater inflater = (LayoutInflater) this.context
+                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            fila = inflater.inflate(R.layout.fila_navigation_drawer, parent, false);
+
+        } else {
+            fila = convertView;
+        }
+        TextView textoDelMenu = (TextView) fila.findViewById(R.id.texto_fila_menu_izquierdo);
+        ImageView imagenDelMenu = (ImageView) fila.findViewById(R.id.imagen_fila_menu_izquierdo);
+        textoDelMenu.setText(menuIzquierdo[position]);
+        imagenDelMenu.setImageResource(imagenes[position]);
+
+        return fila;
+    }
 }
