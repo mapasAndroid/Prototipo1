@@ -8,6 +8,8 @@ import android.util.Log;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
+
 /**
  * Created by MAIS on 11/07/2015.
  */
@@ -302,29 +304,39 @@ public class BaseDeDatos {
 
     }
 
-    public String getParaderos(String tipo) {
+    public String [] getParaderos(String tipo) {
         String columnas[] = new String[]{
                 "id",
-                "nombre"
+                "nombre",
+                "latitud",
+                "longitud"
         };
 
         Cursor c = this.nBaseDatos.query("paradero", columnas, null, null, null, null, null, null);
 
         if (c.getCount() == 0) {
-            return "";
+            return null;
         }
-        String res = "";
+        ArrayList <String> res = new ArrayList<String>();
 
         int id = c.getColumnIndexOrThrow("id");
         int nombre = c.getColumnIndexOrThrow("nombre");
+        int latitud = c.getColumnIndexOrThrow("latitud");
+        int longitud = c.getColumnIndexOrThrow("longitud");
 
         for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
             if(c.getString(id).startsWith(tipo + "$")){
-                res += c.getString(id) + "&" + c.getString(nombre) + ",";
+                res.add(c.getString(id) + "&" + c.getString(nombre) +"&"
+                        + c.getString(latitud) +"&" + c.getString(longitud));
             }
         }
 
-        return res;
+        String [] respuesta = new String[res.size()];
+        for(int i = 0; i < res.size(); i++){
+            respuesta[i] = res.get(i);
+        }
+
+        return respuesta;
 
     }
 
