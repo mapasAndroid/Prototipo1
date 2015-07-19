@@ -8,7 +8,6 @@ import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
@@ -17,8 +16,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.cristhian.prototipo2.util.SystemUiHider;
-
-import java.io.File;
 
 
 /**
@@ -199,20 +196,6 @@ public class Splash extends Activity {
             }
         }, 4000);
 
-    }
-
-    private void borrarBd() {
-        File database = getApplicationContext().getDatabasePath("stopbus.db");
-        Log.i("Database", database.getFreeSpace() + "");
-
-        if (!database.exists()) {
-            // Database does not exist so copy it from assets here
-            Log.i("Database", "no encontrada");
-        } else {
-            Log.i("Database", "encontrada");
-            database.delete();
-            Log.i("Database", "borrada");
-        }
     }
 
 

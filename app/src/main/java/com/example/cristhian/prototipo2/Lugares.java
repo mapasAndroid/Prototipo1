@@ -2,8 +2,10 @@ package com.example.cristhian.prototipo2;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -18,6 +20,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -33,6 +36,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
+
+import static android.graphics.Typeface.BOLD;
+
 
 public class Lugares extends ActionBarActivity {
 
@@ -46,7 +53,6 @@ public class Lugares extends ActionBarActivity {
     private CharSequence tituloSec;
     private CharSequence tituloApp;
 
-    private String paraderos;
     private String recientes;
     private String nombreUsuario;
     private MyAdapter myAdapter;
@@ -57,6 +63,7 @@ public class Lugares extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sitios);
 
+        //pintar el action bar de color indigo
         ActionBar bar = getSupportActionBar();
         bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#3F51B5")));
 
@@ -64,17 +71,19 @@ public class Lugares extends ActionBarActivity {
         listView = (ListView) findViewById(R.id.menuizquierdo);
 
 
+        //verificar si hay conexion a internet para notificarle al usuario
         if (!verificaConexion(this.getBaseContext())) {
             asistenteMensajes.imprimir(this.getFragmentManager(), "No tienes conexion a internet, Stopbus trabajara con los datos locales. Conectate a internet lo mas rapido posible.", 3);
         }
 
+        //muestra el mensaje de bienvenida, siempre y cuando hayan extras en el intent
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             mostrarMensaje(extras.get("usuario").toString(), extras.get("desde").toString());
             this.nombreUsuario = extras.get("usuario").toString();
         }
 
-        obtenerParaderos();
+        //mostrar los lugares recientes en el principal
         llenarListaRecientes();
 
         drawerLayout = (DrawerLayout) findViewById(R.id.contenedor_principal);
@@ -86,7 +95,7 @@ public class Lugares extends ActionBarActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Fragment fragment = null;
-                boolean bnd = false;
+                boolean bnd = true;
                 switch (position) {
                     case 0:
                         bnd = false;
@@ -94,31 +103,24 @@ public class Lugares extends ActionBarActivity {
                         break;
                     case 1:
                         fragment = new Parque();
-                        bnd = true;
                         break;
                     case 2:
                         fragment = new Educacion();
-                        bnd = true;
                         break;
                     case 3:
                         fragment = new Centro_comercial();
-                        bnd = true;
                         break;
                     case 4:
                         fragment = new Hotel();
-                        bnd = true;
                         break;
                     case 5:
                         fragment = new Banco();
-                        bnd = true;
                         break;
                     case 6:
                         fragment = new Cajero();
-                        bnd = true;
                         break;
                     case 7:
                         fragment = new Restaurante();
-                        bnd = true;
                         break;
                 }
 
@@ -133,14 +135,14 @@ public class Lugares extends ActionBarActivity {
 
                 listView.setItemChecked(position, true);
 
-
-                //despintarTodosItems;
+                //despintar todos los items para que se vean normal
                 for (int i = 0; i < parent.getCount(); i++) {
-                    LinearLayout linear = (LinearLayout)parent.getChildAt(i);
+                    LinearLayout linear = (LinearLayout) parent.getChildAt(i);
                     TextView texto = (TextView) linear.getChildAt(1);
-                    if (linear != null){
+                    if (linear != null) {
                         linear.setBackground(new ColorDrawable(Color.parseColor("#FFFFFF")));
                         texto.setTextColor(getResources().getColor(R.color.negro_defecto));
+                        texto.setTypeface(texto.getTypeface(), Typeface.NORMAL);
                         //poner la imagen negra para todos
                     }
 
@@ -150,11 +152,11 @@ public class Lugares extends ActionBarActivity {
                 linearFila.setBackground(new ColorDrawable(Color.parseColor("#F5F5F5")));
                 TextView texto = (TextView) view.findViewById(R.id.texto_fila_menu_izquierdo);
                 texto.setTextColor(new ColorDrawable(Color.parseColor("#3F51B5")).getColor());
-                //imagen azul
+                texto.setTypeface(texto.getTypeface(), BOLD);
+                //imagen azul para el especificamente
                 tituloSec = (getResources().getStringArray(R.array.menu_izquierdo))[position];
                 getSupportActionBar().setTitle(tituloSec);
                 drawerLayout.closeDrawer(listView);
-
 
             }
 
@@ -184,13 +186,6 @@ public class Lugares extends ActionBarActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
 
 
-    }
-
-    private void obtenerParaderos() {
-        BaseDeDatos baseDeDatos = new BaseDeDatos(Lugares.this.getBaseContext());
-        baseDeDatos.abrir();
-        this.paraderos = baseDeDatos.getParaderos();
-        baseDeDatos.cerrar();
     }
 
     private void mostrarMensaje(String usuario, String desde) {
@@ -250,8 +245,18 @@ public class Lugares extends ActionBarActivity {
         int id = item.getItemId();
 
 
-        if (id == R.id.action_settings) {
-            Toast.makeText(this.getBaseContext(), "settings", Toast.LENGTH_LONG).show();
+        if (id == R.id.action_logout) {
+            Toast.makeText(this.getBaseContext(), "Cerrando Sesion...", Toast.LENGTH_SHORT).show();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    borrarBd();
+                    Intent inicio = new Intent(Lugares.this, Inicio.class);
+                    startActivity(inicio);
+                    Lugares.this.finish();
+                }
+            }, 2000);
+
         }
         if (id == R.id.action_refresh) {
             Toast.makeText(this.getBaseContext(), "Actualizando...", Toast.LENGTH_LONG).show();
@@ -266,6 +271,20 @@ public class Lugares extends ActionBarActivity {
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void borrarBd() {
+        File database = getApplicationContext().getDatabasePath("stopbus.db");
+        Log.i("Database", database.getFreeSpace() + "");
+
+        if (!database.exists()) {
+            // Database does not exist so copy it from assets here
+            Log.i("Database", "no encontrada");
+        } else {
+            Log.i("Database", "encontrada");
+            database.delete();
+            Log.i("Database", "borrada");
+        }
     }
 
 

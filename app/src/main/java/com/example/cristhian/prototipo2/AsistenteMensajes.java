@@ -16,6 +16,12 @@ public class AsistenteMensajes {
 
     }
 
+    /**
+     * metodo decorador de el metodo imprimir de el dialogfragment2
+     * @param fm fragment manager de donde fue llamado
+     * @param mensaje mensaje a imprimir
+     * @param bnd bandera de donde fue llamado
+     */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     public void imprimir(FragmentManager fm , String mensaje, int bnd){
         //bnd 1: para vista principal, 2: para registro.. etc

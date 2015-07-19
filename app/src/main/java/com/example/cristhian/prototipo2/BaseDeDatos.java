@@ -54,10 +54,6 @@ public class BaseDeDatos {
 
     }
 
-    public void setNoActualizacion(String usuario) {
-
-    }
-
     /**
      * metodo que permite copiar los datos a la base de datos local, por medio de un JSON
      * @param s es la cadena con el contenido de las tabals en formato JSON
@@ -306,7 +302,7 @@ public class BaseDeDatos {
 
     }
 
-    public String getParaderos() {
+    public String getParaderos(String tipo) {
         String columnas[] = new String[]{
                 "id",
                 "nombre"
@@ -323,11 +319,14 @@ public class BaseDeDatos {
         int nombre = c.getColumnIndexOrThrow("nombre");
 
         for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-            res += c.getString(id) + "&" + c.getString(nombre) + ",";
+            if(c.getString(id).startsWith(tipo + "$")){
+                res += c.getString(id) + "&" + c.getString(nombre) + ",";
+            }
         }
 
         return res;
 
     }
+
 }
 

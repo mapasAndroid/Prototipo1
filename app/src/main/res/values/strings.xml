@@ -31,7 +31,8 @@
     <string name="title_section3">Section 3</string>
 
     <string name="action_refresh">Actualizar</string>
-    <string name="title_activity_prueba">Prueba</string>
+    <string name="action_salir">Salir</string>
+    <string name="action_ayuda">Ayuda</string>
 
     <string-array name="menu_izquierdo">
         <item>Lugares Recientes</item>
