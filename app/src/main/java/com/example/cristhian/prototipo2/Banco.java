@@ -3,8 +3,10 @@ package com.example.cristhian.prototipo2;
 import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -14,16 +16,18 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Created by MAIS on 13/07/15.
  */
-public class Banco extends Fragment {
+public class Banco extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     String paraderos[];
     BaseDeDatos baseDeDatos;
     private ListView listView;
     private AdapterCardView myAdapter;
+    SwipeRefreshLayout mSwipeRefreshLayout;
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Nullable
@@ -39,8 +43,15 @@ public class Banco extends Fragment {
         this.paraderos = this.baseDeDatos.getParaderos("B");
         this.baseDeDatos.cerrar();
 
+        //recycler view
         RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
+        recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(rootView.getContext()));
+
+        //swiperefresh
+        mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.activity_main_swipe_refresh_layout);
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.orange, R.color.green, R.color.blue);
+        mSwipeRefreshLayout.setOnRefreshListener(this);
 
 
         ItemData itemsData[] = { new ItemData("Help",5),
@@ -69,7 +80,24 @@ public class Banco extends Fragment {
     public String[] getParaderos() {
         return this.paraderos;
     }
+
+    @Override
+    public void onRefresh() {
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(Banco.this.getActivity().getBaseContext(), "debo actualizar, aun no lo hago, pero ya hago swipe :')", Toast.LENGTH_LONG).show();
+                mSwipeRefreshLayout.setRefreshing(false);
+            }
+        }, 5000);
+    }
 }
+
+                    /*
+                    =========================================
+                    CLASE PARA MANEJAR EL ADAPTER DE LA LISTA
+                    =========================================
+                     */
 
 class AdapterCardView extends RecyclerView.Adapter<AdapterCardView.ViewHolder> {
     private ItemData[] itemsData;
@@ -84,7 +112,7 @@ class AdapterCardView extends RecyclerView.Adapter<AdapterCardView.ViewHolder> {
                                                    int viewType) {
         // create a new view
         View itemLayoutView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.fila_card_view, null);
+                .inflate(R.layout.fila_card_view, parent, false);
 
         // create ViewHolder
 

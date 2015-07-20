@@ -320,6 +320,9 @@ public class Lugares extends ActionBarActivity {
         return bConectado;
     }
 
+    public void maxtrans(View view) {
+        Toast.makeText(this, "supuestamente lo agrego a favoritos, no lo hago, pero intento :P", Toast.LENGTH_LONG).show();
+    }
 }
 
 class MyAdapter extends BaseAdapter {
