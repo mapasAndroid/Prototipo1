@@ -46,7 +46,7 @@ public class BaseDeDatos {
         };
 
         Cursor c = this.nBaseDatos.query("pasajero", columnas, null, null, null, null, null);
-        Log.i("prueba", c.getCount()+"");
+        Log.i("prueba", c.getCount() + "");
         if (c.getCount() == 0) {
             return null;
 
@@ -58,6 +58,7 @@ public class BaseDeDatos {
 
     /**
      * metodo que permite copiar los datos a la base de datos local, por medio de un JSON
+     *
      * @param s es la cadena con el contenido de las tabals en formato JSON
      */
     public void duplicarEnLocal(String s) {
@@ -178,7 +179,7 @@ public class BaseDeDatos {
 
                 //va a insertar si solo si, el usuario que esta en el registro de pasajeroxbus es el usuario que tenemos aca, si no, nos
                 //va a generar error a la hora de insertar usuarios diferentes al que tenemos
-                if(pasajerosxbuses.getJSONObject(i+"").getString("usuario").equals(objetoPapa.getJSONObject("1").getJSONObject("0").getString("usuario"))) {
+                if (pasajerosxbuses.getJSONObject(i + "").getString("usuario").equals(objetoPapa.getJSONObject("1").getJSONObject("0").getString("usuario"))) {
                     String usuario = pasajerosxbuses.getJSONObject(i + "").getString("usuario");
                     String placa = pasajerosxbuses.getJSONObject(i + "").getString("placa");
                     String fecha = pasajerosxbuses.getJSONObject(i + "").getString("fecha");
@@ -227,7 +228,8 @@ public class BaseDeDatos {
         this.nBaseDatos.insert("pasajero", null, values);
     }
 
-    private void insertarParadero(String id_paradero, String nombre, String latitud, String longitud) {
+    private void insertarParadero(String id_paradero, String nombre,
+                                  String latitud, String longitud) {
         ContentValues values = new ContentValues();
 
         values.put("id", id_paradero);
@@ -272,12 +274,33 @@ public class BaseDeDatos {
     }
 
 
+    /*
+   =================================
+               GETTERS
+   =================================
+    */
 
-     /*
-    =================================
-                GETTERS
-    =================================
-     */
+
+    public String getReciente(String id) {
+        String columnas[] = new String[]{
+                "id",
+                "nombre"
+        };
+
+        Cursor c = this.nBaseDatos.query("recientes", columnas, "id=\'" + id + "\'", null, null, null, null);
+
+        if (c.getCount() == 0) {
+            return "";
+        }
+        String res = "";
+
+        int id_ = c.getColumnIndexOrThrow("id");
+        int nombre = c.getColumnIndexOrThrow("nombre");
+        c.moveToFirst();
+
+        //Separo el id del nombre ocn un simbolo &
+        return c.getString(c.getColumnIndexOrThrow("id")) + "&" + c.getString(c.getColumnIndexOrThrow("nombre"));
+    }
 
 
     public String getRecientes() {
@@ -286,7 +309,7 @@ public class BaseDeDatos {
                 "nombre"
         };
 
-        Cursor c = this.nBaseDatos.query("recientes", columnas, null, null,  null, null, null, null);
+        Cursor c = this.nBaseDatos.query("recientes", columnas, null, null, null, null, null, null);
 
         if (c.getCount() == 0) {
             return "";
@@ -296,15 +319,16 @@ public class BaseDeDatos {
         int id = c.getColumnIndexOrThrow("id");
         int nombre = c.getColumnIndexOrThrow("nombre");
 
+        //separo cada id del nombre, por un simbolo &
         for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-            res += c.getString(id) + "$" + c.getString(nombre) + ",";
+            res += c.getString(id) + "&" + c.getString(nombre) + ",";
         }
 
         return res;
 
     }
 
-    public String [] getParaderos(String tipo) {
+    public String[] getParaderos(String tipo) {
         String columnas[] = new String[]{
                 "id",
                 "nombre",
@@ -317,7 +341,7 @@ public class BaseDeDatos {
         if (c.getCount() == 0) {
             return null;
         }
-        ArrayList <String> res = new ArrayList<String>();
+        ArrayList<String> res = new ArrayList<String>();
 
         int id = c.getColumnIndexOrThrow("id");
         int nombre = c.getColumnIndexOrThrow("nombre");
@@ -325,14 +349,23 @@ public class BaseDeDatos {
         int longitud = c.getColumnIndexOrThrow("longitud");
 
         for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-            if(c.getString(id).startsWith(tipo + "$")){
-                res.add(c.getString(id) + "&" + c.getString(nombre) +"&"
-                        + c.getString(latitud) +"&" + c.getString(longitud));
+            if (c.getString(id).startsWith(tipo + "$")) {
+                String esReciente = (this.getReciente(c.getString(id)));
+                if (!esReciente.isEmpty()) {
+                    esReciente = "si";
+                } else {
+                    esReciente = "no";
+                }
+                res.add(c.getString(id) + "&" + c.getString(nombre) + "&"
+                        + c.getString(latitud) + "&" + c.getString(longitud) + "&" + esReciente);
+
+                Log.i("cm01" , c.getString(id) + "&" + c.getString(nombre) + "&"
+                        + c.getString(latitud) + "&" + c.getString(longitud) + "&" + esReciente);
             }
         }
 
-        String [] respuesta = new String[res.size()];
-        for(int i = 0; i < res.size(); i++){
+        String[] respuesta = new String[res.size()];
+        for (int i = 0; i < res.size(); i++) {
             respuesta[i] = res.get(i);
         }
 

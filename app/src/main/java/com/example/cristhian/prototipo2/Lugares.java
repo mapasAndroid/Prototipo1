@@ -54,6 +54,11 @@ public class Lugares extends ActionBarActivity {
     private CharSequence tituloApp;
 
     private String recientes;
+
+    public String getNombreUsuario() {
+        return nombreUsuario;
+    }
+
     private String nombreUsuario;
     private MyAdapter myAdapter;
 
@@ -67,6 +72,7 @@ public class Lugares extends ActionBarActivity {
         ActionBar bar = getSupportActionBar();
         bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#3F51B5")));
 
+        //poner el adapter
         this.myAdapter = new MyAdapter(this);
         listView = (ListView) findViewById(R.id.menuizquierdo);
 
@@ -219,7 +225,7 @@ public class Lugares extends ActionBarActivity {
             alista = new String[para.length];
 
             for (int i = 0; i < alista.length; i++) {
-                alista[i] = para[i].split("$")[1];
+                alista[i] = para[i].split("&")[1];
             }
         } else {
             alista = new String[]{"No hay lugares recientes"};
@@ -255,7 +261,7 @@ public class Lugares extends ActionBarActivity {
                     startActivity(inicio);
                     Lugares.this.finish();
                 }
-            }, 2000);
+            }, 1500);
 
         }
         if (id == R.id.action_refresh) {

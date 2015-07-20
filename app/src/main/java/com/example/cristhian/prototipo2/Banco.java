@@ -14,7 +14,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -23,11 +22,12 @@ import android.widget.Toast;
  */
 public class Banco extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
-    String paraderos[];
+
     BaseDeDatos baseDeDatos;
-    private ListView listView;
     private AdapterCardView myAdapter;
-    SwipeRefreshLayout mSwipeRefreshLayout;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private RecyclerView recyclerView;
+    private View rootView;
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Nullable
@@ -36,60 +36,66 @@ public class Banco extends Fragment implements SwipeRefreshLayout.OnRefreshListe
                              @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
 
+        //infla en contenido en el fragmento lay_banco
         View rootView = inflater.inflate(R.layout.lay_banco, container, false);
 
-        this.baseDeDatos = new BaseDeDatos(rootView.getContext());
-        this.baseDeDatos.abrir();
-        this.paraderos = this.baseDeDatos.getParaderos("B");
-        this.baseDeDatos.cerrar();
+        //set rootView como mi atributo
+        this.rootView = rootView;
 
-        //recycler view
-        RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
+        //recycler view para la lista dinamica
+        this.recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(rootView.getContext()));
 
-        //swiperefresh
+        //solicitar los paraderos de tipo banco y los inserta en la lista dinamica
+        this.setParaderosEnLista();
+
+        //elemento swiperefresh para actualizar
         mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.activity_main_swipe_refresh_layout);
         mSwipeRefreshLayout.setColorSchemeResources(R.color.orange, R.color.green, R.color.blue);
         mSwipeRefreshLayout.setOnRefreshListener(this);
 
 
-        ItemData itemsData[] = { new ItemData("Help",5),
-                new ItemData("Delete",5),
-                new ItemData("Cloud",5),
-                new ItemData("Favorite",5),
-                new ItemData("Like",5),
-                new ItemData("Rating",5)};
-
-        this.myAdapter = new AdapterCardView(itemsData);
-        recyclerView.setAdapter(myAdapter);
-        recyclerView.setItemAnimator(new DefaultItemAnimator());
-
         return rootView;
 
     }
 
-    private String imprimirVector(String[] paraderos) {
-        String res = "";
-        for (String paradero : paraderos) {
-            res += paradero + ":::";
+    private void setParaderosEnLista() {
+
+        this.baseDeDatos = new BaseDeDatos(this.rootView.getContext());
+        this.baseDeDatos.abrir();
+        String [] paraderos = this.baseDeDatos.getParaderos("B");
+        this.baseDeDatos.cerrar();
+
+        //elementos de cada elemento que la lsita dinamica va a tener
+        ItemParaderos itemsData[] = new ItemParaderos[paraderos.length];
+        for(int i = 0; i< paraderos.length ; i++) {
+            itemsData[i] = new ItemParaderos(paraderos[i]);
         }
-        return res;
+        //le pone el adapter personalizado a el recycle view
+        this.myAdapter = new AdapterCardView(itemsData);
+        this.recyclerView.setAdapter(this.myAdapter);
+        this.recyclerView.setItemAnimator(new DefaultItemAnimator());
     }
 
-    public String[] getParaderos() {
-        return this.paraderos;
-    }
-
+    /**
+     * metodo que refresca la lista de paraderos
+     */
     @Override
     public void onRefresh() {
+        new Copia().copiarDatos(
+                this.rootView.getContext(),
+                ((Lugares) getActivity()).getNombreUsuario()
+        );
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(Banco.this.getActivity().getBaseContext(), "debo actualizar, aun no lo hago, pero ya hago swipe :')", Toast.LENGTH_LONG).show();
+                setParaderosEnLista();
                 mSwipeRefreshLayout.setRefreshing(false);
+                Toast.makeText(Banco.this.getActivity().getBaseContext(), "Actualizado", Toast.LENGTH_LONG).show();
             }
-        }, 5000);
+        }, 7000);
     }
 }
 
@@ -100,49 +106,50 @@ public class Banco extends Fragment implements SwipeRefreshLayout.OnRefreshListe
                      */
 
 class AdapterCardView extends RecyclerView.Adapter<AdapterCardView.ViewHolder> {
-    private ItemData[] itemsData;
+    private ItemParaderos[] itemsData;
 
-    public AdapterCardView(ItemData[] itemsData) {
+    public AdapterCardView(ItemParaderos[] itemsData) {
         this.itemsData = itemsData;
     }
 
-    // Create new views (invoked by the layout manager)
+    // crear nuevas vistas (invocado por el layout manager)
     @Override
     public AdapterCardView.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                    int viewType) {
-        // create a new view
+        // crear una nueva vista
         View itemLayoutView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fila_card_view, parent, false);
 
-        // create ViewHolder
+        // crear ViewHolder
 
         ViewHolder viewHolder = new ViewHolder(itemLayoutView);
         return viewHolder;
     }
 
-    // Replace the contents of a view (invoked by the layout manager)
+    // reemplaza el contenido de la vista (invocado por el layout manager)
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
 
-        // - get data from your itemsData at this position
-        // - replace the contents of the view with that itemsData
-
-        viewHolder.txtViewTitle.setText(itemsData[position].getTitle());
-        //viewHolder.imgViewIcon.setImageResource(itemsData[position].getImageUrl());
-
+        //coloca el nombre en cada elemento de la lista
+        viewHolder.txtViewTitle.setText(itemsData[position].getNombreParadero());
+        viewHolder.txtViewLatLong.setText(itemsData[position].getLatLong());
+        if(itemsData[position].esReciente()){
+            viewHolder.imageViewFav.setBackgroundResource(R.drawable.ic_action_star_10_yellow);
+        }
 
     }
 
-    // inner class to hold a reference to each item of RecyclerView
+    //calse embebida para referenciar a cada elemento de recycler
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
         public TextView txtViewTitle;
-        public ImageView imgViewIcon;
+        public TextView txtViewLatLong;
+        public ImageView imageViewFav;
 
         public ViewHolder(View itemLayoutView) {
             super(itemLayoutView);
-            txtViewTitle = (TextView) itemLayoutView.findViewById(R.id.person_name);
-            //imgViewIcon = (ImageView) itemLayoutView.findViewById(R.id.item_icon);
+            txtViewTitle = (TextView) itemLayoutView.findViewById(R.id.nombreParadero);
+            txtViewLatLong = (TextView) itemLayoutView.findViewById(R.id.latLonParadero);
         }
     }
 
