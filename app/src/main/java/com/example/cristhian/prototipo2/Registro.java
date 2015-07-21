@@ -111,9 +111,11 @@ public class Registro extends ActionBarActivity{
                 return;
             }
 
+            String datos [] = s.split("&");
             Intent activityLugares= new Intent(Registro.this, Lugares.class);
-            new Copia().copiarDatos(Registro.this.getBaseContext(), s);
-            activityLugares.putExtra("usuario", s);
+            new Copia().copiarDatos(Registro.this.getBaseContext(), datos[0]);
+            activityLugares.putExtra("usuario", datos[0]);
+            activityLugares.putExtra("correo", datos[1]);
             activityLugares.putExtra("desde", "registro");
             startActivity(activityLugares);
             finish();

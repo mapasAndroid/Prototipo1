@@ -181,6 +181,10 @@ public class Splash extends Activity {
                         datosUsuario.getColumnIndexOrThrow("usuario")
                 );
 
+                String correo = datosUsuario.getString(
+                        datosUsuario.getColumnIndexOrThrow("correo")
+                );
+
                 Intent activityLugares = new Intent(Splash.this, Lugares.class);
                 baseDeDatos.cerrar();
                 new Copia().copiarDatos(
@@ -189,6 +193,7 @@ public class Splash extends Activity {
                 );
 
                 activityLugares.putExtra("usuario", usuario);
+                activityLugares.putExtra("correo", correo);
                 activityLugares.putExtra("desde", "splash");
                 Splash.this.startActivity(activityLugares);
                 overridePendingTransition(R.anim.zoom_forward_in, R.anim.zoom_forward_out);

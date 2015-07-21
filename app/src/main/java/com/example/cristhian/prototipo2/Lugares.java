@@ -43,16 +43,24 @@ public class Lugares extends ActionBarActivity {
     AsistenteMensajes asistenteMensajes = new AsistenteMensajes();
 
     private CharSequence tituloSec;
+
     private CharSequence tituloApp;
 
     private String recientes;
 
+    private String nombreUsuario;
+
+    private String correoUsuario;
+
+    private MyAdapter myAdapter;
+
     public String getNombreUsuario() {
         return nombreUsuario;
     }
+    public String getCorreoUsuario() {
+        return correoUsuario;
+    }
 
-    private String nombreUsuario;
-    private MyAdapter myAdapter;
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
@@ -75,6 +83,7 @@ public class Lugares extends ActionBarActivity {
         if (extras != null) {
             mostrarMensaje(extras.get("usuario").toString(), extras.get("desde").toString());
             this.nombreUsuario = extras.get("usuario").toString();
+            this.correoUsuario = extras.get("correo").toString();
         }
 
         //mostrar los lugares recientes en el principal
@@ -96,14 +105,14 @@ public class Lugares extends ActionBarActivity {
         this.mRecycler.setHasFixedSize(true);
 
         this.myAdapter = new MyAdapter(titulos, imagenes, this.getNombreUsuario(),
-                "algo@gmail.com", R.drawable.ic_action_user_white);
+                this.getCorreoUsuario(), R.drawable.ic_action_user_white);
 
 
         this.mRecycler.setAdapter(this.myAdapter);
 
-        mLayoutManager = new LinearLayoutManager(this);                 // Creating a layout Manager
+        mLayoutManager = new LinearLayoutManager(this);
 
-        this.mRecycler.setLayoutManager(mLayoutManager);                 // Setting the layout Manager
+        this.mRecycler.setLayoutManager(mLayoutManager);
 
         /*
         mRecycler.setOnItemClickListener(new AdapterView.OnItemClickListener() {
