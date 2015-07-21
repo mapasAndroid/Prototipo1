@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -14,38 +13,31 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.io.File;
-
-import static android.graphics.Typeface.BOLD;
 
 
 public class Lugares extends ActionBarActivity {
 
     private String[] alista;
     private DrawerLayout drawerLayout;
-    private ListView listView, lista;
+    private ListView lista;
+    private RecyclerView mRecycler;
+    RecyclerView.LayoutManager mLayoutManager;
     private EditText editable;
     private ActionBarDrawerToggle drawerToggle;
     AsistenteMensajes asistenteMensajes = new AsistenteMensajes();
@@ -72,10 +64,6 @@ public class Lugares extends ActionBarActivity {
         ActionBar bar = getSupportActionBar();
         bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#3F51B5")));
 
-        //poner el adapter
-        this.myAdapter = new MyAdapter(this);
-        listView = (ListView) findViewById(R.id.menuizquierdo);
-
 
         //verificar si hay conexion a internet para notificarle al usuario
         if (!verificaConexion(this.getBaseContext())) {
@@ -90,12 +78,35 @@ public class Lugares extends ActionBarActivity {
         }
 
         //mostrar los lugares recientes en el principal
-        llenarListaRecientes();
+        //llenarListaRecientes();
 
         drawerLayout = (DrawerLayout) findViewById(R.id.contenedor_principal);
 
-        this.listView.setAdapter(this.myAdapter);
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        int imagenes[] = {R.drawable.ic_action_clock, R.drawable.ic_action_bike,
+                R.drawable.ic_action_book, R.drawable.ic_action_cart,
+                R.drawable.ic_action_home, R.drawable.ic_action_creditcard,
+                R.drawable.ic_action_dialer, R.drawable.ic_action_restaurant
+        };
+
+        String titulos[] = this.getResources().getStringArray(R.array.menu_izquierdo);
+
+
+        //poner el adapter
+        this.mRecycler = (RecyclerView) findViewById(R.id.menuizquierdo);
+        this.mRecycler.setHasFixedSize(true);
+
+        this.myAdapter = new MyAdapter(titulos, imagenes, this.getNombreUsuario(),
+                "algo@gmail.com", R.drawable.ic_action_user_white);
+
+
+        this.mRecycler.setAdapter(this.myAdapter);
+
+        mLayoutManager = new LinearLayoutManager(this);                 // Creating a layout Manager
+
+        this.mRecycler.setLayoutManager(mLayoutManager);                 // Setting the layout Manager
+
+        /*
+        mRecycler.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
             @Override
@@ -167,6 +178,8 @@ public class Lugares extends ActionBarActivity {
             }
 
         });
+
+        */
 
         tituloSec = getTitle();
         tituloApp = getTitle();
@@ -330,6 +343,7 @@ public class Lugares extends ActionBarActivity {
         Toast.makeText(this, "supuestamente lo agrego a favoritos, no lo hago, pero intento :P", Toast.LENGTH_LONG).show();
     }
 }
+/*
 
 class MyAdapter extends BaseAdapter {
 
@@ -380,4 +394,4 @@ class MyAdapter extends BaseAdapter {
 
         return fila;
     }
-}
+}*/

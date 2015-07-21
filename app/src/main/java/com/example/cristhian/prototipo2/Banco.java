@@ -108,6 +108,7 @@ public class Banco extends Fragment implements SwipeRefreshLayout.OnRefreshListe
 class AdapterCardView extends RecyclerView.Adapter<AdapterCardView.ViewHolder> {
     private ItemParaderos[] itemsData;
 
+
     public AdapterCardView(ItemParaderos[] itemsData) {
         this.itemsData = itemsData;
     }
@@ -116,8 +117,10 @@ class AdapterCardView extends RecyclerView.Adapter<AdapterCardView.ViewHolder> {
     @Override
     public AdapterCardView.ViewHolder onCreateViewHolder(ViewGroup parent,
                                                    int viewType) {
+
+
         // crear una nueva vista
-        View itemLayoutView = LayoutInflater.from(parent.getContext())
+        View itemLayoutView = itemLayoutView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.fila_card_view, parent, false);
 
         // crear ViewHolder
