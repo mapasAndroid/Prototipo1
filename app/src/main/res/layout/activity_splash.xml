@@ -12,7 +12,7 @@
         android:id="@+id/logoLocale"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/logolocale"
+        android:background="@drawable/logo_blanco_mediano"
         android:scaleType="centerInside"
         android:visibility="visible" />
 
