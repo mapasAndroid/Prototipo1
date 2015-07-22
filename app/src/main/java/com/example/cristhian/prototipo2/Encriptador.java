@@ -17,9 +17,9 @@ public class Encriptador {
             e.printStackTrace();
         }
         byte[] result = mDigest.digest(cadena.getBytes());
-        StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < result.length; i++) {
-            sb.append(Integer.toString((result[i] & 0xff) + 0x100, 16).substring(1));
+        StringBuilder sb = new StringBuilder();
+        for (byte aResult : result) {
+            sb.append(Integer.toString((aResult & 0xff) + 0x100, 16).substring(1));
         }
 
         return sb.toString();

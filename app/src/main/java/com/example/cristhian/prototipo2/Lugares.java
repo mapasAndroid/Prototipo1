@@ -13,6 +13,8 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
@@ -57,6 +59,7 @@ public class Lugares extends ActionBarActivity {
     public String getNombreUsuario() {
         return nombreUsuario;
     }
+
     public String getCorreoUsuario() {
         return correoUsuario;
     }
@@ -75,7 +78,9 @@ public class Lugares extends ActionBarActivity {
 
         //verificar si hay conexion a internet para notificarle al usuario
         if (!verificaConexion(this.getBaseContext())) {
-            asistenteMensajes.imprimir(this.getFragmentManager(), "No tienes conexion a internet, Stopbus trabajara con los datos locales. Conectate a internet lo mas rapido posible.", 3);
+            asistenteMensajes.imprimir(this.getFragmentManager(),
+                    "No tienes conexion a internet, Stopbus trabajara con los datos locales. " +
+                            "Conectate a internet lo mas rapido posible.", 3);
         }
 
         //muestra el mensaje de bienvenida, siempre y cuando hayan extras en el intent
@@ -114,84 +119,22 @@ public class Lugares extends ActionBarActivity {
 
         this.mRecycler.setLayoutManager(mLayoutManager);
 
-        /*
-        mRecycler.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        mRecycler.addOnItemTouchListener(
+                new RecyclerItemClickListener(getBaseContext(), new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+                        String title[] = {""};
+                        Fragment a = getFragmentByPos(position, title);
+                        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+                        transaction.replace(R.id.contenedor_frame, a);
+                        transaction.addToBackStack(null);
+                        transaction.commit();
+                        setTitle(title[0]);
+                        drawerLayout.closeDrawers();
 
-            @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Fragment fragment = null;
-                boolean bnd = true;
-                switch (position) {
-                    case 0:
-                        bnd = false;
-                        fragment = new Recientes();
-                        break;
-                    case 1:
-                        fragment = new Parque();
-                        break;
-                    case 2:
-                        fragment = new Educacion();
-                        break;
-                    case 3:
-                        fragment = new Centro_comercial();
-                        break;
-                    case 4:
-                        fragment = new Hotel();
-                        break;
-                    case 5:
-                        fragment = new Banco();
-                        break;
-                    case 6:
-                        fragment = new Cajero();
-                        break;
-                    case 7:
-                        fragment = new Restaurante();
-                        break;
-                }
-
-                FragmentManager fragmentManager = getSupportFragmentManager();
-                fragmentManager.beginTransaction()
-                        .replace(R.id.contenedor_frame, fragment)
-                        .commit();
-
-                if (bnd) {
-                    ((LinearLayout) findViewById(R.id.mostrarAdentro)).setVisibility(View.GONE);
-                }
-
-                listView.setItemChecked(position, true);
-
-                //despintar todos los items para que se vean normal
-                for (int i = 0; i < parent.getCount(); i++) {
-                    LinearLayout linear = (LinearLayout) parent.getChildAt(i);
-                    TextView texto = (TextView) linear.getChildAt(1);
-                    if (linear != null) {
-                        linear.setBackground(new ColorDrawable(Color.parseColor("#FFFFFF")));
-                        texto.setTextColor(getResources().getColor(R.color.negro_defecto));
-                        texto.setTypeface(texto.getTypeface(), Typeface.NORMAL);
-                        //poner la imagen negra para todos
                     }
-
-                }
-
-                LinearLayout linearFila = (LinearLayout) view.findViewById(R.id.linearFila);
-                linearFila.setBackground(new ColorDrawable(Color.parseColor("#F5F5F5")));
-                TextView texto = (TextView) view.findViewById(R.id.texto_fila_menu_izquierdo);
-                texto.setTextColor(new ColorDrawable(Color.parseColor("#3F51B5")).getColor());
-                texto.setTypeface(texto.getTypeface(), BOLD);
-                //imagen azul para el especificamente
-                tituloSec = (getResources().getStringArray(R.array.menu_izquierdo))[position];
-                getSupportActionBar().setTitle(tituloSec);
-                drawerLayout.closeDrawer(listView);
-
-            }
-
-        });
-
-        */
-
-        tituloSec = getTitle();
-        tituloApp = getTitle();
+                })
+        );
 
         drawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
                 R.string.abierto, R.string.cerrado) {
@@ -214,6 +157,45 @@ public class Lugares extends ActionBarActivity {
         getSupportActionBar().setHomeButtonEnabled(true);
 
 
+    }
+
+    public Fragment getFragmentByPos(int pos, String title []){
+        String instancia = "";
+        switch (pos){
+            case 1:
+                instancia = "LR";
+                title[0] = "Lugares Recientes";
+                break;
+            case 2:
+                instancia = "P";
+                title[0] = "Parques";
+                break;
+            case 3:
+                instancia = "E";
+                title[0] = "Educacion";
+                break;
+            case 4:
+                instancia = "C";
+                title[0] = "Compras";
+                break;
+            case 5:
+                instancia = "H";
+                title[0] = "Hoteles";
+                break;
+            case 6:
+                instancia = "B";
+                title[0] = "Bancos";
+                break;
+            case 7:
+                instancia = "CA";
+                title[0] = "Cajeros";
+                break;
+            case 8:
+                instancia = "R";
+                title[0] = "Restaurantes";
+                break;
+        }
+        return new FragmentoBasico(instancia);
     }
 
     private void mostrarMensaje(String usuario, String desde) {
@@ -240,7 +222,7 @@ public class Lugares extends ActionBarActivity {
         this.recientes = baseDeDatos.getRecientes();
         baseDeDatos.cerrar();
 
-        lista = (ListView) findViewById(R.id.lugaresRecientes);
+        //lista = (ListView) findViewById(R.id.lugaresRecientes);
 
         if (!recientes.isEmpty()) {
             String[] para = this.recientes.split(",");
@@ -351,56 +333,15 @@ public class Lugares extends ActionBarActivity {
     public void maxtrans(View view) {
         Toast.makeText(this, "supuestamente lo agrego a favoritos, no lo hago, pero intento :P", Toast.LENGTH_LONG).show();
     }
-}
-/*
-
-class MyAdapter extends BaseAdapter {
-
-    private Context context;
-    String menuIzquierdo[];
-    int imagenes[] = {R.drawable.ic_action_clock, R.drawable.ic_action_bike,
-            R.drawable.ic_action_book, R.drawable.ic_action_cart,
-            R.drawable.ic_action_home, R.drawable.ic_action_creditcard,
-            R.drawable.ic_action_dialer, R.drawable.ic_action_restaurant
-    };
-
-    public MyAdapter(Context context) {
-        this.menuIzquierdo = context.getResources().getStringArray(R.array.menu_izquierdo);
-        this.context = context;
-    }
-
-    @Override
-    public int getCount() {
-        return menuIzquierdo.length;
-    }
-
-    @Override
-    public Object getItem(int position) {
-        return menuIzquierdo[position];
-    }
-
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
 
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        View fila = null;
-        if (convertView == null) {
-            LayoutInflater inflater = (LayoutInflater) this.context
-                    .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-            fila = inflater.inflate(R.layout.fila_navigation_drawer, parent, false);
+    public void onBackPressed() {
 
+        if (getFragmentManager().getBackStackEntryCount() == 0) {
+            this.finish();
         } else {
-            fila = convertView;
+            getFragmentManager().popBackStack();
         }
-        TextView textoDelMenu = (TextView) fila.findViewById(R.id.texto_fila_menu_izquierdo);
-        ImageView imagenDelMenu = (ImageView) fila.findViewById(R.id.imagen_fila_menu_izquierdo);
-        textoDelMenu.setText(menuIzquierdo[position]);
-        imagenDelMenu.setImageResource(imagenes[position]);
-
-        return fila;
     }
-}*/
+}

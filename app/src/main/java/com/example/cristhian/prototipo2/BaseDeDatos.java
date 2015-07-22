@@ -62,7 +62,6 @@ public class BaseDeDatos {
      * @param s es la cadena con el contenido de las tabals en formato JSON
      */
     public void duplicarEnLocal(String s) {
-        Log.i("prueba", s);
         insertarTablaPasajero(s);
         insertarTablaRuta(s);
         insertarTablaParadero(s);
