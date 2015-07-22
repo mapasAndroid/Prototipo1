@@ -64,7 +64,7 @@ public class Splash extends Activity {
         setContentView(R.layout.activity_splash);
 
         final View controlsView = findViewById(R.id.fullscreen_content_controls);
-        final View contentView = findViewById(R.id.tituloBus);
+        final View contentView = findViewById(R.id.tituloBus_splash);
 
         //mostrar el logo
         ImageView logoLocale = (ImageView) findViewById(R.id.logoLocale);
@@ -72,7 +72,7 @@ public class Splash extends Activity {
 
 
         //poner fuente al titulo
-        TextView titulo = (TextView) findViewById(R.id.tituloBus);
+        TextView titulo = (TextView) findViewById(R.id.tituloBus_splash);
         roboto = Typeface.createFromAsset(getAssets(), "fonts/RobotoCondensed-Bold.ttf");
         titulo.setTypeface(roboto);
 

@@ -12,6 +12,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -45,6 +46,8 @@ public class Inicio extends ActionBarActivity {
     //Ventana de espera para el usuario
     protected ProgressDialog progres;
 
+    Typeface roboto;
+
 
     /**
      * METODO PRINCIPAL ONCREATE
@@ -64,6 +67,11 @@ public class Inicio extends ActionBarActivity {
         //cambiar el tipo de letra a DEFAULT al edit text contraseña
         EditText password = (EditText) findViewById(R.id.editTextContrasenia);
         password.setTypeface(Typeface.DEFAULT);
+
+        //poner fuente al titulo
+        TextView titulo = (TextView) findViewById(R.id.tituloBus);
+        roboto = Typeface.createFromAsset(getAssets(), "fonts/RobotoCondensed-Bold.ttf");
+        titulo.setTypeface(roboto);
 
     }
 

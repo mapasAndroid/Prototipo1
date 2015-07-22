@@ -20,7 +20,7 @@
          is needed to present your content, e.g. VideoView, SurfaceView,
          TextureView, etc.-->
     <TextView
-        android:id="@+id/tituloBus"
+        android:id="@+id/tituloBus_splash"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
