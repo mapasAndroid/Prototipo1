@@ -25,7 +25,6 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -104,7 +103,6 @@ public class Lugares extends ActionBarActivity {
 
         String titulos[] = this.getResources().getStringArray(R.array.menu_izquierdo);
 
-
         //poner el adapter
         this.mRecycler = (RecyclerView) findViewById(R.id.menuizquierdo);
         this.mRecycler.setHasFixedSize(true);
@@ -156,7 +154,13 @@ public class Lugares extends ActionBarActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setHomeButtonEnabled(true);
 
-
+        String title[] = {""};
+        Fragment a = getFragmentByPos(1, title);
+        FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.contenedor_frame, a);
+        transaction.addToBackStack(null);
+        transaction.commit();
+        setTitle(title[0]);
     }
 
     public Fragment getFragmentByPos(int pos, String title []){
@@ -215,31 +219,6 @@ public class Lugares extends ActionBarActivity {
         Toast.makeText(getBaseContext(), mensaje, Toast.LENGTH_LONG).show();
     }
 
-    private void llenarListaRecientes() {
-
-        BaseDeDatos baseDeDatos = new BaseDeDatos(Lugares.this.getBaseContext());
-        baseDeDatos.abrir();
-        this.recientes = baseDeDatos.getRecientes();
-        baseDeDatos.cerrar();
-
-        //lista = (ListView) findViewById(R.id.lugaresRecientes);
-
-        if (!recientes.isEmpty()) {
-            String[] para = this.recientes.split(",");
-            alista = new String[para.length];
-
-            for (int i = 0; i < alista.length; i++) {
-                alista[i] = para[i].split("&")[1];
-            }
-        } else {
-            alista = new String[]{"No hay lugares recientes"};
-        }
-
-        final ArrayAdapter<String> aa = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, alista);
-        lista.setAdapter(aa);
-
-    }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -275,7 +254,7 @@ public class Lugares extends ActionBarActivity {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    llenarListaRecientes();
+
                 }
             }, 5000);
 

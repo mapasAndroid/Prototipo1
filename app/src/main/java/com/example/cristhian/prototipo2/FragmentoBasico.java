@@ -58,46 +58,62 @@ public class FragmentoBasico extends Fragment implements SwipeRefreshLayout.OnRe
 
         //recycler view para la lista dinamica
         this.recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(rootView.getContext()));
-
-        //solicitar los paraderos de tipo banco y los inserta en la lista dinamica
-        this.setParaderosEnLista();
+        this.recyclerView.setHasFixedSize(true);
+        this.recyclerView.setLayoutManager(new LinearLayoutManager(rootView.getContext()));
 
         //elemento swiperefresh para actualizar
-        mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.activity_main_swipe_refresh_layout);
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.orange, R.color.green, R.color.blue);
-        mSwipeRefreshLayout.setOnRefreshListener(this);
+        this.mSwipeRefreshLayout = (SwipeRefreshLayout) this.rootView.findViewById(R.id.activity_main_swipe_refresh_layout);
+        this.mSwipeRefreshLayout.setColorSchemeResources(R.color.orange, R.color.green, R.color.blue);
+        this.mSwipeRefreshLayout.setOnRefreshListener(this);
+
+        //solicitar los paraderos de tipo banco y los inserta en la lista dinamica
+        boolean hayParaderos = this.setParaderosEnLista();
+        if(! hayParaderos){
+            String tv = "";
+            if (getArguments() != null) {
+                tv = getArguments().getString("tipoV");
+            }
+            if(tv.equals("LR")){
+                this.rootView = inflater.inflate(R.layout.fragment_fragmento_vacio_recientes, container, false);
+            }else{
+                this.rootView = inflater.inflate(R.layout.fragment_fragmento_vacio_basico, container, false);
+            }
+
+        }
 
 
-        return rootView;
+        return this.rootView;
 
     }
 
-    public void setParaderosEnLista() {
+    public boolean setParaderosEnLista() {
 
-        this.baseDeDatos = new BaseDeDatos(this.rootView.getContext());
-        this.baseDeDatos.abrir();
         String tv = "";
         if (getArguments() != null) {
             tv = getArguments().getString("tipoV");
 
         }
+
+        this.baseDeDatos = new BaseDeDatos(this.rootView.getContext());
+        this.baseDeDatos.abrir();
         String[] paraderos = this.baseDeDatos.getParaderos(tv);
         this.baseDeDatos.cerrar();
-        String r = "";
-        for (String para : paraderos) {
-            r += para + ":::";
+
+        if (paraderos != null) {
+            //elementos de cada elemento que la lista dinamica va a tener
+            ItemParaderos itemsData[] = new ItemParaderos[paraderos.length];
+            for (int i = 0; i < paraderos.length; i++) {
+                itemsData[i] = new ItemParaderos(paraderos[i]);
+            }
+            //le pone el adapter personalizado a el recycle view
+            this.myAdapter = new AdapterCardView(itemsData);
+            this.recyclerView.setAdapter(this.myAdapter);
+            this.recyclerView.setItemAnimator(new DefaultItemAnimator());
+            return true;
+        } else {
+            return false;
         }
-        //elementos de cada elemento que la lsita dinamica va a tener
-        ItemParaderos itemsData[] = new ItemParaderos[paraderos.length];
-        for (int i = 0; i < paraderos.length; i++) {
-            itemsData[i] = new ItemParaderos(paraderos[i]);
-        }
-        //le pone el adapter personalizado a el recycle view
-        this.myAdapter = new AdapterCardView(itemsData);
-        this.recyclerView.setAdapter(this.myAdapter);
-        this.recyclerView.setItemAnimator(new DefaultItemAnimator());
+
     }
 
     /**

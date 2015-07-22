@@ -283,7 +283,9 @@ public class BaseDeDatos {
     public String getReciente(String id) {
         String columnas[] = new String[]{
                 "id",
-                "nombre"
+                "nombre",
+                "latitud",
+                "longitud"
         };
 
         Cursor c = this.nBaseDatos.query("recientes", columnas, "id=\'" + id + "\'", null, null, null, null);
@@ -291,40 +293,18 @@ public class BaseDeDatos {
         if (c.getCount() == 0) {
             return "";
         }
-        String res = "";
 
         int id_ = c.getColumnIndexOrThrow("id");
         int nombre = c.getColumnIndexOrThrow("nombre");
+        int latitud = c.getColumnIndexOrThrow("latitud");
+        int longitud = c.getColumnIndexOrThrow("longitud");
         c.moveToFirst();
 
         //Separo el id del nombre ocn un simbolo &
-        return c.getString(c.getColumnIndexOrThrow("id")) + "&" + c.getString(c.getColumnIndexOrThrow("nombre"));
-    }
-
-
-    public String getRecientes() {
-        String columnas[] = new String[]{
-                "id",
-                "nombre"
-        };
-
-        Cursor c = this.nBaseDatos.query("recientes", columnas, null, null, null, null, null, null);
-
-        if (c.getCount() == 0) {
-            return "";
-        }
-        String res = "";
-
-        int id = c.getColumnIndexOrThrow("id");
-        int nombre = c.getColumnIndexOrThrow("nombre");
-
-        //separo cada id del nombre, por un simbolo &
-        for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-            res += c.getString(id) + "&" + c.getString(nombre) + ",";
-        }
-
-        return res;
-
+        return c.getString(id_) + "&" +
+                c.getString(nombre) + "&" +
+                c.getString(latitud) + "&" +
+                c.getString(longitud);
     }
 
     public String[] getParaderos(String tipo) {
@@ -335,7 +315,14 @@ public class BaseDeDatos {
                 "longitud"
         };
 
-        Cursor c = this.nBaseDatos.query("paradero", columnas, null, null, null, null, null, null);
+        String tabla = "";
+        if(tipo.equals("LR")){
+            tabla = "recientes";
+        }else{
+            tabla = "paradero";
+        }
+
+        Cursor c = this.nBaseDatos.query(tabla, columnas, null, null, null, null, null, null);
 
         if (c.getCount() == 0) {
             return null;
