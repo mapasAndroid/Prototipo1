@@ -14,10 +14,9 @@
         >
 
         <ImageView
-            android:layout_width="180dp"
-            android:layout_height="180dp"
-            android:src="@drawable/favorite_icon_stopbus"
-            android:layout_below="@+id/texto_vacio_recientes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/favorite_icon_stopbus2"
             android:layout_gravity="center_horizontal"
 
 
@@ -28,11 +27,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="No hay lugares recientes"
-            android:textSize="24sp"
+            android:textSize="26sp"
             android:layout_gravity="center_horizontal"
-            android:textStyle="bold"
             android:textColor="#616161"
-            android:layout_marginTop="20dp"
             />
 
     </LinearLayout>

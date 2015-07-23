@@ -1,6 +1,7 @@
 package com.example.cristhian.prototipo2;
 
 import android.annotation.SuppressLint;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 
@@ -68,16 +70,26 @@ public class FragmentoBasico extends Fragment implements SwipeRefreshLayout.OnRe
 
         //solicitar los paraderos de tipo banco y los inserta en la lista dinamica
         boolean hayParaderos = this.setParaderosEnLista();
-        if(! hayParaderos){
+        if (!hayParaderos) {
             String tv = "";
             if (getArguments() != null) {
                 tv = getArguments().getString("tipoV");
             }
-            if(tv.equals("LR")){
+
+            if (tv.equals("LR")) {
                 this.rootView = inflater.inflate(R.layout.fragment_fragmento_vacio_recientes, container, false);
-            }else{
+                ((TextView) this.rootView.findViewById(R.id.texto_vacio_recientes))
+                        .setTypeface(Typeface.createFromAsset(
+                                        getActivity().getAssets(), "fonts/RobotoCondensed-Light.ttf")
+                        );
+            } else {
                 this.rootView = inflater.inflate(R.layout.fragment_fragmento_vacio_basico, container, false);
+                ((TextView) this.rootView.findViewById(R.id.texto_vacio_basico))
+                        .setTypeface(Typeface.createFromAsset(
+                                        getActivity().getAssets(), "fonts/RobotoCondensed-Light.ttf")
+                        );
             }
+
 
         }
 
