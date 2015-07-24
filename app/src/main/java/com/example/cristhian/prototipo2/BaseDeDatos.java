@@ -344,10 +344,11 @@ public class BaseDeDatos {
                 }
                 res.add(c.getString(id) + "&" + c.getString(nombre) + "&"
                         + c.getString(latitud) + "&" + c.getString(longitud) + "&" + esReciente);
-
-                Log.i("cm01" , c.getString(id) + "&" + c.getString(nombre) + "&"
-                        + c.getString(latitud) + "&" + c.getString(longitud) + "&" + esReciente);
             }
+        }
+
+        if(res.isEmpty()){
+            return null;
         }
 
         String[] respuesta = new String[res.size()];
