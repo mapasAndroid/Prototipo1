@@ -31,7 +31,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="25dp"
                     android:textSize="20sp"
-                    android:text="Hola"
+                    android:text=""
                     />
 
                 <TextView
@@ -39,11 +39,20 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="25dp"
-                    android:text="Something like I love Maite:3" />
+                    android:text="" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/id_oculto"
+                    android:text=""
+                    android:layout_marginLeft="25dp"
+                    android:visibility="gone"
+                    />
 
             </LinearLayout>
 
-            <!--para boton facoritos -->
+            <!--para boton favoritos -->
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -57,7 +66,6 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:src="@drawable/ic_action_star_10"
-                    android:onClick="maxtrans"
                     />
 
             </LinearLayout>

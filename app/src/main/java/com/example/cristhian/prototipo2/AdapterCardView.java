@@ -42,6 +42,7 @@ public class AdapterCardView extends RecyclerView.Adapter<AdapterCardView.ViewHo
         //coloca el nombre en cada elemento de la lista
         viewHolder.txtViewTitle.setText(itemsData[position].getNombreParadero());
         viewHolder.txtViewLatLong.setText(itemsData[position].getLatLong());
+        viewHolder.texto_oculto.setText(itemsData[position].getIdParadero());
         if(itemsData[position].esReciente()){
             viewHolder.imageViewFav.setBackgroundResource(R.drawable.ic_action_star_10_yellow);
         }
@@ -54,11 +55,13 @@ public class AdapterCardView extends RecyclerView.Adapter<AdapterCardView.ViewHo
         public TextView txtViewTitle;
         public TextView txtViewLatLong;
         public ImageView imageViewFav;
+        public TextView texto_oculto;
 
         public ViewHolder(View itemLayoutView) {
             super(itemLayoutView);
             txtViewTitle = (TextView) itemLayoutView.findViewById(R.id.nombreParadero);
             txtViewLatLong = (TextView) itemLayoutView.findViewById(R.id.latLonParadero);
+            texto_oculto = (TextView) itemLayoutView.findViewById(R.id.id_oculto);
         }
     }
 

@@ -1,19 +1,27 @@
 package com.example.cristhian.prototipo2;
 
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 /**
  * Created by CRISTHIAN and MAITE
@@ -55,7 +63,7 @@ public class FragmentoBasico extends Fragment implements SwipeRefreshLayout.OnRe
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.fragment_fragmento_basico, container, false);
+        final View rootView = inflater.inflate(R.layout.fragment_fragmento_basico, container, false);
 
         //set rootView como mi atributo
         this.rootView = rootView;
@@ -94,6 +102,29 @@ public class FragmentoBasico extends Fragment implements SwipeRefreshLayout.OnRe
 
 
         }
+
+        this.recyclerView.addOnItemTouchListener(
+                new RecyclerItemClickListener(this.rootView.getContext(), new RecyclerItemClickListener.OnItemClickListener() {
+                    @Override
+                    public void onItemClick(View view, int position) {
+
+                        LinearLayout linearLayout = (LinearLayout) view;
+
+                        CardView cardView = (CardView) linearLayout.getChildAt(0);
+
+                        LinearLayout hijoCardView = (LinearLayout) cardView.getChildAt(0);
+
+                        LinearLayout hijodeLinear = (LinearLayout) hijoCardView.getChildAt(0);
+
+                        TextView texto = (TextView) hijodeLinear.getChildAt(2);
+
+                        String id = texto.getText().toString();
+
+                        ((Lugares) getActivity()).agregarARecientes(id);
+
+                    }
+                })
+        );
 
 
         return this.rootView;

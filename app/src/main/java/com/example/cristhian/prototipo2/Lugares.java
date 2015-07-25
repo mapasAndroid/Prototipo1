@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.media.Image;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Build;
@@ -21,12 +22,18 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import org.w3c.dom.Text;
 
 import java.io.File;
 
@@ -367,15 +374,6 @@ public class Lugares extends ActionBarActivity {
     }
 
     /**
-     * metodo que agrega a los favoritos o recientes cuando se da click en la imagen de la estrella
-     *
-     * @param view
-     */
-    public void maxtrans(View view) {
-        Toast.makeText(this, "supuestamente lo agrego a favoritos, no lo hago, pero intento :P", Toast.LENGTH_LONG).show();
-    }
-
-    /**
      * metodo que permite salir de la aplicacion cuando el usuario presiona el boton ATRAS
      * y no generar error con la pila de sucesos
      */
@@ -388,5 +386,9 @@ public class Lugares extends ActionBarActivity {
         } else {
             getFragmentManager().popBackStack();
         }
+    }
+
+    public void agregarARecientes(String id){
+        Toast.makeText(getBaseContext(), id, Toast.LENGTH_SHORT).show();
     }
 }

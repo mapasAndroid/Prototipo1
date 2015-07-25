@@ -23,7 +23,7 @@ public class DBHelper extends SQLiteOpenHelper {
             Empresa.E_NIT + " TEXT PRIMARY KEY, " +
             Empresa.E_NOMBRE + " TEXT NOT NULL, " +
             Empresa.E_DIRECCION + " TEXT NOT NULL, " +
-            Empresa.E_TELEFONO + " TEXT NOT NULL " + ");";
+            Empresa.E_TELEFONO + " TEXT NOT NULL );";
 
 
     public static final String CREATE_PASAJERO = "CREATE TABLE " + Pasajero.NOMBRE_TABLA + "(" +
@@ -34,11 +34,9 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public static final String CREATE_RECIENTES = "CREATE TABLE " + Recientess.NOMBRE_TABLA + "(" +
             Recientess.R_ID + " TEXT PRIMARY KEY, " +
-            Recientess.R_ID_USUARIO + " TEXT NOT NULL, " +
             Recientess.R_NOMBRE + " TEXT NOT NULL, " +
             Recientess.R_LATITUD + " TEXT NOT NULL, " +
-            Recientess.R_LONGITUD + " TEXT NOT NULL, " +
-            "FOREIGN KEY (" + Recientess.R_ID_USUARIO + ") REFERENCES " + Pasajero.NOMBRE_TABLA + " (" + Pasajero.P_USUARIO + "));";
+            Recientess.R_LONGITUD + " TEXT NOT NULL);" ;
 
 
     public static final String CREATE_RUTAS = "CREATE TABLE " + Ruta.NOMBRE_TABLA + "(" +
@@ -49,7 +47,7 @@ public class DBHelper extends SQLiteOpenHelper {
             Paradero.PA_ID + " TEXT PRIMARY KEY, " +
             Paradero.PA_NOMBRE + " TEXT NOT NULL, " +
             Paradero.PA_LATITUD + " TEXT NOT NULL, " +
-            Paradero.PA_LONGITUD + " TEXT NOT NULL " + ");";
+            Paradero.PA_LONGITUD + " TEXT NOT NULL );";
 
     public static final String CREATE_PARADEROXRUTA = "CREATE TABLE " + ParaderoxRuta.NOMBRE_TABLA + "(" +
             ParaderoxRuta.PR_ID_PARADERO + " TEXT NOT NULL, " +

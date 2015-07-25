@@ -27,7 +27,6 @@ public class StopBusContract {
     public static final class Recientess implements BaseColumns {
         public static final String NOMBRE_TABLA = "recientes";
         public static final String R_ID = "id";
-        public static final String R_ID_USUARIO = "usuario";
         public static final String R_NOMBRE = "nombre";
         public static final String R_LATITUD = "latitud";
         public static final String R_LONGITUD = "longitud";
