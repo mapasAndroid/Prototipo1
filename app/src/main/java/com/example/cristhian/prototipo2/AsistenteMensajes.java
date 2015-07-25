@@ -5,7 +5,7 @@ import android.app.FragmentManager;
 import android.os.Build;
 
 /**
- * Created by cristhian on 5/10/15.
+ * Created by CRISTHIAN and MAITE
  */
 public class AsistenteMensajes {
 

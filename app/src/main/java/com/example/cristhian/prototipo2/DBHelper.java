@@ -6,7 +6,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 import com.example.cristhian.prototipo2.StopBusContract.*;
 
-
+/**
+ * Created by CRISTHIAN and MAITE
+ */
 public class DBHelper extends SQLiteOpenHelper {
 
     private static final int DATABASE_VERSION = 2;

@@ -29,7 +29,9 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Created by CRISTHIAN and MAITE
+ */
 public class Inicio extends ActionBarActivity {
 
     /**

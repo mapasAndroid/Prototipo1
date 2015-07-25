@@ -4,7 +4,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
 /**
- * Created by cristhian on 5/11/15.
+ * Created by CRISTHIAN and MAITE
  */
 public class Encriptador {
 

@@ -32,7 +32,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
+                android:orientation="horizontal"
                 android:layout_gravity="center"
                 >
 
@@ -41,65 +41,64 @@
                     android:id="@+id/logoAzul"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_horizontal"
                     android:layout_marginTop="10dp"
-                    android:background="@drawable/logoazul_mediano" />
-
-            </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="400dp"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_marginLeft="40dp"
-                android:layout_gravity="center_vertical"
-                >
-
-
-                <EditText
-                    android:id="@+id/editTextUsuario"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:drawableLeft="@drawable/ic_action_user"
-                    android:hint="Email o Usuario"
-                    android:inputType="text" />
-
-                <EditText
-                    android:id="@+id/editTextContrasenia"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:drawableLeft="@drawable/ic_action_key"
-                    android:hint="Contraseña"
-                    android:inputType="textPassword" />
-
+                    android:background="@drawable/logoazul_grande" />
 
                 <LinearLayout
-                    android:layout_width="300dp"
+                    android:layout_width="400dp"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginLeft="40dp"
+                    android:layout_gravity="center_vertical"
                     >
 
-                    <Button
-                        android:id="@+id/iniciarsesion"
+
+                    <EditText
+                        android:id="@+id/editTextUsuario"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:onClick="IniciarSesion"
-                        android:text="@string/iniciar" />
+                        android:layout_marginTop="20dp"
+                        android:drawableLeft="@drawable/ic_action_user"
+                        android:hint="Email o Usuario"
+                        android:inputType="text" />
 
-                    <Button
-                        android:id="@+id/registrarse"
+                    <EditText
+                        android:id="@+id/editTextContrasenia"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:onClick="Registrarse"
-                        android:text="@string/Registro"
-                        />
+                        android:layout_marginTop="10dp"
+                        android:drawableLeft="@drawable/ic_action_key"
+                        android:hint="Contraseña"
+                        android:inputType="textPassword" />
 
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="20dp"
+                        >
+
+                        <Button
+                            android:id="@+id/iniciarsesion"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:onClick="IniciarSesion"
+                            android:text="@string/iniciar" />
+
+                        <Button
+                            android:id="@+id/registrarse"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:onClick="Registrarse"
+                            android:text="@string/Registro"
+                            />
+
+                    </LinearLayout>
                 </LinearLayout>
+
+
             </LinearLayout>
 
         </LinearLayout>

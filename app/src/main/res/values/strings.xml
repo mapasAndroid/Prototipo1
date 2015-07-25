@@ -1,37 +1,50 @@
 <resources>
     <string name="app_name">StopBus</string>
 
-    <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
     <string name="Registro">Registrarse</string>
+
     <string name="iniciar">Iniciar</string>
+
     <string name="REGISTRO">Registro</string>
+
     <string name="Sitios">Lugares recientes</string>
 
-
     <string name="navigation_drawer_open">Open navigation drawer</string>
+
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_example">Example action</string>
+
     <string name="fire">Aceptar</string>
+
     <string name="cancel">cancelar</string>
+
     <string name="app_id">464748477014722</string>
+
     <string name="title_activity_splash">Splash</string>
-    <string name="dummy_button">Dummy Button</string>
-    <string name="dummy_content"></string>
 
     <string name="abierto">Abierto</string>
+
     <string name="cerrado">Cerrado</string>
-    <string name="title_activity_maps">Map</string>
+
+    <string name="title_activity_maps">Mapas</string>
+
     <string name="Mapa">Mapa</string>
+
     <string name="title_activity_menu2">menu2</string>
 
     <string name="title_section1">Section 1</string>
+
     <string name="title_section2">Section 2</string>
+
     <string name="title_section3">Section 3</string>
 
     <string name="action_refresh">Actualizar</string>
+
     <string name="action_salir">Salir</string>
+
     <string name="action_ayuda">Ayuda</string>
 
     <string-array name="menu_izquierdo">
@@ -45,6 +58,4 @@
         <item>Restaurantes</item>
     </string-array>
 
-<!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

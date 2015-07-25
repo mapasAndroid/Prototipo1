@@ -17,7 +17,7 @@
                 app:showAsAction="never" />
             <item
                 android:id="@+id/action_ayuda"
-                android:icon="@drawable/ic_action_planet"
+                android:icon="@drawable/ic_action_help"
                 android:title="@string/action_ayuda"
                 app:showAsAction="never" />
             <item

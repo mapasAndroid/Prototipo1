@@ -27,9 +27,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by MAIS on 07/05/2015.
+ * Created by CRISTHIAN and MAITE
  */
-
 public class Registro extends ActionBarActivity{
 
     /**

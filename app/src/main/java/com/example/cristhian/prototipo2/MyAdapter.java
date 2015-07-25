@@ -9,9 +9,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 /**
- * Created by cristhian on 7/20/15.
+ * Created by CRISTHIAN and MAITE
  */
-
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     private static final int TYPE_HEADER = 0;  // Declaring Variable to Understand which View is being worked on

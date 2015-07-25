@@ -11,7 +11,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 /**
- * Created by MAIS on 11/07/2015.
+ * Created by CRISTHIAN and MAITE
  */
 public class BaseDeDatos {
 
@@ -279,7 +279,6 @@ public class BaseDeDatos {
    =================================
     */
 
-
     public String getReciente(String id) {
         String columnas[] = new String[]{
                 "id",
@@ -307,6 +306,12 @@ public class BaseDeDatos {
                 c.getString(longitud);
     }
 
+    /**
+     * retorna los paraderos de toda la base de datos
+     * @param tipo el tipo de paraderos que se necesita buscar
+     * @return un vector con los paraderos separados por coma, o null
+     * en caso contrario
+     */
     public String[] getParaderos(String tipo) {
         String columnas[] = new String[]{
                 "id",

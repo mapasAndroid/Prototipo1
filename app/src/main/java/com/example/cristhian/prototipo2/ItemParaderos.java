@@ -1,7 +1,7 @@
 package com.example.cristhian.prototipo2;
 
 /**
- * Created by cristhian on 7/19/15.
+ * Created by CRISTHIAN and MAITE
  */
 public class ItemParaderos {
     private String nombreParadero;

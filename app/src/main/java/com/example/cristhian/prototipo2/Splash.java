@@ -17,12 +17,8 @@ import android.widget.TextView;
 
 import com.example.cristhian.prototipo2.util.SystemUiHider;
 
-
 /**
- * An example full-screen activity that shows and hides the system UI (i.e.
- * status bar and navigation/system bar) with user interaction.
- *
- * @see SystemUiHider
+ * Created by CRISTHIAN and MAITE
  */
 public class Splash extends Activity {
 
@@ -150,6 +146,7 @@ public class Splash extends Activity {
         final ImageView myImage = (ImageView) findViewById(R.id.logoLocale);
         final Animation myRotation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.iniciar);
         myImage.startAnimation(myRotation);
+
     }
 
 
@@ -162,7 +159,6 @@ public class Splash extends Activity {
             public void run() {
                 /* Create an Intent that will start the Menu-Activity. */
 
-                //borrarBd();
                 BaseDeDatos baseDeDatos = new BaseDeDatos(Splash.this.getBaseContext());
                 baseDeDatos.abrir();
 

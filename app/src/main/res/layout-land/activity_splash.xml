@@ -12,7 +12,7 @@
         android:id="@+id/logoLocale"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/logo_blanco_grande"
+        android:background="@drawable/logo_blanco_peuqenio"
         android:scaleType="centerInside"
         android:visibility="visible" />
 
@@ -26,7 +26,7 @@
         android:layout_gravity="center_horizontal"
         android:text="@string/app_name"
         android:textColor="#fff"
-        android:textSize="50sp" />
+        android:textSize="40sp" />
 
     <LinearLayout
         android:id="@+id/fullscreen_content_controls"
