@@ -272,6 +272,18 @@ public class BaseDeDatos {
         this.nBaseDatos.insert("pasajeroxbus", null, values);
     }
 
+    private void insertarReciente(String id, String nombre, String latitud, String longitud) {
+
+        ContentValues values = new ContentValues();
+
+        values.put("id", id);
+        values.put("nombre", nombre);
+        values.put("latitud", latitud);
+        values.put("longitud", longitud);
+
+        this.nBaseDatos.insert("recientes", null, values);
+    }
+
 
     /*
    =================================
@@ -365,5 +377,38 @@ public class BaseDeDatos {
 
     }
 
+    public String getParaderoPorId(String id) {
+        String columnas[] = new String[]{
+                "id",
+                "nombre",
+                "latitud",
+                "longitud"
+        };
+
+        Cursor c = this.nBaseDatos.query("paradero", columnas, "id=\'" + id + "\'", null, null, null, null);
+
+        if (c.getCount() == 0) {
+            return "";
+        }
+
+        int id_ = c.getColumnIndexOrThrow("id");
+        int nombre = c.getColumnIndexOrThrow("nombre");
+        int latitud = c.getColumnIndexOrThrow("latitud");
+        int longitud = c.getColumnIndexOrThrow("longitud");
+        c.moveToFirst();
+
+        //Separo el id del nombre ocn un simbolo &
+        return c.getString(id_) + "&" +
+                c.getString(nombre) + "&" +
+                c.getString(latitud) + "&" +
+                c.getString(longitud);
+    }
+
+    public void agregarRecientes(String datos) {
+        //separo por el simbolo &
+        String datosReciente [] = datos.split("&");
+        this.insertarReciente(datosReciente[0],
+                datosReciente[1], datosReciente[2], datosReciente[3]);
+    }
 }
 

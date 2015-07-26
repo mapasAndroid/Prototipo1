@@ -388,7 +388,13 @@ public class Lugares extends ActionBarActivity {
         }
     }
 
-    public void agregarARecientes(String id){
-        Toast.makeText(getBaseContext(), id, Toast.LENGTH_SHORT).show();
+    public String agregarARecientes(String id){
+        String datos;
+        BaseDeDatos baseDeDatos = new BaseDeDatos(this.getBaseContext());
+        baseDeDatos.abrir();
+        datos = baseDeDatos.getParaderoPorId(id);
+        baseDeDatos.agregarRecientes(datos);
+        baseDeDatos.cerrar();
+        return datos;
     }
 }

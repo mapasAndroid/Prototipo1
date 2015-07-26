@@ -120,7 +120,9 @@ public class FragmentoBasico extends Fragment implements SwipeRefreshLayout.OnRe
 
                         String id = texto.getText().toString();
 
-                        ((Lugares) getActivity()).agregarARecientes(id);
+                        String datosParadero = ((Lugares) getActivity()).agregarARecientes(id);
+
+                        //luego mostrar mapa con los datosPAradero
 
                     }
                 })
