@@ -15,7 +15,6 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,8 +35,6 @@ public class FragmentoBasico extends Fragment implements SwipeRefreshLayout.OnRe
     FragmentActivity myContext;
     ViewGroup container;
     LayoutInflater inflater;
-
-    AsistenteMensajes asistente = new AsistenteMensajes();
 
 
     public static FragmentoBasico newInstance(String param1, String param2) {
@@ -199,8 +196,6 @@ public class FragmentoBasico extends Fragment implements SwipeRefreshLayout.OnRe
                     }
 
                     boolean x = setParaderosEnLista();
-
-                    Log.i("cm01", x + "");
 
                     if( !x ){
                         rootView = inflater.inflate(R.layout.fragment_fragmento_vacio_recientes, container, false);

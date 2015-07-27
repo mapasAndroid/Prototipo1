@@ -23,16 +23,14 @@ public class AsistenteMensajes {
      * @param bnd bandera de donde fue llamado
      */
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    public void imprimir(FragmentManager fm , String mensaje, int bnd, boolean loHizo[]){
-        // 1: para vista principal,
+    public void imprimir(FragmentManager fm , String mensaje, int bnd){
+        // 1: para vista principal
         // 2: para registro
         //3: para lugares
         //4: para fragmento basico
         mensajeria.setMensaje(mensaje);
         mensajeria.setTipo(bnd);
-        mensajeria.setLoHizo(loHizo);
         mensajeria.show(fm, mensaje);
-
 
     }
 

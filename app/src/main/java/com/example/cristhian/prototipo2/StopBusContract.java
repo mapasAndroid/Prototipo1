@@ -28,6 +28,7 @@ public class StopBusContract {
         public static final String NOMBRE_TABLA = "recientes";
         public static final String R_ID = "id";
         public static final String R_NOMBRE = "nombre";
+        public static final String R_DIRECCION = "direccion";
         public static final String R_LATITUD = "latitud";
         public static final String R_LONGITUD = "longitud";
 
@@ -45,6 +46,7 @@ public class StopBusContract {
         public static final String NOMBRE_TABLA = "paradero";
         public static final String PA_ID = "id";
         public static final String PA_NOMBRE = "nombre";
+        public static final String PA_DIRECCION = "direccion";
         public static final String PA_LATITUD = "latitud";
         public static final String PA_LONGITUD = "longitud";
 

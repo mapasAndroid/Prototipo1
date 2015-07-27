@@ -41,7 +41,7 @@ public class AdapterCardView extends RecyclerView.Adapter<AdapterCardView.ViewHo
 
         //coloca el nombre en cada elemento de la lista
         viewHolder.txtViewTitle.setText(itemsData[position].getNombreParadero());
-        viewHolder.txtViewLatLong.setText(itemsData[position].getLatLong());
+        viewHolder.txtViewLatLong.setText(itemsData[position].getDireccion());
         viewHolder.texto_oculto.setText(itemsData[position].getIdParadero());
         if(itemsData[position].esReciente()){
             viewHolder.imageViewFav.setImageResource(R.drawable.ic_action_star_10_yellow);

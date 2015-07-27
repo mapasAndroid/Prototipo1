@@ -111,7 +111,7 @@ public class Inicio extends ActionBarActivity {
 
         //si tiene campos vacios notifiquele al usuario
         if (usuario.isEmpty() || pass.isEmpty()) {
-            asistente.imprimir(getFragmentManager(), "Campos vacios, verifique nuevamente", 1, null);
+            asistente.imprimir(getFragmentManager(), "Campos vacios, verifique nuevamente", 1);
             return;
         }
 
@@ -152,11 +152,11 @@ public class Inicio extends ActionBarActivity {
 
             //si la respuesta del servidor es 0, avise al usuario
             if (s.equals("0")) {
-                asistente.imprimir(getFragmentManager(), "Usuario o contraseña no coinciden", 1, null);
+                asistente.imprimir(getFragmentManager(), "Usuario o contraseña no coinciden", 1);
                 return;
             }
             if (s.equals("nonet")) {
-                asistente.imprimir(getFragmentManager(), "Error de red, verifica tu conexion", 1, null);
+                asistente.imprimir(getFragmentManager(), "Error de red, verifica tu conexion", 1);
                 return;
             }
 

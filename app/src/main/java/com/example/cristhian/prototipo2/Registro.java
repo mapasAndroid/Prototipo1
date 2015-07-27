@@ -71,7 +71,7 @@ public class Registro extends ActionBarActivity{
 
         if(usuario.isEmpty() || nombre.isEmpty()
                 || correo.isEmpty() || pass.isEmpty()|| telef.isEmpty()){
-            asistente.imprimir(getFragmentManager(), "Campos vacios, verifica nuevamente", 2, null);
+            asistente.imprimir(getFragmentManager(), "Campos vacios, verifica nuevamente", 2);
             return;
         }
 
@@ -92,21 +92,21 @@ public class Registro extends ActionBarActivity{
 
             //si la respuesta del servidor es 0, avise al usuario
             if (s.equals("0")) {
-                asistente.imprimir(getFragmentManager(), "Ocurrio algun error en el registro, intentalo nuevamente", 2, null);
+                asistente.imprimir(getFragmentManager(), "Ocurrio algun error en el registro, intentalo nuevamente", 2);
                 return;
             }
             if (s.equals("nonet")) {
-                asistente.imprimir(getFragmentManager(), "Error de red, verifica tu conexion", 2, null);
+                asistente.imprimir(getFragmentManager(), "Error de red, verifica tu conexion", 2);
                 return;
             }
 
             if(s.equals("email_duplicado")){
-                asistente.imprimir(getFragmentManager(), "Email ya existe", 2, null);
+                asistente.imprimir(getFragmentManager(), "Email ya existe", 2);
                 return;
             }
 
             if(s.equals("usuario_duplicado")){
-                asistente.imprimir(getFragmentManager(), "Usuario ya existe", 2, null);
+                asistente.imprimir(getFragmentManager(), "Usuario ya existe", 2);
                 return;
             }
 

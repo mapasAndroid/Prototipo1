@@ -35,6 +35,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String CREATE_RECIENTES = "CREATE TABLE " + Recientess.NOMBRE_TABLA + "(" +
             Recientess.R_ID + " TEXT PRIMARY KEY, " +
             Recientess.R_NOMBRE + " TEXT NOT NULL, " +
+            Recientess.R_DIRECCION + " TEXT NOT NULL, " +
             Recientess.R_LATITUD + " TEXT NOT NULL, " +
             Recientess.R_LONGITUD + " TEXT NOT NULL);" ;
 
@@ -46,6 +47,7 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String CREATE_PARADERO = "CREATE TABLE " + Paradero.NOMBRE_TABLA + "(" +
             Paradero.PA_ID + " TEXT PRIMARY KEY, " +
             Paradero.PA_NOMBRE + " TEXT NOT NULL, " +
+            Paradero.PA_DIRECCION + " TEXT NOT NULL, " +
             Paradero.PA_LATITUD + " TEXT NOT NULL, " +
             Paradero.PA_LONGITUD + " TEXT NOT NULL );";
 

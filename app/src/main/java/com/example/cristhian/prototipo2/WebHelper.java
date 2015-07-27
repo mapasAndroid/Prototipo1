@@ -15,7 +15,6 @@ public class WebHelper {
     private final String urlCopiarDatos = "servicios/copiarDatos.php";
     private final String urlIniciarSesion = "servicios/iniciarSesion.php";
     private final String urlRegistrarUsuario = "servicios/registrarUsuario.php";
-    private final String urlInsertarReciente = "servicios/insertarReciente.php";
 
 
     public WebHelper(){

@@ -119,6 +119,7 @@ public class BaseDeDatos {
             for (int i = 0; i < paraderos.length(); i++) {
                 String id_paradero = paraderos.getJSONObject(i + "").getString("id_paradero");
                 String nombre = paraderos.getJSONObject(i + "").getString("nombre");
+                String direccion = paraderos.getJSONObject(i + "").getString("direccion");
                 String latitud = paraderos.getJSONObject(i + "").getString("latitud");
                 String longitud = paraderos.getJSONObject(i + "").getString("longitud");
                 this.insertarParadero(id_paradero, nombre, latitud, longitud);
@@ -271,12 +272,13 @@ public class BaseDeDatos {
         this.nBaseDatos.insert("pasajeroxbus", null, values);
     }
 
-    private void insertarReciente(String id, String nombre, String latitud, String longitud) {
+    private void insertarReciente(String id, String nombre, String direccion, String latitud, String longitud) {
 
         ContentValues values = new ContentValues();
 
         values.put("id", id);
         values.put("nombre", nombre);
+        values.put("direccion", direccion);
         values.put("latitud", latitud);
         values.put("longitud", longitud);
 
@@ -340,6 +342,7 @@ public class BaseDeDatos {
         String columnas[] = new String[]{
                 "id",
                 "nombre",
+                "direccion",
                 "latitud",
                 "longitud"
         };
@@ -357,6 +360,7 @@ public class BaseDeDatos {
 
         int id = c.getColumnIndexOrThrow("id");
         int nombre = c.getColumnIndexOrThrow("nombre");
+        int direccion = c.getColumnIndexOrThrow("direccion");
         int latitud = c.getColumnIndexOrThrow("latitud");
         int longitud = c.getColumnIndexOrThrow("longitud");
 
@@ -369,7 +373,9 @@ public class BaseDeDatos {
                     esReciente = "no";
                 }
                 res.add(c.getString(id) + "&" + c.getString(nombre) + "&"
-                        + c.getString(latitud) + "&" + c.getString(longitud) + "&" + esReciente);
+                        +c.getString(direccion) + "&"
+                        + c.getString(latitud) + "&" + c.getString(longitud) + "&"
+                        + esReciente);
             }
         }
 
@@ -391,6 +397,7 @@ public class BaseDeDatos {
         String columnas[] = new String[]{
                 "id",
                 "nombre",
+                "direccion",
                 "latitud",
                 "longitud"
         };
@@ -404,11 +411,13 @@ public class BaseDeDatos {
 
         int id = c.getColumnIndexOrThrow("id");
         int nombre = c.getColumnIndexOrThrow("nombre");
+        int direccion = c.getColumnIndexOrThrow("direccion");
         int latitud = c.getColumnIndexOrThrow("latitud");
         int longitud = c.getColumnIndexOrThrow("longitud");
 
         for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
             res.add(c.getString(id) + "&" + c.getString(nombre) + "&"
+                    + c.getString(direccion) + "&"
                     + c.getString(latitud) + "&" + c.getString(longitud) + "&si");
         }
 
@@ -430,6 +439,7 @@ public class BaseDeDatos {
         String columnas[] = new String[]{
                 "id",
                 "nombre",
+                "direccion",
                 "latitud",
                 "longitud"
         };
@@ -442,6 +452,7 @@ public class BaseDeDatos {
 
         int id_ = c.getColumnIndexOrThrow("id");
         int nombre = c.getColumnIndexOrThrow("nombre");
+        int direccion = c.getColumnIndexOrThrow("direccion");
         int latitud = c.getColumnIndexOrThrow("latitud");
         int longitud = c.getColumnIndexOrThrow("longitud");
 
@@ -450,6 +461,7 @@ public class BaseDeDatos {
         //Separo el id del nombre ocn un simbolo &
         return c.getString(id_) + "&" +
                 c.getString(nombre) + "&" +
+                c.getString(direccion) + "&" +
                 c.getString(latitud) + "&" +
                 c.getString(longitud);
     }
@@ -458,7 +470,7 @@ public class BaseDeDatos {
         //separo por el simbolo &
         String datosReciente [] = datos.split("&");
         this.insertarReciente(datosReciente[0],
-                datosReciente[1], datosReciente[2], datosReciente[3]);
+                datosReciente[1], datosReciente[2], datosReciente[3], datosReciente[4]);
     }
 
 

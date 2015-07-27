@@ -108,7 +108,7 @@ public class Lugares extends ActionBarActivity {
         if (!verificaConexion(this.getBaseContext())) {
             asistenteMensajes.imprimir(this.getFragmentManager(),
                     "No tienes conexion a internet, Stopbus trabajara con los datos locales. " +
-                            "Conectate a internet lo mas rapido posible.", 3, null);
+                            "Conectate a internet lo mas rapido posible.", 3);
         }
 
         //muestra el mensaje de bienvenida, siempre y cuando hayan extras en el intent
