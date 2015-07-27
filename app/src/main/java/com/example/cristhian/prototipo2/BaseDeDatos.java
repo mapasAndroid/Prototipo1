@@ -122,7 +122,7 @@ public class BaseDeDatos {
                 String direccion = paraderos.getJSONObject(i + "").getString("direccion");
                 String latitud = paraderos.getJSONObject(i + "").getString("latitud");
                 String longitud = paraderos.getJSONObject(i + "").getString("longitud");
-                this.insertarParadero(id_paradero, nombre, latitud, longitud);
+                this.insertarParadero(id_paradero, nombre, direccion, latitud, longitud);
             }
 
         } catch (Exception e) {
@@ -227,12 +227,14 @@ public class BaseDeDatos {
         this.nBaseDatos.insert("pasajero", null, values);
     }
 
-    private void insertarParadero(String id_paradero, String nombre,
+    private void insertarParadero(String id_paradero, String nombre, String direccion,
                                   String latitud, String longitud) {
+        Log.e("cm01", direccion);
         ContentValues values = new ContentValues();
 
         values.put("id", id_paradero);
         values.put("nombre", nombre);
+        values.put("direccion", direccion);
         values.put("latitud", latitud);
         values.put("longitud", longitud);
 

@@ -15,8 +15,8 @@ public class ItemParaderos {
         String v [] = paradero.split("&");
         this.idParadero = v[0];
         this.nombreParadero = v[1];
-        this.latitud = v[2];
-        this.direccion = v[3];
+        this.direccion = v[2];
+        this.latitud = v[3];
         this.longitud = v[4];
         this.esReciente = false;
         if(v[5].equals("si")){
