@@ -17,7 +17,13 @@ public class DialogFragment2 extends DialogFragment{
 
 
     String mensaje;
+
     int tipo;
+
+    AlertDialog.Builder builder;
+
+    boolean loHizo [] = {false};
+
 
     public DialogFragment2(){
         this.mensaje = "";
@@ -30,10 +36,19 @@ public class DialogFragment2 extends DialogFragment{
     public void setTipo(int id){
         this.tipo = id;
     }
+
+    public void setLoHizo(boolean v[]){
+        this.loHizo = v;
+
+    }
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the Builder class for convenient dialog construction
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        this.builder = new AlertDialog.Builder(getActivity());
+
+
+
         builder.setMessage(mensaje)
                 .setPositiveButton(R.string.fire, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
@@ -51,10 +66,25 @@ public class DialogFragment2 extends DialogFragment{
                                 break;
                             case 2:
                                 break;
+                            case 3:
+                                break;
+                            case 4:
+                                loHizo[0] = true;
+                                break;
 
                         }
                     }
                 });
+
+        if(this.tipo == 4){
+            this.builder.setNegativeButton(
+                    R.string.cancel, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int id) {
+                            loHizo[0] = false;
+                        }
+                    }
+            );
+        }
                 /*.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         // User cancelled the dialog

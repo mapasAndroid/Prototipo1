@@ -46,7 +46,6 @@ public class BaseDeDatos {
         };
 
         Cursor c = this.nBaseDatos.query("pasajero", columnas, null, null, null, null, null);
-        Log.i("prueba", c.getCount() + "");
         if (c.getCount() == 0) {
             return null;
 
@@ -287,6 +286,18 @@ public class BaseDeDatos {
 
     /*
    =================================
+          REMOVER RECIENTE
+   =================================
+    */
+
+    public void eliminarReciente(String id){
+
+        this.nBaseDatos.delete("recientes", "id=\'" + id + "\'", null);
+    }
+
+
+    /*
+   =================================
                GETTERS
    =================================
     */
@@ -325,6 +336,7 @@ public class BaseDeDatos {
      * en caso contrario
      */
     public String[] getParaderos(String tipo) {
+
         String columnas[] = new String[]{
                 "id",
                 "nombre",
@@ -332,14 +344,11 @@ public class BaseDeDatos {
                 "longitud"
         };
 
-        String tabla = "";
         if(tipo.equals("LR")){
-            tabla = "recientes";
-        }else{
-            tabla = "paradero";
+            return getTodosRecientes();
         }
 
-        Cursor c = this.nBaseDatos.query(tabla, columnas, null, null, null, null, null, null);
+        Cursor c = this.nBaseDatos.query("paradero", columnas, null, null, null, null, null, null);
 
         if (c.getCount() == 0) {
             return null;
@@ -364,6 +373,45 @@ public class BaseDeDatos {
             }
         }
 
+
+        if(res.isEmpty()){
+            return null;
+        }
+
+        String[] respuesta = new String[res.size()];
+        for (int i = 0; i < res.size(); i++) {
+            respuesta[i] = res.get(i);
+        }
+
+        return respuesta;
+
+    }
+
+    public String [] getTodosRecientes(){
+        String columnas[] = new String[]{
+                "id",
+                "nombre",
+                "latitud",
+                "longitud"
+        };
+
+        Cursor c = this.nBaseDatos.query("recientes", columnas, null, null, null, null, null, null);
+
+        if (c.getCount() == 0) {
+            return null;
+        }
+        ArrayList<String> res = new ArrayList<String>();
+
+        int id = c.getColumnIndexOrThrow("id");
+        int nombre = c.getColumnIndexOrThrow("nombre");
+        int latitud = c.getColumnIndexOrThrow("latitud");
+        int longitud = c.getColumnIndexOrThrow("longitud");
+
+        for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
+            res.add(c.getString(id) + "&" + c.getString(nombre) + "&"
+                    + c.getString(latitud) + "&" + c.getString(longitud) + "&si");
+        }
+
         if(res.isEmpty()){
             return null;
         }
@@ -378,6 +426,7 @@ public class BaseDeDatos {
     }
 
     public String getParaderoPorId(String id) {
+
         String columnas[] = new String[]{
                 "id",
                 "nombre",
@@ -395,6 +444,7 @@ public class BaseDeDatos {
         int nombre = c.getColumnIndexOrThrow("nombre");
         int latitud = c.getColumnIndexOrThrow("latitud");
         int longitud = c.getColumnIndexOrThrow("longitud");
+
         c.moveToFirst();
 
         //Separo el id del nombre ocn un simbolo &
@@ -404,11 +454,13 @@ public class BaseDeDatos {
                 c.getString(longitud);
     }
 
-    public void agregarRecientes(String datos) {
+    public void agregarReciente(String datos) {
         //separo por el simbolo &
         String datosReciente [] = datos.split("&");
         this.insertarReciente(datosReciente[0],
                 datosReciente[1], datosReciente[2], datosReciente[3]);
     }
+
+
 }
 

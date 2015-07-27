@@ -44,7 +44,9 @@ public class AdapterCardView extends RecyclerView.Adapter<AdapterCardView.ViewHo
         viewHolder.txtViewLatLong.setText(itemsData[position].getLatLong());
         viewHolder.texto_oculto.setText(itemsData[position].getIdParadero());
         if(itemsData[position].esReciente()){
-            viewHolder.imageViewFav.setBackgroundResource(R.drawable.ic_action_star_10_yellow);
+            viewHolder.imageViewFav.setImageResource(R.drawable.ic_action_star_10_yellow);
+        }else{
+            viewHolder.imageViewFav.setImageResource(R.drawable.ic_action_star_10);
         }
 
     }
@@ -62,6 +64,7 @@ public class AdapterCardView extends RecyclerView.Adapter<AdapterCardView.ViewHo
             txtViewTitle = (TextView) itemLayoutView.findViewById(R.id.nombreParadero);
             txtViewLatLong = (TextView) itemLayoutView.findViewById(R.id.latLonParadero);
             texto_oculto = (TextView) itemLayoutView.findViewById(R.id.id_oculto);
+            imageViewFav = (ImageView) itemLayoutView.findViewById(R.id.boton_favoritos);
         }
     }
 

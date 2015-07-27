@@ -1,27 +1,27 @@
 package com.example.cristhian.prototipo2;
 
 import android.annotation.SuppressLint;
-import android.graphics.Color;
+import android.annotation.TargetApi;
+import android.app.Activity;
 import android.graphics.Typeface;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import org.w3c.dom.Text;
 
 /**
  * Created by CRISTHIAN and MAITE
@@ -33,6 +33,11 @@ public class FragmentoBasico extends Fragment implements SwipeRefreshLayout.OnRe
     private AdapterCardView myAdapter;
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private RecyclerView recyclerView;
+    FragmentActivity myContext;
+    ViewGroup container;
+    LayoutInflater inflater;
+
+    AsistenteMensajes asistente = new AsistenteMensajes();
 
 
     public static FragmentoBasico newInstance(String param1, String param2) {
@@ -63,6 +68,8 @@ public class FragmentoBasico extends Fragment implements SwipeRefreshLayout.OnRe
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        this.inflater = inflater;
+        this.container = container;
         final View rootView = inflater.inflate(R.layout.fragment_fragmento_basico, container, false);
 
         //set rootView como mi atributo
@@ -80,6 +87,7 @@ public class FragmentoBasico extends Fragment implements SwipeRefreshLayout.OnRe
 
         //solicitar los paraderos de tipo banco y los inserta en la lista dinamica
         boolean hayParaderos = this.setParaderosEnLista();
+
         if (!hayParaderos) {
             String tv = "";
             if (getArguments() != null) {
@@ -103,6 +111,15 @@ public class FragmentoBasico extends Fragment implements SwipeRefreshLayout.OnRe
 
         }
 
+        colocarEventoClick();
+        colocarEventoBorrado();
+
+        return this.rootView;
+
+    }
+
+
+    private void colocarEventoClick() {
         this.recyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(this.rootView.getContext(), new RecyclerItemClickListener.OnItemClickListener() {
                     @Override
@@ -122,15 +139,80 @@ public class FragmentoBasico extends Fragment implements SwipeRefreshLayout.OnRe
 
                         String datosParadero = ((Lugares) getActivity()).agregarARecientes(id);
 
-                        //luego mostrar mapa con los datosPAradero
+                        recyclerView.getAdapter().notifyDataSetChanged();
+
+                        setParaderosEnLista();
 
                     }
                 })
         );
+    }
 
 
-        return this.rootView;
+    private void colocarEventoBorrado() {
+        String tv = "";
+        if (getArguments() != null) {
+            tv = getArguments().getString("tipoV");
 
+        }
+        if (tv.equals("LR")) {
+            ItemTouchHelper.SimpleCallback simpleItemTouchCallback = new ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT) {
+                @Override
+                public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder viewHolder1) {
+                    return false;
+                }
+
+                @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+                @Override
+                public void onSwiped(RecyclerView.ViewHolder viewHolder, int swipeDir) {
+
+                    int position = viewHolder.getAdapterPosition();
+
+                    viewHolder.getLayoutPosition();
+
+                    LinearLayout linearLayout = (LinearLayout)recyclerView.getChildAt(position);
+
+                    CardView cardView = (CardView) linearLayout.getChildAt(0);
+
+                    LinearLayout hijoCardView = (LinearLayout) cardView.getChildAt(0);
+
+                    LinearLayout hijodeLinear = (LinearLayout) hijoCardView.getChildAt(0);
+
+                    TextView texto = (TextView) hijodeLinear.getChildAt(2);
+
+                    String id = texto.getText().toString();
+
+                    baseDeDatos.abrir();
+                    baseDeDatos.eliminarReciente(id);
+                    baseDeDatos.cerrar();
+
+                    if(recyclerView.getAdapter().getItemCount() == 1){
+
+                        recyclerView = null;
+                        recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
+                        recyclerView.setHasFixedSize(true);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(rootView.getContext()));
+                        recyclerView.setAdapter(null);
+
+                    }else{
+                        recyclerView.getAdapter().notifyItemRemoved(position);
+                    }
+
+                    boolean x = setParaderosEnLista();
+
+                    Log.i("cm01", x + "");
+
+                    if( !x ){
+                        rootView = inflater.inflate(R.layout.fragment_fragmento_vacio_recientes, container, false);
+                    }
+
+
+                }
+            };
+            ItemTouchHelper itemTouchHelper = new ItemTouchHelper(simpleItemTouchCallback);
+            itemTouchHelper.attachToRecyclerView(recyclerView);
+
+        }
     }
 
     public boolean setParaderosEnLista() {
@@ -151,6 +233,7 @@ public class FragmentoBasico extends Fragment implements SwipeRefreshLayout.OnRe
             ItemParaderos itemsData[] = new ItemParaderos[paraderos.length];
             for (int i = 0; i < paraderos.length; i++) {
                 itemsData[i] = new ItemParaderos(paraderos[i]);
+
             }
             //le pone el adapter personalizado a el recycle view
             this.myAdapter = new AdapterCardView(itemsData);
@@ -180,8 +263,12 @@ public class FragmentoBasico extends Fragment implements SwipeRefreshLayout.OnRe
                 mSwipeRefreshLayout.setRefreshing(false);
                 Toast.makeText(FragmentoBasico.this.getActivity().getBaseContext(), "Actualizado", Toast.LENGTH_SHORT).show();
             }
-        }, 7000);
+        }, 5000);
     }
 
-
+    @Override
+    public void onAttach(Activity activity) {
+        this.myContext = (FragmentActivity) activity;
+        super.onAttach(activity);
+    }
 }
