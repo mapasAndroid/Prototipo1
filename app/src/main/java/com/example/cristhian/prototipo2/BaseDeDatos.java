@@ -36,7 +36,7 @@ public class BaseDeDatos {
     }
 
 
-    public Cursor getDatosUsuario() {
+    public String[] getDatosUsuario() {
 
         String columnas[] = new String[]{
                 "usuario",
@@ -46,13 +46,28 @@ public class BaseDeDatos {
         };
 
         Cursor c = this.nBaseDatos.query("pasajero", columnas, null, null, null, null, null);
+
         if (c.getCount() == 0) {
             return null;
 
         }
+        int usuario = c.getColumnIndexOrThrow("usuario");
+        int nombre = c.getColumnIndexOrThrow("nombre");
+        int correo = c.getColumnIndexOrThrow("correo");
+        int password = c.getColumnIndexOrThrow("password");
 
-        return c;
+        c.moveToFirst();
 
+        //Separo el id del nombre ocn un simbolo &
+
+        String[] x = new String[]{c.getString(usuario),
+                c.getString(nombre),
+                c.getString(correo),
+                c.getString(password)};
+        for (int i=0; i<x.length; i++){
+            Log.i("cm01",x[i]);
+        }
+        return x;
     }
 
     /**
@@ -82,6 +97,9 @@ public class BaseDeDatos {
             JSONObject objetoPapa = new JSONObject(response);
             JSONObject lista = objetoPapa.getJSONObject("1");
             JSONObject detallesUsuario = lista.getJSONObject("0");
+            Log.i("cm01",detallesUsuario.getString("usuario"));
+            Log.i("cm01",detallesUsuario.getString("nombre"));
+            Log.i("cm01",detallesUsuario.getString("correo"));
             this.insertarUsuario(
                     detallesUsuario.getString("usuario"),
                     detallesUsuario.getString("nombre"),
@@ -294,7 +312,7 @@ public class BaseDeDatos {
    =================================
     */
 
-    public void eliminarReciente(String id){
+    public void eliminarReciente(String id) {
 
         this.nBaseDatos.delete("recientes", "id=\'" + id + "\'", null);
     }
@@ -335,6 +353,7 @@ public class BaseDeDatos {
 
     /**
      * retorna los paraderos de toda la base de datos
+     *
      * @param tipo el tipo de paraderos que se necesita buscar
      * @return un vector con los paraderos separados por coma, o null
      * en caso contrario
@@ -349,7 +368,7 @@ public class BaseDeDatos {
                 "longitud"
         };
 
-        if(tipo.equals("LR")){
+        if (tipo.equals("LR")) {
             return getTodosRecientes();
         }
 
@@ -375,14 +394,14 @@ public class BaseDeDatos {
                     esReciente = "no";
                 }
                 res.add(c.getString(id) + "&" + c.getString(nombre) + "&"
-                        +c.getString(direccion) + "&"
+                        + c.getString(direccion) + "&"
                         + c.getString(latitud) + "&" + c.getString(longitud) + "&"
                         + esReciente);
             }
         }
 
 
-        if(res.isEmpty()){
+        if (res.isEmpty()) {
             return null;
         }
 
@@ -395,7 +414,7 @@ public class BaseDeDatos {
 
     }
 
-    public String [] getTodosRecientes(){
+    public String[] getTodosRecientes() {
         String columnas[] = new String[]{
                 "id",
                 "nombre",
@@ -423,7 +442,7 @@ public class BaseDeDatos {
                     + c.getString(latitud) + "&" + c.getString(longitud) + "&si");
         }
 
-        if(res.isEmpty()){
+        if (res.isEmpty()) {
             return null;
         }
 
@@ -470,7 +489,7 @@ public class BaseDeDatos {
 
     public void agregarReciente(String datos) {
         //separo por el simbolo &
-        String datosReciente [] = datos.split("&");
+        String datosReciente[] = datos.split("&");
         this.insertarReciente(datosReciente[0],
                 datosReciente[1], datosReciente[2], datosReciente[3], datosReciente[4]);
     }

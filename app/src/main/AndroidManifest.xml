@@ -40,14 +40,6 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".MapsActivity"
-            android:label="@string/Mapa"
-            android:parentActivityName=".Inicio" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.example.cristhian.prototipo2.Inicio" />
-        </activity>
-        <activity
             android:name=".Registro"
             android:label="@string/REGISTRO"
             android:parentActivityName=".Inicio" >
@@ -55,6 +47,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.cristhian.prototipo2.Inicio" />
         </activity>
+
         <activity
             android:name=".Lugares"
             android:label="@string/Sitios" >
@@ -62,6 +55,7 @@
                 android:name="android.intent.category.DEFAULT"
                 android:value="com.example.cristhian.prototipo2.Inicio" />
         </activity>
+
         <activity
             android:name=".Splash"
             android:configChanges="orientation|keyboardHidden|screenSize"
@@ -72,6 +66,15 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".Mapas"
+            android:label="@string/title_activity_mapas"
+            android:parentActivityName=".Lugares" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.cristhian.prototipo2.Lugares" />
         </activity>
 
     </application>

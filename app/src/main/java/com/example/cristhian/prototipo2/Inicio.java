@@ -8,6 +8,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -125,12 +126,6 @@ public class Inicio extends ActionBarActivity {
         overridePendingTransition(R.anim.right_in, R.anim.right_out);
     }
 
-    public void VerMapa(View view) {
-        Intent i = new Intent(Inicio.this, MapsActivity.class);
-        startActivity(i);
-
-    }
-
 
     public class Validador extends AsyncTask<String, String, String> {
 
@@ -160,11 +155,11 @@ public class Inicio extends ActionBarActivity {
                 return;
             }
 
+            Log.i("cm01", s);
+
             String datos [] = s.split("&");
             Intent activityLugares = new Intent(Inicio.this, Lugares.class);
             new Copia().copiarDatos(Inicio.this.getBaseContext(), datos[0]);
-            activityLugares.putExtra("usuario", datos[0]);
-            activityLugares.putExtra("correo", datos[1]);
             activityLugares.putExtra("desde", "inicio");
             startActivity(activityLugares);
             Inicio.this.finish();

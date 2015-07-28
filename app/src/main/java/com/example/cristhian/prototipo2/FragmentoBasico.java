@@ -3,6 +3,7 @@ package com.example.cristhian.prototipo2;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
@@ -60,6 +61,7 @@ public class FragmentoBasico extends Fragment implements SwipeRefreshLayout.OnRe
             //mParam2 = getArguments().getString(argumentoAdicional);
         }
     }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -139,6 +141,13 @@ public class FragmentoBasico extends Fragment implements SwipeRefreshLayout.OnRe
                         recyclerView.getAdapter().notifyDataSetChanged();
 
                         setParaderosEnLista();
+
+                        Intent intent = new Intent(getActivity(), Mapas.class);
+
+                        intent.putExtra("datosParadero",datosParadero);
+                        intent.putExtra("datosUsuario", ((Lugares) getActivity()).getDatosUsuario());
+
+                        startActivity(intent);
 
                     }
                 })

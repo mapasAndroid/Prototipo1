@@ -57,5 +57,8 @@
         <item>Cajeros</item>
         <item>Restaurantes</item>
     </string-array>
+    <string name="title_activity_mapas">Mapas</string>
+
+    <string name="hello_world">Hello world!</string>
 
 </resources>

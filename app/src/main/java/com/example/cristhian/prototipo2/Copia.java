@@ -48,6 +48,7 @@ public class Copia {
 
         @Override
         protected void onPostExecute(String s) {
+            Log.i("cm01", s);
             BaseDeDatos baseDeDatos = new BaseDeDatos(contexto);
             baseDeDatos.abrir();
             baseDeDatos.duplicarEnLocal(s);

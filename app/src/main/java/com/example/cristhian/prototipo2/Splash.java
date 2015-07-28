@@ -162,7 +162,7 @@ public class Splash extends Activity {
                 BaseDeDatos baseDeDatos = new BaseDeDatos(Splash.this.getBaseContext());
                 baseDeDatos.abrir();
 
-                Cursor datosUsuario = baseDeDatos.getDatosUsuario();
+                String [] datosUsuario = baseDeDatos.getDatosUsuario();
 
                 if (datosUsuario == null) {
                     Intent mainIntent = new Intent(Splash.this, Inicio.class);
@@ -172,24 +172,13 @@ public class Splash extends Activity {
                     return;
                 }
 
-                datosUsuario.moveToFirst();
-                String usuario = datosUsuario.getString(
-                        datosUsuario.getColumnIndexOrThrow("usuario")
-                );
-
-                String correo = datosUsuario.getString(
-                        datosUsuario.getColumnIndexOrThrow("correo")
-                );
-
+                String usuario = datosUsuario[0];
                 Intent activityLugares = new Intent(Splash.this, Lugares.class);
                 baseDeDatos.cerrar();
                 new Copia().copiarDatos(
                         Splash.this.getBaseContext(),
                         usuario
                 );
-
-                activityLugares.putExtra("usuario", usuario);
-                activityLugares.putExtra("correo", correo);
                 activityLugares.putExtra("desde", "splash");
                 Splash.this.startActivity(activityLugares);
                 overridePendingTransition(R.anim.zoom_forward_in, R.anim.zoom_forward_out);
