@@ -155,11 +155,14 @@ public class Inicio extends ActionBarActivity {
                 return;
             }
 
-            Log.i("cm01", s);
+            Log.i("cm01", "respuesta servidor inicio::: " + s);
 
             String datos [] = s.split("&");
             Intent activityLugares = new Intent(Inicio.this, Lugares.class);
+            Log.i("cm01", "usuario::: " + datos[0]);
             new Copia().copiarDatos(Inicio.this.getBaseContext(), datos[0]);
+            activityLugares.putExtra("usuario", datos[0]);
+            activityLugares.putExtra("correo", datos[1]);
             activityLugares.putExtra("desde", "inicio");
             startActivity(activityLugares);
             Inicio.this.finish();

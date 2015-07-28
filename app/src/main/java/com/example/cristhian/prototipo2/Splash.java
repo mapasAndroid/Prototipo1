@@ -3,7 +3,6 @@ package com.example.cristhian.prototipo2;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
 import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
@@ -179,7 +178,11 @@ public class Splash extends Activity {
                         Splash.this.getBaseContext(),
                         usuario
                 );
+
+                activityLugares.putExtra("usuario", usuario);
+                activityLugares.putExtra("correo", datosUsuario[2]);
                 activityLugares.putExtra("desde", "splash");
+
                 Splash.this.startActivity(activityLugares);
                 overridePendingTransition(R.anim.zoom_forward_in, R.anim.zoom_forward_out);
                 Splash.this.finish();

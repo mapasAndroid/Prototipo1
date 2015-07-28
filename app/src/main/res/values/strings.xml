@@ -47,6 +47,8 @@
 
     <string name="action_ayuda">Ayuda</string>
 
+    <string name="action_acerca_de">Acerca de</string>
+
     <string-array name="menu_izquierdo">
         <item>Lugares Recientes</item>
         <item>Parques</item>

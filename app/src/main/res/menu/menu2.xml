@@ -11,18 +11,15 @@
         app:showAsAction="always">
         <menu>
             <item
-                android:id="@+id/action_refresh"
-                android:icon="@drawable/ic_action_reload"
-                android:title="@string/action_refresh"
+                android:id="@+id/action_acerca_de"
+                android:title="@string/action_acerca_de"
                 app:showAsAction="never" />
             <item
                 android:id="@+id/action_ayuda"
-                android:icon="@drawable/ic_action_help"
                 android:title="@string/action_ayuda"
                 app:showAsAction="never" />
             <item
                 android:id="@+id/action_logout"
-                android:icon="@drawable/ic_action_exit"
                 android:title="@string/action_salir"
                 app:showAsAction="never" />
         </menu>

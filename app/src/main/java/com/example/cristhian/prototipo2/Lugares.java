@@ -63,6 +63,10 @@ public class Lugares extends ActionBarActivity {
 
     private String[] datosUsuario;
 
+    private String nombreUsuario;
+
+    private String correoUsuario;
+
     private MyAdapter myAdapter;
 
 
@@ -72,14 +76,20 @@ public class Lugares extends ActionBarActivity {
 
 
     public String getNombreUsuario() {
-        return this.datosUsuario[1];
+        return this.nombreUsuario;
     }
 
     public String getCorreoUsuario() {
-        return this.datosUsuario[2];
+        return this.correoUsuario;
     }
 
     public String[] getDatosUsuario() {
+
+        BaseDeDatos baseDeDatos = new BaseDeDatos(getBaseContext());
+        baseDeDatos.abrir();
+        this.datosUsuario = baseDeDatos.getDatosUsuario();
+        baseDeDatos.cerrar();
+
         return this.datosUsuario;
     }
 
@@ -114,15 +124,12 @@ public class Lugares extends ActionBarActivity {
                             "Conectate a internet lo mas rapido posible.", 3);
         }
 
-        BaseDeDatos baseDeDatos = new BaseDeDatos(getBaseContext());
-        baseDeDatos.abrir();
-        this.datosUsuario = baseDeDatos.getDatosUsuario();
-        baseDeDatos.cerrar();
-
         //muestra el mensaje de bienvenida, siempre y cuando hayan extras en el intent
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            mostrarMensaje(this.datosUsuario[0], extras.get("desde").toString());
+            this.nombreUsuario = extras.get("usuario").toString();
+            this.correoUsuario = extras.get("correo").toString();
+            mostrarMensaje(this.nombreUsuario, extras.get("desde").toString());
         }
 
         //extraer el drawer layout de la vista
@@ -304,21 +311,10 @@ public class Lugares extends ActionBarActivity {
                     startActivity(inicio);
                     Lugares.this.finish();
                 }
-            }, 1500);
+            }, 1000);
 
         }
-        if (id == R.id.action_refresh) {
-            Toast.makeText(this.getBaseContext(), "Actualizando...", Toast.LENGTH_LONG).show();
-            Copia copiaDatos = new Copia();
-            copiaDatos.copiarDatos(getBaseContext(), this.getNombreUsuario());
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
 
-                }
-            }, 5000);
-
-        }
         return super.onOptionsItemSelected(item);
     }
 

@@ -118,6 +118,9 @@ public class FragmentoBasico extends Fragment implements SwipeRefreshLayout.OnRe
     }
 
 
+    /**
+     * metodo que hace el evento del click de cada terjeta en la vista
+     */
     private void colocarEventoClick() {
         this.recyclerView.addOnItemTouchListener(
                 new RecyclerItemClickListener(this.rootView.getContext(), new RecyclerItemClickListener.OnItemClickListener() {
@@ -154,7 +157,9 @@ public class FragmentoBasico extends Fragment implements SwipeRefreshLayout.OnRe
         );
     }
 
-
+    /**
+     * metodo que permite ejecutar el borrado de los lugares recientes de las tarjetas
+     */
     private void colocarEventoBorrado() {
         String tv = "";
         if (getArguments() != null) {
@@ -209,6 +214,8 @@ public class FragmentoBasico extends Fragment implements SwipeRefreshLayout.OnRe
                     if( !x ){
                         rootView = inflater.inflate(R.layout.fragment_fragmento_vacio_recientes, container, false);
                     }
+
+                    Toast.makeText(rootView.getContext(), "Favorito eliminado...", Toast.LENGTH_SHORT).show();
 
 
                 }
@@ -265,9 +272,9 @@ public class FragmentoBasico extends Fragment implements SwipeRefreshLayout.OnRe
             public void run() {
                 setParaderosEnLista();
                 mSwipeRefreshLayout.setRefreshing(false);
-                Toast.makeText(FragmentoBasico.this.getActivity().getBaseContext(), "Actualizado", Toast.LENGTH_SHORT).show();
+                Toast.makeText(FragmentoBasico.this.getActivity().getBaseContext(), "Informacion actualizada...", Toast.LENGTH_SHORT).show();
             }
-        }, 5000);
+        }, 7000);
     }
 
     @Override

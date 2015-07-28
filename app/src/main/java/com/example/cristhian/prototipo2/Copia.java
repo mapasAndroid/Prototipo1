@@ -40,6 +40,7 @@ public class Copia {
      * metodo que permite bajar todos los datos de la bd de la web
      */
     public void copiarDatos(Context contexto, String usuario) {
+        Log.i("cm01", "usuario en copia::: " + usuario);
         this.contexto = contexto;
         new Copiado().execute(usuario);
     }

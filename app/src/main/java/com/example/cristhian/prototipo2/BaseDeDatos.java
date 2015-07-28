@@ -17,7 +17,9 @@ public class BaseDeDatos {
 
 
     private DBHelper nDBHelper;
+
     private Context contexto;
+
     SQLiteDatabase nBaseDatos;
 
 
@@ -25,50 +27,23 @@ public class BaseDeDatos {
         this.contexto = contexto;
     }
 
+    /**
+     * metodo que abre una coneccion con la base de datos
+     * @return un objeto de tipo base de datos
+     */
     public BaseDeDatos abrir() {
         this.nDBHelper = new DBHelper(this.contexto);
         this.nBaseDatos = this.nDBHelper.getWritableDatabase();
         return this;
     }
 
+    /**
+     * metodo que cierra la coneccion con la base de datos
+     */
     public void cerrar() {
         this.nDBHelper.close();
     }
 
-
-    public String[] getDatosUsuario() {
-
-        String columnas[] = new String[]{
-                "usuario",
-                "nombre",
-                "correo",
-                "password"
-        };
-
-        Cursor c = this.nBaseDatos.query("pasajero", columnas, null, null, null, null, null);
-
-        if (c.getCount() == 0) {
-            return null;
-
-        }
-        int usuario = c.getColumnIndexOrThrow("usuario");
-        int nombre = c.getColumnIndexOrThrow("nombre");
-        int correo = c.getColumnIndexOrThrow("correo");
-        int password = c.getColumnIndexOrThrow("password");
-
-        c.moveToFirst();
-
-        //Separo el id del nombre ocn un simbolo &
-
-        String[] x = new String[]{c.getString(usuario),
-                c.getString(nombre),
-                c.getString(correo),
-                c.getString(password)};
-        for (int i=0; i<x.length; i++){
-            Log.i("cm01",x[i]);
-        }
-        return x;
-    }
 
     /**
      * metodo que permite copiar los datos a la base de datos local, por medio de un JSON
@@ -76,12 +51,14 @@ public class BaseDeDatos {
      * @param s es la cadena con el contenido de las tabals en formato JSON
      */
     public void duplicarEnLocal(String s) {
+
         insertarTablaPasajero(s);
         insertarTablaRuta(s);
         insertarTablaParadero(s);
         insertarTablaParaderoxRuta(s);
         insertarTablaBus(s);
         insertarTablaPasajeroxBus(s);
+
     }
 
 
@@ -97,9 +74,7 @@ public class BaseDeDatos {
             JSONObject objetoPapa = new JSONObject(response);
             JSONObject lista = objetoPapa.getJSONObject("1");
             JSONObject detallesUsuario = lista.getJSONObject("0");
-            Log.i("cm01",detallesUsuario.getString("usuario"));
-            Log.i("cm01",detallesUsuario.getString("nombre"));
-            Log.i("cm01",detallesUsuario.getString("correo"));
+
             this.insertarUsuario(
                     detallesUsuario.getString("usuario"),
                     detallesUsuario.getString("nombre"),
@@ -194,8 +169,6 @@ public class BaseDeDatos {
             JSONObject pasajerosxbuses = objetoPapa.getJSONObject("6");
             for (int i = 0; i < pasajerosxbuses.length(); i++) {
 
-                //va a insertar si solo si, el usuario que esta en el registro de pasajeroxbus es el usuario que tenemos aca, si no, nos
-                //va a generar error a la hora de insertar usuarios diferentes al que tenemos
                 if (pasajerosxbuses.getJSONObject(i + "").getString("usuario").equals(objetoPapa.getJSONObject("1").getJSONObject("0").getString("usuario"))) {
                     String usuario = pasajerosxbuses.getJSONObject(i + "").getString("usuario");
                     String placa = pasajerosxbuses.getJSONObject(i + "").getString("placa");
@@ -305,10 +278,17 @@ public class BaseDeDatos {
         this.nBaseDatos.insert("recientes", null, values);
     }
 
+    public void agregarReciente(String datos) {
+        //separo por el simbolo &
+        String datosReciente[] = datos.split("&");
+        this.insertarReciente(datosReciente[0],
+                datosReciente[1], datosReciente[2], datosReciente[3], datosReciente[4]);
+    }
+
 
     /*
    =================================
-          REMOVER RECIENTE
+          REMOVER RECIENTE POR ID
    =================================
     */
 
@@ -323,6 +303,37 @@ public class BaseDeDatos {
                GETTERS
    =================================
     */
+
+    public String[] getDatosUsuario() {
+
+        String columnas[] = new String[]{
+                "usuario",
+                "nombre",
+                "correo",
+                "password"
+        };
+
+        Cursor c = this.nBaseDatos.query("pasajero", columnas, null, null, null, null, null);
+
+        if (c.getCount() == 0) {
+            return null;
+        }
+
+        int usuario = c.getColumnIndexOrThrow("usuario");
+        int nombre = c.getColumnIndexOrThrow("nombre");
+        int correo = c.getColumnIndexOrThrow("correo");
+        int password = c.getColumnIndexOrThrow("password");
+
+        c.moveToFirst();
+
+        String[] x = new String[]{c.getString(usuario),
+                c.getString(nombre),
+                c.getString(correo),
+                c.getString(password)};
+
+        return x;
+    }
+
 
     public String getReciente(String id) {
         String columnas[] = new String[]{
@@ -486,14 +497,6 @@ public class BaseDeDatos {
                 c.getString(latitud) + "&" +
                 c.getString(longitud);
     }
-
-    public void agregarReciente(String datos) {
-        //separo por el simbolo &
-        String datosReciente[] = datos.split("&");
-        this.insertarReciente(datosReciente[0],
-                datosReciente[1], datosReciente[2], datosReciente[3], datosReciente[4]);
-    }
-
 
 }
 
