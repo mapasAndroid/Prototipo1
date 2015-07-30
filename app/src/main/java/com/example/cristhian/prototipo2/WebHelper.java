@@ -15,6 +15,7 @@ public class WebHelper {
     private final String urlCopiarDatos = "servicios/copiarDatos.php";
     private final String urlIniciarSesion = "servicios/iniciarSesion.php";
     private final String urlRegistrarUsuario = "servicios/registrarUsuario.php";
+    private final String urlBuscarBus = "servicios/buscarBus.php";
 
 
     public WebHelper(){
@@ -36,5 +37,9 @@ public class WebHelper {
 
     public String getUrlRegistrarUsuario() {
         return urlRegistrarUsuario;
+    }
+
+    public String getUrlBuscarBus(){
+        return  this.urlBuscarBus;
     }
 }

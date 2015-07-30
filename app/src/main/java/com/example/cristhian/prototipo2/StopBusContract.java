@@ -77,6 +77,13 @@ public class StopBusContract {
 
     }
 
+    public static final class Waypoints implements BaseColumns {
+        public static final String NOMBRE_TABLA = "waypoints";
+        public static final String WAY_ID_RUTA = "id_ruta";
+        public static final String WAY_LATITUD = "latitud";
+        public static final String WAY_LONGITUD = "longitud";
+
+    }
 
 
 }

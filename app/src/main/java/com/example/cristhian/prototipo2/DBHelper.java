@@ -37,7 +37,7 @@ public class DBHelper extends SQLiteOpenHelper {
             Recientess.R_NOMBRE + " TEXT NOT NULL, " +
             Recientess.R_DIRECCION + " TEXT NOT NULL, " +
             Recientess.R_LATITUD + " TEXT NOT NULL, " +
-            Recientess.R_LONGITUD + " TEXT NOT NULL);" ;
+            Recientess.R_LONGITUD + " TEXT NOT NULL);";
 
 
     public static final String CREATE_RUTAS = "CREATE TABLE " + Ruta.NOMBRE_TABLA + "(" +
@@ -54,26 +54,32 @@ public class DBHelper extends SQLiteOpenHelper {
     public static final String CREATE_PARADEROXRUTA = "CREATE TABLE " + ParaderoxRuta.NOMBRE_TABLA + "(" +
             ParaderoxRuta.PR_ID_PARADERO + " TEXT NOT NULL, " +
             ParaderoxRuta.PR_ID_RUTA + " TEXT NOT NULL, " +
-            "PRIMARY KEY(" + ParaderoxRuta.PR_ID_PARADERO + "," + ParaderoxRuta.PR_ID_RUTA + "),"+
-            "FOREIGN KEY ("+ParaderoxRuta.PR_ID_PARADERO+") REFERENCES "+ Paradero.NOMBRE_TABLA+"("+Paradero.PA_ID+"),"+
-            "FOREIGN KEY ("+ParaderoxRuta.PR_ID_RUTA+") REFERENCES "+ Ruta.NOMBRE_TABLA+"("+Ruta.RU_ID_RUTA+"));";
+            "PRIMARY KEY(" + ParaderoxRuta.PR_ID_PARADERO + "," + ParaderoxRuta.PR_ID_RUTA + ")," +
+            "FOREIGN KEY (" + ParaderoxRuta.PR_ID_PARADERO + ") REFERENCES " + Paradero.NOMBRE_TABLA + "(" + Paradero.PA_ID + ")," +
+            "FOREIGN KEY (" + ParaderoxRuta.PR_ID_RUTA + ") REFERENCES " + Ruta.NOMBRE_TABLA + "(" + Ruta.RU_ID_RUTA + "));";
 
     public static final String CREATE_BUS = "CREATE TABLE " + Bus.NOMBRE_TABLA + "(" +
             Bus.B_PLACA + " TEXT PRIMARY KEY, " +
             Bus.B_CONDUCTOR + " TEXT NOT NULL, " +
             Bus.B_ID_RUTA + " TEXT NOT NULL, " +
             Bus.B_NIT + " TEXT NOT NULL, " +
-            "FOREIGN KEY ("+Bus.B_ID_RUTA+") REFERENCES "+ Ruta.NOMBRE_TABLA+"("+Ruta.RU_ID_RUTA+"),"+
-            "FOREIGN KEY ("+Bus.B_NIT+") REFERENCES "+ Empresa.NOMBRE_TABLA+"("+Empresa.E_NIT+"));";
+            "FOREIGN KEY (" + Bus.B_ID_RUTA + ") REFERENCES " + Ruta.NOMBRE_TABLA + "(" + Ruta.RU_ID_RUTA + ")," +
+            "FOREIGN KEY (" + Bus.B_NIT + ") REFERENCES " + Empresa.NOMBRE_TABLA + "(" + Empresa.E_NIT + "));";
 
     public static final String CREATE_PASAJEROXBUS = "CREATE TABLE " + PasajeroxBus.NOMBRE_TABLA + "(" +
             PasajeroxBus.PB_USUARIO + " TEXT NOT NULL, " +
             PasajeroxBus.PB_PLACA + " TEXT NOT NULL, " +
             PasajeroxBus.PB_FECHA + " TEXT NOT NULL, " +
-            "PRIMARY KEY(" + PasajeroxBus.PB_USUARIO + "," + PasajeroxBus.PB_PLACA + "," + PasajeroxBus.PB_FECHA + "),"+
-            "FOREIGN KEY ("+PasajeroxBus.PB_USUARIO + ") REFERENCES "+ Pasajero.NOMBRE_TABLA +"("+Pasajero.P_USUARIO+"),"+
-            "FOREIGN KEY ("+PasajeroxBus.PB_PLACA+") REFERENCES "+ Bus.NOMBRE_TABLA+"("+Bus.B_PLACA+"));";
+            "PRIMARY KEY(" + PasajeroxBus.PB_USUARIO + "," + PasajeroxBus.PB_PLACA + "," + PasajeroxBus.PB_FECHA + ")," +
+            "FOREIGN KEY (" + PasajeroxBus.PB_USUARIO + ") REFERENCES " + Pasajero.NOMBRE_TABLA + "(" + Pasajero.P_USUARIO + ")," +
+            "FOREIGN KEY (" + PasajeroxBus.PB_PLACA + ") REFERENCES " + Bus.NOMBRE_TABLA + "(" + Bus.B_PLACA + "));";
 
+    public static final String CREATE_WAYPOINTS = "CREATE TABLE " + Waypoints.NOMBRE_TABLA + "(" +
+            Waypoints.WAY_ID_RUTA + " TEXT NOT NULL, " +
+            Waypoints.WAY_LATITUD + " TEXT NOT NULL, " +
+            Waypoints.WAY_LONGITUD + " TEXT NOT NULL, " +
+            "PRIMARY KEY(" + Waypoints.WAY_ID_RUTA + "," + Waypoints.WAY_LATITUD + "," + Waypoints.WAY_LONGITUD + ")," +
+            "FOREIGN KEY (" + Waypoints.WAY_ID_RUTA + ") REFERENCES " + Ruta.NOMBRE_TABLA + "(" + Ruta.RU_ID_RUTA + "));";
 
 
     public DBHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
@@ -92,6 +98,7 @@ public class DBHelper extends SQLiteOpenHelper {
         database.execSQL(CREATE_PARADEROXRUTA);
         database.execSQL(CREATE_BUS);
         database.execSQL(CREATE_PASAJEROXBUS);
+        database.execSQL(CREATE_WAYPOINTS);
     }
 
     @Override
@@ -105,6 +112,7 @@ public class DBHelper extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + ParaderoxRuta.NOMBRE_TABLA);
         db.execSQL("DROP TABLE IF EXISTS " + Bus.NOMBRE_TABLA);
         db.execSQL("DROP TABLE IF EXISTS " + PasajeroxBus.NOMBRE_TABLA);
+        db.execSQL("DROP TABLE IF EXISTS " + Waypoints.NOMBRE_TABLA);
 
         onCreate(db);
 

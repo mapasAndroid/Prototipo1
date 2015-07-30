@@ -5,6 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
+import com.example.cristhian.prototipo2.StopBusContract.*;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONObject;
 
@@ -57,7 +60,7 @@ public class BaseDeDatos {
         insertarTablaParadero(s);
         insertarTablaParaderoxRuta(s);
         insertarTablaBus(s);
-        insertarTablaPasajeroxBus(s);
+        insertarTablaWaypoints(s);
 
     }
 
@@ -67,6 +70,23 @@ public class BaseDeDatos {
     PARSEANDO LOS DATOS JSON PARA PODER INSERTARLOS EN LA BD
     =========================================================
      */
+
+    public void insertarTablaWaypoints(String s) {
+        try {
+
+            JSONObject objetoPapa = new JSONObject(s);
+            JSONObject paraderosxrutas = objetoPapa.getJSONObject("7");
+            for (int i = 0; i < paraderosxrutas.length(); i++) {
+                String id_ruta = paraderosxrutas.getJSONObject(i + "").getString("id_ruta");
+                String latitud = paraderosxrutas.getJSONObject(i + "").getString("latitud");
+                String longitud = paraderosxrutas.getJSONObject(i + "").getString("longitud");
+                this.insertarWaypoint(id_ruta, latitud, longitud);
+            }
+
+        } catch (Exception e) {
+            Log.i("cm01", "error insertando:: " + e.toString());
+        }
+    }
 
     public void insertarTablaPasajero(String response) {
         try {
@@ -162,34 +182,24 @@ public class BaseDeDatos {
     }
 
 
-    private void insertarTablaPasajeroxBus(String s) {
-        try {
-
-            JSONObject objetoPapa = new JSONObject(s);
-            JSONObject pasajerosxbuses = objetoPapa.getJSONObject("6");
-            for (int i = 0; i < pasajerosxbuses.length(); i++) {
-
-                if (pasajerosxbuses.getJSONObject(i + "").getString("usuario").equals(objetoPapa.getJSONObject("1").getJSONObject("0").getString("usuario"))) {
-                    String usuario = pasajerosxbuses.getJSONObject(i + "").getString("usuario");
-                    String placa = pasajerosxbuses.getJSONObject(i + "").getString("placa");
-                    String fecha = pasajerosxbuses.getJSONObject(i + "").getString("fecha");
-                    this.insertarPasajeroxBus(usuario, placa, fecha);
-                }
-
-            }
-
-        } catch (Exception e) {
-            Log.i("cm01", "error insertando:: " + e.toString());
-        }
-    }
-
-
 
     /*
     =================================
     INSERCIONES EN LA BASE DE DATOS
     =================================
      */
+
+
+
+    //debe ser xq ya estan, borra la app y volvamos a ejecutarlas amor voy amor
+    private void insertarWaypoint(String id_ruta, String latitid, String longitud) {
+        ContentValues values = new ContentValues();
+
+        values.put("id_ruta", id_ruta);
+        values.put("latitud", latitid);
+        values.put("longitud", longitud);
+
+    }
 
 
     /**
@@ -220,7 +230,6 @@ public class BaseDeDatos {
 
     private void insertarParadero(String id_paradero, String nombre, String direccion,
                                   String latitud, String longitud) {
-        Log.e("cm01", direccion);
         ContentValues values = new ContentValues();
 
         values.put("id", id_paradero);
@@ -252,17 +261,6 @@ public class BaseDeDatos {
         values.put("nit", nit);
         this.nBaseDatos.insert("bus", null, values);
 
-    }
-
-    private void insertarPasajeroxBus(String usuario, String placa, String fecha) {
-
-        ContentValues values = new ContentValues();
-
-        values.put("usuario", usuario);
-        values.put("placa", placa);
-        values.put("fecha", fecha);
-
-        this.nBaseDatos.insert("pasajeroxbus", null, values);
     }
 
     private void insertarReciente(String id, String nombre, String direccion, String latitud, String longitud) {
@@ -498,5 +496,57 @@ public class BaseDeDatos {
                 c.getString(longitud);
     }
 
+    public LatLng[] getWaypointsByRuta(String id_ruta) {
+        String columnas[] = new String[]{
+                Waypoints.WAY_LATITUD,
+                Waypoints.WAY_LONGITUD
+        };
+
+        Cursor c = this.nBaseDatos.query(Waypoints.NOMBRE_TABLA, columnas, Waypoints.WAY_ID_RUTA + "=\'" + id_ruta + "\'", null, null, null, null);
+
+        if (c.getCount() == 0) {
+            return null;
+        }
+
+        int latitud = c.getColumnIndexOrThrow(Waypoints.WAY_LATITUD);
+        int longitud = c.getColumnIndexOrThrow(Waypoints.WAY_LONGITUD);
+
+        LatLng res [] = new LatLng[c.getCount()];
+        int i = 0;
+        for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext(), i++) {
+            res[i] = new LatLng(c.getDouble(latitud), c.getDouble(longitud));
+        }
+
+        return res;
+
+    }
+
+    public String[] getTodosWaypoints() {
+
+        String columnas[] = new String[]{
+                Waypoints.WAY_ID_RUTA,
+                Waypoints.WAY_LATITUD,
+                Waypoints.WAY_LONGITUD
+        };
+
+        Cursor c = this.nBaseDatos.query(Waypoints.NOMBRE_TABLA, columnas, null, null, null, null, null, null);
+
+        if (c.getCount() == 0) {
+            return null;
+        }
+
+        int id = c.getColumnIndexOrThrow(Waypoints.WAY_ID_RUTA);
+        int latitud = c.getColumnIndexOrThrow(Waypoints.WAY_LATITUD);
+        int longitud = c.getColumnIndexOrThrow(Waypoints.WAY_LONGITUD);
+
+        String res [] = new String[c.getCount()];
+        int i = 0 ;
+        for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext(), i++) {
+            res[i] = c.getString(id) + "&" + c.getString(latitud) + "&" + c.getString(longitud);
+        }
+
+        return res;
+
+    }
 }
 
