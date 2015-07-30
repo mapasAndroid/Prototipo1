@@ -5,18 +5,15 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
-import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -31,10 +28,8 @@ import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 
 public class Mapas extends ActionBarActivity {
@@ -56,6 +51,7 @@ public class Mapas extends ActionBarActivity {
     LatLng ubicacionActual;
     LatLng ubicacionParadero;
     LatLng[] recorridoRuta;
+    String rutaString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,8 +67,7 @@ public class Mapas extends ActionBarActivity {
         setUpMapIfNeeded();
 
         // cambiar posiciones para pruebas
-        this.ubicacionActual = getUbicacionActual();
-        Log.i("cm01", "mi ubicacion" + this.ubicacionActual);
+        this.ubicacionActual = new LatLng(7.894214,-72.499529);//getUbicacionActual();
 
         this.ubicacionParadero = new LatLng(
                 //Double.parseDouble(this.datosParadero.split("&")[3]),
@@ -80,53 +75,46 @@ public class Mapas extends ActionBarActivity {
                 7.8836143, -72.4999937
 
         );
-        Log.i("cm01", "paradero " + this.ubicacionParadero);
+
 
         String id_ruta = getRutaApropiada();
-        Log.i("cm01", "unica ruta::: " + id_ruta);
 
+        this.rutaString = id_ruta;
+        Log.i("cm01", id_ruta);
         if (!id_ruta.isEmpty()) {
-            this.recorridoRuta = this.baseDeDatos.getWaypointsByRuta(id_ruta);
-            Log.i("cm01", "recorrido::: " + recorridoRuta);
-            //async task que busca el bus apropiado en la web
-            //y pinta el mapa
+            //this.recorridoRuta = this.baseDeDatos.getWaypointsByRuta(id_ruta);
             //BusuqedaDeBus busuqedaDeBus = new BusuqedaDeBus();
-           // busuqedaDeBus.execute(id_ruta);
+            //busuqedaDeBus.execute(id_ruta);
         } else {
             //imprima mensaje
-            Log.i("cm01", "no hay rutas cercanas");
+
         }
 
 
     }
 
+
+
     private String getRutaApropiada() {
-        //ubicacionActual, ubicacionParadero
-        //vector donde cada posicion tiene los datos de un waypoint separados por &
+
         this.baseDeDatos.abrir();
         String v[] = this.baseDeDatos.getTodosWaypoints();
         this.baseDeDatos.cerrar();
         String b = calcularRuta(v, this.ubicacionActual, this.ubicacionParadero);
-        return b;
+        return "";
     }
 
     private String calcularRuta(String[] waypoints, LatLng posicionActual, LatLng posicionParadero) {
-        String perro = "";
-        for(String a : waypoints){
-            perro+= a + ":::";
-        }
-        Log.i("cm01",perro);
+
         ArrayList<String[]> cercanasPosACtual = new ArrayList<>();
 
         for (int i = 0; i < waypoints.length; i++) {
-            Log.i("cm01", i + "");
+
             String[] datosWaypoint = waypoints[i].split("&");
 
             double dif = diferencia(new LatLng(Double.parseDouble(datosWaypoint[1]), Double.parseDouble(datosWaypoint[2])), posicionActual);
-            Log.i("cm01", "diferencia al actual::: " + dif);
             if (dif <= this.MARGEN_DE_ERROR) {
                 cercanasPosACtual.add(datosWaypoint);
-                Log.i("cm01", "datos waypoint::: " + datosWaypoint[0]);
             }
         }
 
@@ -138,10 +126,11 @@ public class Mapas extends ActionBarActivity {
         while (cercanos.hasNext()) {
             String datosWaypoint[] = (String[]) cercanos.next();
 
-            double dif = diferencia(new LatLng(Double.parseDouble(datosWaypoint[1]), Double.parseDouble(datosWaypoint[2])), posicionParadero);
-            Log.i("cm01", "diferencia al paradero::: " + dif);
+            double dif = diferencia(
+                    new LatLng(Double.parseDouble(datosWaypoint[1]), Double.parseDouble(datosWaypoint[2])),
+                    posicionParadero);
             if (dif <= this.MARGEN_DE_ERROR_LUGAR) {
-                Log.i("cm01", "punto que me sirve::: " + datosWaypoint[0]);
+                Log.i("cm01", datosWaypoint[0]);
                 return datosWaypoint[0];
             }
         }
@@ -218,11 +207,7 @@ public class Mapas extends ActionBarActivity {
             Log.i("cm01", "ubicacionBus::: " + posBus);
             Log.i("cm01", "ubicacionActual::: " + ubicacionActual);
             Log.i("cm01", "ubicacionParadero::: " + ubicacionParadero);
-            String ruta = "";
-            for (int i = 0; i < recorridoRuta.length; i++) {
-                ruta += recorridoRuta[i].latitude + "," + recorridoRuta[i].longitude + ":::::";
-            }
-            Log.i("cm01", ruta);
+            Log.i("cm01", "id de la ruta apropiada:: " + rutaString);
 
 
         }
@@ -236,6 +221,7 @@ public class Mapas extends ActionBarActivity {
             HttpClient httpClient = new DefaultHttpClient();
             HttpContext localContext = new BasicHttpContext();
             HttpPost httpPost = new HttpPost(webHelper.getUrl() + webHelper.getUrlBuscarBus());
+            Log.i("cm01", webHelper.getUrl() + webHelper.getUrlBuscarBus() );
             HttpResponse response = null;
             String resultado = "";
             try {

@@ -199,6 +199,8 @@ public class BaseDeDatos {
         values.put("latitud", latitid);
         values.put("longitud", longitud);
 
+        this.nBaseDatos.insert(Waypoints.NOMBRE_TABLA, null, values);
+
     }
 
 
