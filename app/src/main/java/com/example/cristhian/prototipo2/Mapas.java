@@ -67,7 +67,7 @@ public class Mapas extends ActionBarActivity {
         setUpMapIfNeeded();
 
         // cambiar posiciones para pruebas
-        this.ubicacionActual = new LatLng(7.894214,-72.499529);//getUbicacionActual();
+        this.ubicacionActual =new LatLng(7.894214,-72.499529);// getUbicacionActual();
 
         this.ubicacionParadero = new LatLng(
                 //Double.parseDouble(this.datosParadero.split("&")[3]),
@@ -93,15 +93,13 @@ public class Mapas extends ActionBarActivity {
 
     }
 
-
-
     private String getRutaApropiada() {
 
         this.baseDeDatos.abrir();
         String v[] = this.baseDeDatos.getTodosWaypoints();
         this.baseDeDatos.cerrar();
         String b = calcularRuta(v, this.ubicacionActual, this.ubicacionParadero);
-        return "";
+        return b;
     }
 
     private String calcularRuta(String[] waypoints, LatLng posicionActual, LatLng posicionParadero) {

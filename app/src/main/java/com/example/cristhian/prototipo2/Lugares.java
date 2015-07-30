@@ -1,6 +1,7 @@
 package com.example.cristhian.prototipo2;
 
 import android.annotation.TargetApi;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -69,6 +70,8 @@ public class Lugares extends ActionBarActivity {
 
     private MyAdapter myAdapter;
 
+    protected ProgressDialog progres;
+
 
     //====================================
     //          GETTER Y SETTER
@@ -114,7 +117,6 @@ public class Lugares extends ActionBarActivity {
         //pintar el action bar de color azul indigo
         ActionBar bar = getSupportActionBar();
         bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#3F51B5")));
-
 
         //verificar si hay conexion a internet para notificarle al usuario
         //que va a trabajar con datos posiblemente antiguos
@@ -206,6 +208,17 @@ public class Lugares extends ActionBarActivity {
         transaction.addToBackStack(null);
         transaction.commit();
         setTitle(title[0]);
+
+        this.progres = ProgressDialog.show(this, "Copiando datos", "Espera unos segundos...", true, false);
+
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                if (progres != null) {
+                    progres.dismiss();
+                }
+            }
+        }, 3000);
 
     }
 
