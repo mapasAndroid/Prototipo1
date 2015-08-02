@@ -1,6 +1,7 @@
 package com.example.cristhian.prototipo2;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -9,6 +10,7 @@ import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -72,6 +74,8 @@ public class Lugares extends ActionBarActivity {
 
     protected ProgressDialog progres;
 
+    public static Activity cerrarlugar;
+
 
     //====================================
     //          GETTER Y SETTER
@@ -113,6 +117,7 @@ public class Lugares extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sitios);
+        cerrarlugar=this;
 
         //pintar el action bar de color azul indigo
         ActionBar bar = getSupportActionBar();
@@ -326,6 +331,18 @@ public class Lugares extends ActionBarActivity {
                 }
             }, 1000);
 
+        }
+
+        if (id == R.id.action_acerca_de) {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse("http://pruebasmais.zz.mu/stopbus/acerca_de.php"));
+            startActivity(intent);
+        }
+
+        if (id == R.id.action_ayuda) {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse("http://pruebasmais.zz.mu/stopbus/contacto.php"));
+            startActivity(intent);
         }
 
         return super.onOptionsItemSelected(item);

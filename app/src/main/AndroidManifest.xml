@@ -69,7 +69,7 @@
         </activity>
 
         <activity
-            android:name=".Mapas"
+            android:name=".Mapa"
             android:label="@string/title_activity_mapas"
             android:parentActivityName=".Lugares" >
             <meta-data

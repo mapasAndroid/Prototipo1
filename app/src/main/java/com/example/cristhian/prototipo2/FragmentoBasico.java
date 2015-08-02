@@ -145,7 +145,7 @@ public class FragmentoBasico extends Fragment implements SwipeRefreshLayout.OnRe
 
                         setParaderosEnLista();
 
-                        Intent intent = new Intent(getActivity(), Mapas.class);
+                        Intent intent = new Intent(getActivity(), Mapa.class);
 
                         //datosParadero es un String con todos los datos del paradero separados por &
                         intent.putExtra("datosParadero",datosParadero);

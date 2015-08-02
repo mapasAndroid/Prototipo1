@@ -1,16 +1,25 @@
 package com.example.cristhian.prototipo2;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
@@ -27,20 +36,24 @@ import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 
-public class Mapas extends ActionBarActivity {
+public class Mapa extends ActionBarActivity {
 
     private GoogleMap mMap;
+    private ActionBarDrawerToggle drawerToggle;
+    private Lugares cx= new Lugares();
 
     private String datosParadero;
     private String[] datosUsuario;
     private BaseDeDatos baseDeDatos;
     private final double MARGEN_DE_ERROR = 753.9047315860873;
     private final double MARGEN_DE_ERROR_LUGAR = 700.9047315860873;
+    public static final LatLng CAMARA = new LatLng(7.885067,-72.500351);
 
     //Atributo que encripta las contrasenias en sha1
     private Encriptador encriptador = new Encriptador();
@@ -57,6 +70,8 @@ public class Mapas extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mapas);
+        ActionBar bar = getSupportActionBar();
+        bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#3F51B5")));
 
         this.baseDeDatos = new BaseDeDatos(getBaseContext());
         Bundle datosFragmento = getIntent().getExtras();
@@ -67,27 +82,28 @@ public class Mapas extends ActionBarActivity {
         setUpMapIfNeeded();
 
         // cambiar posiciones para pruebas
-        this.ubicacionActual =new LatLng(7.894214,-72.499529);// getUbicacionActual();
+        this.ubicacionActual =new LatLng(7.893039,-72.502297);// getUbicacionActual();
+
+
+        //7.894214,-72.499529
 
         this.ubicacionParadero = new LatLng(
-                //Double.parseDouble(this.datosParadero.split("&")[3]),
-                //Double.parseDouble(this.datosParadero.split("&")[4])
-                7.8836143, -72.4999937
-
+                Double.parseDouble(this.datosParadero.split("&")[3]),
+                Double.parseDouble(this.datosParadero.split("&")[4])
         );
 
 
         String id_ruta = getRutaApropiada();
 
         this.rutaString = id_ruta;
-        Log.i("cm01", id_ruta);
+        Log.i("cm01", "la ruta adecuada para ir a "+this.datosParadero.split("&")[1]+" es la "+id_ruta);
         if (!id_ruta.isEmpty()) {
             //this.recorridoRuta = this.baseDeDatos.getWaypointsByRuta(id_ruta);
             //BusuqedaDeBus busuqedaDeBus = new BusuqedaDeBus();
             //busuqedaDeBus.execute(id_ruta);
         } else {
             //imprima mensaje
-
+            Log.i("cm01", "no hay rutas cercanas ");
         }
 
 
@@ -117,6 +133,7 @@ public class Mapas extends ActionBarActivity {
         }
 
         if (cercanasPosACtual.isEmpty()) {
+
             return "";
         }
 
@@ -160,17 +177,50 @@ public class Mapas extends ActionBarActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
+
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
 
+        if (id == R.id.action_logout) {
+            Toast.makeText(this.getBaseContext(), "Cerrando Sesion...", Toast.LENGTH_SHORT).show();
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    borrarBd();
+                    Intent inicio = new Intent(Mapa.this, Inicio.class);
+                    startActivity(inicio);
+                    Mapa.this.finish();
+                    cx.cerrarlugar.finish();
+
+                }
+            }, 1000);
+
+        }
+
+        if (id == R.id.action_acerca_de) {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse("http://pruebasmais.zz.mu/stopbus/acerca_de.php"));
+            startActivity(intent);
+        }
+
+        if (id == R.id.action_ayuda) {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse("http://pruebasmais.zz.mu/stopbus/contacto.php"));
+            startActivity(intent);
+        }
+
         return super.onOptionsItemSelected(item);
+    }
+
+    private void borrarBd() {
+            File database = getApplicationContext().getDatabasePath("stopbus.db");
+
+            if (database.exists()) {
+                database.delete();
+            }
     }
 
     @Override
@@ -196,6 +246,9 @@ public class Mapas extends ActionBarActivity {
     private void setUpMap() {
         mMap.setMyLocationEnabled(true);
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(CAMARA));
+        mMap.animateCamera(CameraUpdateFactory.zoomTo(14));
     }
 
     public class BusuqedaDeBus extends AsyncTask<String, String, String> {
@@ -240,5 +293,6 @@ public class Mapas extends ActionBarActivity {
 
 
     }
+
 
 }

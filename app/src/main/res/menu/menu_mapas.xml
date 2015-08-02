@@ -1,7 +1,26 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.cristhian.prototipo2.Mapas">
-    <item android:id="@+id/action_settings" android:title="@string/action_settings"
-        android:orderInCategory="100" app:showAsAction="never" />
+    tools:context="com.example.cristhian.prototipo2.Mapa">
+    <item
+        android:id="@+id/opciones"
+        android:icon="@drawable/ic_action_overflow"
+        android:orderInCategory="100"
+        android:title="@string/action_salir"
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:id="@+id/action_acerca_de"
+                android:title="@string/action_acerca_de"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_ayuda"
+                android:title="@string/action_ayuda"
+                app:showAsAction="never" />
+            <item
+                android:id="@+id/action_logout"
+                android:title="@string/action_salir"
+                app:showAsAction="never" />
+        </menu>
+    </item>
 </menu>

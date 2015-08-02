@@ -1,46 +1,16 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    tools:context="com.example.cristhian.prototipo2.Mapas">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.cristhian.prototipo2.Mapa">
 
     <fragment
 
-        android:layout_width="400dp"
-        android:layout_height="400dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:id="@+id/map"
         tools:context="com.example.cristhian.prototipo2.MapsActivity"
         android:name="com.google.android.gms.maps.SupportMapFragment" />
 
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="boton A"
-        android:id="@+id/botonA"
-        android:onClick="getA"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="boton B"
-        android:id="@+id/botonB"
-        android:onClick="getB"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="boton C"
-        android:id="@+id/botonC"
-        android:onClick="getC"/>
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="boton D"
-        android:id="@+id/botonD"
-        android:onClick="getD"/>
 
 </RelativeLayout>
