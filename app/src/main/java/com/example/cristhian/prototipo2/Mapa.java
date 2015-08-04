@@ -22,7 +22,10 @@ import android.widget.Toast;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -92,11 +95,17 @@ public class Mapa extends ActionBarActivity {
                 Double.parseDouble(this.datosParadero.split("&")[4])
         );
 
+        agregarMarker(this.ubicacionActual, BitmapDescriptorFactory.HUE_ORANGE, "actual", "actual");
+        agregarMarker(this.ubicacionParadero, BitmapDescriptorFactory.HUE_ORANGE, "paradero", "paradero");
 
+
+
+
+        /*
         String id_ruta = getRutaApropiada();
 
         this.rutaString = id_ruta;
-        Log.i("cm01", "la ruta adecuada para ir a "+this.datosParadero.split("&")[1]+" es la "+id_ruta);
+        Log.i("cm01", "ruta que sirve::: " + id_ruta);
         if (!id_ruta.isEmpty()) {
             //this.recorridoRuta = this.baseDeDatos.getWaypointsByRuta(id_ruta);
             //BusuqedaDeBus busuqedaDeBus = new BusuqedaDeBus();
@@ -104,7 +113,23 @@ public class Mapa extends ActionBarActivity {
         } else {
             //imprima mensaje
             Log.i("cm01", "no hay rutas cercanas ");
-        }
+        }*/
+
+        this.baseDeDatos.abrir();
+        ArrayList<LatLng> ruta1 = baseDeDatos.getWaypointsByRuta("1");
+        ArrayList<LatLng> ruta2 = baseDeDatos.getWaypointsByRuta("2");
+        ArrayList<LatLng> ruta3 = baseDeDatos.getWaypointsByRuta("3");
+        this.baseDeDatos.cerrar();
+        pintarRuta(ruta1, Color.GRAY);
+
+    }
+
+    public void pintarRuta(ArrayList<LatLng> puntos, int color){
+        PolylineOptions opciones = new PolylineOptions();
+        opciones.addAll(puntos);
+        opciones.color(color);
+        opciones.width(4);
+        this.mMap.addPolyline(opciones);
 
 
     }
@@ -120,13 +145,17 @@ public class Mapa extends ActionBarActivity {
 
     private String calcularRuta(String[] waypoints, LatLng posicionActual, LatLng posicionParadero) {
 
+        Log.i("cm01", "cantidad de puntos ::: " + waypoints.length);
         ArrayList<String[]> cercanasPosACtual = new ArrayList<>();
 
         for (int i = 0; i < waypoints.length; i++) {
 
             String[] datosWaypoint = waypoints[i].split("&");
 
-            double dif = diferencia(new LatLng(Double.parseDouble(datosWaypoint[1]), Double.parseDouble(datosWaypoint[2])), posicionActual);
+            double dif = diferencia(
+                    new LatLng(Double.parseDouble(datosWaypoint[1]),
+                            Double.parseDouble(datosWaypoint[2])), posicionActual
+            );
             if (dif <= this.MARGEN_DE_ERROR) {
                 cercanasPosACtual.add(datosWaypoint);
             }
@@ -136,6 +165,8 @@ public class Mapa extends ActionBarActivity {
 
             return "";
         }
+
+        Log.i("cm01", "size de los cercanos a mi::: " + cercanasPosACtual.size());
 
         Iterator cercanos = cercanasPosACtual.iterator();
         while (cercanos.hasNext()) {
@@ -159,6 +190,16 @@ public class Mapa extends ActionBarActivity {
                 Math.cos(c * x.latitude) * Math.cos(c * y.latitude) * Math.pow(Math.sin(c * (y.longitude - x.longitude) / 2), 2))));
     }
 
+    private void agregarMarker(LatLng posicion,float color, String titulo, String snippet){
+        if (mMap != null) {
+            mMap.addMarker(new MarkerOptions().position(posicion)
+                            .title(titulo)
+                            .snippet(snippet)
+                            .icon(BitmapDescriptorFactory.defaultMarker(color))
+            );
+        }
+    }
+
     private LatLng getUbicacionActual() {
         LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         Criteria criteria = new Criteria();
@@ -167,6 +208,9 @@ public class Mapa extends ActionBarActivity {
 
         return new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
     }
+
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

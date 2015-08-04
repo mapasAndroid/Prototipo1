@@ -498,25 +498,31 @@ public class BaseDeDatos {
                 c.getString(longitud);
     }
 
-    public LatLng[] getWaypointsByRuta(String id_ruta) {
+    public ArrayList<LatLng> getWaypointsByRuta(String id_ruta) {
         String columnas[] = new String[]{
                 Waypoints.WAY_LATITUD,
                 Waypoints.WAY_LONGITUD
         };
 
-        Cursor c = this.nBaseDatos.query(Waypoints.NOMBRE_TABLA, columnas, Waypoints.WAY_ID_RUTA + "=\'" + id_ruta + "\'", null, null, null, null);
+        Cursor c = this.nBaseDatos.query(
+                Waypoints.NOMBRE_TABLA,
+                columnas,
+                Waypoints.WAY_ID_RUTA + "=\'" + id_ruta + "\'",
+                null, null, null, null
+        );
 
         if (c.getCount() == 0) {
+            Log.i("cm01", "cero::::" + id_ruta);
             return null;
         }
 
         int latitud = c.getColumnIndexOrThrow(Waypoints.WAY_LATITUD);
         int longitud = c.getColumnIndexOrThrow(Waypoints.WAY_LONGITUD);
 
-        LatLng res [] = new LatLng[c.getCount()];
-        int i = 0;
-        for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext(), i++) {
-            res[i] = new LatLng(c.getDouble(latitud), c.getDouble(longitud));
+        ArrayList<LatLng> res = new ArrayList<LatLng>();
+
+        for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
+            res.add(new LatLng(c.getDouble(latitud), c.getDouble(longitud)));
         }
 
         return res;
