@@ -26,7 +26,7 @@ public class StopBusContract {
 
     public static final class Recientess implements BaseColumns {
         public static final String NOMBRE_TABLA = "recientes";
-        public static final String R_ID = "id";
+        public static final String R_ID = "id_paradero";
         public static final String R_NOMBRE = "nombre";
         public static final String R_DIRECCION = "direccion";
         public static final String R_LATITUD = "latitud";
@@ -44,7 +44,7 @@ public class StopBusContract {
 
     public static final class Paradero implements BaseColumns {
         public static final String NOMBRE_TABLA = "paradero";
-        public static final String PA_ID = "id";
+        public static final String PA_ID = "id_paradero";
         public static final String PA_NOMBRE = "nombre";
         public static final String PA_DIRECCION = "direccion";
         public static final String PA_LATITUD = "latitud";
@@ -80,6 +80,7 @@ public class StopBusContract {
     public static final class Waypoints implements BaseColumns {
         public static final String NOMBRE_TABLA = "waypoints";
         public static final String WAY_ID_RUTA = "id_ruta";
+        public static final String WAY_CONSECUTIVO = "id";
         public static final String WAY_LATITUD = "latitud";
         public static final String WAY_LONGITUD = "longitud";
 

@@ -4,8 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -49,34 +49,36 @@ public class Mapa extends ActionBarActivity {
 
     private GoogleMap mMap;
     private ActionBarDrawerToggle drawerToggle;
-    private Lugares cx= new Lugares();
+    private Lugares cx = new Lugares();
 
     private String datosParadero;
     private String[] datosUsuario;
     private BaseDeDatos baseDeDatos;
     private final double MARGEN_DE_ERROR = 753.9047315860873;
     private final double MARGEN_DE_ERROR_LUGAR = 700.9047315860873;
-    public static final LatLng CAMARA = new LatLng(7.885067,-72.500351);
+    public static final LatLng CAMARA = new LatLng(7.885067, -72.500351);
 
     //Atributo que encripta las contrasenias en sha1
     private Encriptador encriptador = new Encriptador();
     //Atributo que gestiona las conexiones a datos web
     private WebHelper webHelper = new WebHelper();
 
-    //datos para usar desde el Async Task
+    //datos globales para usar desde el Async Task
     LatLng ubicacionActual;
     LatLng ubicacionParadero;
-    LatLng[] recorridoRuta;
     String rutaString;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mapas);
+
+
         ActionBar bar = getSupportActionBar();
         bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#3F51B5")));
 
         this.baseDeDatos = new BaseDeDatos(getBaseContext());
+
         Bundle datosFragmento = getIntent().getExtras();
         if (datosFragmento != null) {
             datosParadero = datosFragmento.get("datosParadero").toString();
@@ -84,25 +86,61 @@ public class Mapa extends ActionBarActivity {
         }
         setUpMapIfNeeded();
 
-        // cambiar posiciones para pruebas
-        this.ubicacionActual =new LatLng(7.893039,-72.502297);// getUbicacionActual();
+
+        //=========== LOCALIZACION ============
+        // Acquire a reference to the system Location Manager
+        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
+        // Define a listener that responds to location updates
+        LocationListener locationListener = new LocationListener() {
+            public void onLocationChanged(Location location) {
+                // Called when a new location is found by the network location provider.
+                Toast.makeText(getBaseContext(), location.toString(), Toast.LENGTH_LONG).show();
+            }
+
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+            }
+
+            public void onProviderEnabled(String provider) {
+            }
+
+            public void onProviderDisabled(String provider) {
+            }
+        };
+
+        // Register the listener with the Location Manager to receive location updates
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+
+        //============ FIN LOCALIZACION ============
+
+        this.ubicacionActual = new LatLng(
+                7.8928452,-72.5025499
+
+        );
 
 
-        //7.894214,-72.499529
+        //agrego los markers en las posiciones a tratar, actual y la del paradero
+        agregarMarker(this.ubicacionActual, BitmapDescriptorFactory.HUE_BLUE, "actual", "actual");
+
+
 
         this.ubicacionParadero = new LatLng(
                 Double.parseDouble(this.datosParadero.split("&")[3]),
                 Double.parseDouble(this.datosParadero.split("&")[4])
         );
 
-        agregarMarker(this.ubicacionActual, BitmapDescriptorFactory.HUE_ORANGE, "actual", "actual");
-        agregarMarker(this.ubicacionParadero, BitmapDescriptorFactory.HUE_ORANGE, "paradero", "paradero");
 
+        agregarMarker(
+                this.ubicacionParadero,
+                BitmapDescriptorFactory.HUE_ORANGE,
+                this.datosParadero.split("&")[1],
+                this.datosParadero.split("&")[2]
+        );
 
-
-
-        /*
         String id_ruta = getRutaApropiada();
+
+
+
 
         this.rutaString = id_ruta;
         Log.i("cm01", "ruta que sirve::: " + id_ruta);
@@ -113,70 +151,78 @@ public class Mapa extends ActionBarActivity {
         } else {
             //imprima mensaje
             Log.i("cm01", "no hay rutas cercanas ");
-        }*/
+        }
 
         this.baseDeDatos.abrir();
-        ArrayList<LatLng> ruta1 = baseDeDatos.getWaypointsByRuta("1");
-        ArrayList<LatLng> ruta2 = baseDeDatos.getWaypointsByRuta("2");
-        ArrayList<LatLng> ruta3 = baseDeDatos.getWaypointsByRuta("3");
+        ArrayList<LatLng> ruta = baseDeDatos.getWaypointsByRuta(id_ruta);
         this.baseDeDatos.cerrar();
-        pintarRuta(ruta1, Color.GRAY);
+
+        pintarRuta(ruta, Color.BLUE);
 
     }
 
-    public void pintarRuta(ArrayList<LatLng> puntos, int color){
+    private String toStringRuta(String[] ruta1) {
+        String res = "";
+        for (String dato : ruta1) {
+            res += dato.toString() + "*";
+        }
+        return res;
+    }
+
+    public void pintarRuta(ArrayList<LatLng> puntos, int color) {
         PolylineOptions opciones = new PolylineOptions();
         opciones.addAll(puntos);
         opciones.color(color);
         opciones.width(4);
         this.mMap.addPolyline(opciones);
-
-
     }
 
     private String getRutaApropiada() {
 
         this.baseDeDatos.abrir();
-        String v[] = this.baseDeDatos.getTodosWaypoints();
+        String waypoints[] = this.baseDeDatos.getTodosWaypoints();
         this.baseDeDatos.cerrar();
-        String b = calcularRuta(v, this.ubicacionActual, this.ubicacionParadero);
+        String b = calcularRuta(waypoints, new LatLng(7.8928452,-72.5025499), this.ubicacionParadero);
         return b;
     }
 
     private String calcularRuta(String[] waypoints, LatLng posicionActual, LatLng posicionParadero) {
 
-        Log.i("cm01", "cantidad de puntos ::: " + waypoints.length);
-        ArrayList<String[]> cercanasPosACtual = new ArrayList<>();
+        ArrayList<String[]> cercanasPosActual = new ArrayList<>();
 
         for (int i = 0; i < waypoints.length; i++) {
 
-            String[] datosWaypoint = waypoints[i].split("&");
+            String[] waypointActual = waypoints[i].split("&");
 
             double dif = diferencia(
-                    new LatLng(Double.parseDouble(datosWaypoint[1]),
-                            Double.parseDouble(datosWaypoint[2])), posicionActual
+                    new LatLng(Double.parseDouble(waypointActual[2]), Double.parseDouble(waypointActual[3])),
+                    posicionActual
             );
+
+
             if (dif <= this.MARGEN_DE_ERROR) {
-                cercanasPosACtual.add(datosWaypoint);
+                cercanasPosActual.add(waypointActual);
             }
         }
 
-        if (cercanasPosACtual.isEmpty()) {
+        if (cercanasPosActual.isEmpty()) {
 
-            return "";
+            return "vacio";
         }
 
-        Log.i("cm01", "size de los cercanos a mi::: " + cercanasPosACtual.size());
 
-        Iterator cercanos = cercanasPosACtual.iterator();
+        Iterator cercanos = cercanasPosActual.iterator();
+
         while (cercanos.hasNext()) {
             String datosWaypoint[] = (String[]) cercanos.next();
 
             double dif = diferencia(
-                    new LatLng(Double.parseDouble(datosWaypoint[1]), Double.parseDouble(datosWaypoint[2])),
-                    posicionParadero);
+                    new LatLng(Double.parseDouble(datosWaypoint[2]), Double.parseDouble(datosWaypoint[3])),
+                    posicionParadero
+
+            );
+
             if (dif <= this.MARGEN_DE_ERROR_LUGAR) {
-                Log.i("cm01", datosWaypoint[0]);
                 return datosWaypoint[0];
             }
         }
@@ -190,7 +236,7 @@ public class Mapa extends ActionBarActivity {
                 Math.cos(c * x.latitude) * Math.cos(c * y.latitude) * Math.pow(Math.sin(c * (y.longitude - x.longitude) / 2), 2))));
     }
 
-    private void agregarMarker(LatLng posicion,float color, String titulo, String snippet){
+    private void agregarMarker(LatLng posicion, float color, String titulo, String snippet) {
         if (mMap != null) {
             mMap.addMarker(new MarkerOptions().position(posicion)
                             .title(titulo)
@@ -199,17 +245,6 @@ public class Mapa extends ActionBarActivity {
             );
         }
     }
-
-    private LatLng getUbicacionActual() {
-        LocationManager locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        Criteria criteria = new Criteria();
-        String provider = locationManager.getBestProvider(criteria, true);
-        Location myLocation = locationManager.getLastKnownLocation(provider);
-
-        return new LatLng(myLocation.getLatitude(), myLocation.getLongitude());
-    }
-
-
 
 
     @Override
@@ -260,11 +295,11 @@ public class Mapa extends ActionBarActivity {
     }
 
     private void borrarBd() {
-            File database = getApplicationContext().getDatabasePath("stopbus.db");
+        File database = getApplicationContext().getDatabasePath("stopbus.db");
 
-            if (database.exists()) {
-                database.delete();
-            }
+        if (database.exists()) {
+            database.delete();
+        }
     }
 
     @Override
@@ -288,6 +323,7 @@ public class Mapa extends ActionBarActivity {
     }
 
     private void setUpMap() {
+
         mMap.setMyLocationEnabled(true);
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 
@@ -316,7 +352,7 @@ public class Mapa extends ActionBarActivity {
             HttpClient httpClient = new DefaultHttpClient();
             HttpContext localContext = new BasicHttpContext();
             HttpPost httpPost = new HttpPost(webHelper.getUrl() + webHelper.getUrlBuscarBus());
-            Log.i("cm01", webHelper.getUrl() + webHelper.getUrlBuscarBus() );
+            Log.i("cm01", webHelper.getUrl() + webHelper.getUrlBuscarBus());
             HttpResponse response = null;
             String resultado = "";
             try {
@@ -335,8 +371,6 @@ public class Mapa extends ActionBarActivity {
 
         }
 
+    }//fin de async task
 
-    }
-
-
-}
+}//fin de la clase

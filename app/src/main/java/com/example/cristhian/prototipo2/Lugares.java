@@ -131,14 +131,6 @@ public class Lugares extends ActionBarActivity {
                             "Conectate a internet lo mas rapido posible.", 3);
         }
 
-        //muestra el mensaje de bienvenida, siempre y cuando hayan extras en el intent
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            this.nombreUsuario = extras.get("usuario").toString();
-            this.correoUsuario = extras.get("correo").toString();
-            mostrarMensaje(this.nombreUsuario, extras.get("desde").toString());
-        }
-
         //extraer el drawer layout de la vista
         drawerLayout = (DrawerLayout) findViewById(R.id.contenedor_principal);
 
@@ -221,6 +213,13 @@ public class Lugares extends ActionBarActivity {
             public void run() {
                 if (progres != null) {
                     progres.dismiss();
+                    //muestra el mensaje de bienvenida, siempre y cuando hayan extras en el intent
+                    Bundle extras = getIntent().getExtras();
+                    if (extras != null) {
+                        nombreUsuario = extras.get("usuario").toString();
+                        correoUsuario = extras.get("correo").toString();
+                        mostrarMensaje(nombreUsuario, extras.get("desde").toString());
+                    }
                 }
             }
         }, 3000);

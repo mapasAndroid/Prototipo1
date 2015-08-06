@@ -76,9 +76,10 @@ public class DBHelper extends SQLiteOpenHelper {
 
     public static final String CREATE_WAYPOINTS = "CREATE TABLE " + Waypoints.NOMBRE_TABLA + "(" +
             Waypoints.WAY_ID_RUTA + " TEXT NOT NULL, " +
+            Waypoints.WAY_CONSECUTIVO + " INTEGER NOT NULL, " +
             Waypoints.WAY_LATITUD + " TEXT NOT NULL, " +
             Waypoints.WAY_LONGITUD + " TEXT NOT NULL, " +
-            "PRIMARY KEY(" + Waypoints.WAY_ID_RUTA + "," + Waypoints.WAY_LATITUD + "," + Waypoints.WAY_LONGITUD + ")," +
+            "PRIMARY KEY(" + Waypoints.WAY_ID_RUTA + "," + Waypoints.WAY_CONSECUTIVO + ")," +
             "FOREIGN KEY (" + Waypoints.WAY_ID_RUTA + ") REFERENCES " + Ruta.NOMBRE_TABLA + "(" + Ruta.RU_ID_RUTA + "));";
 
 

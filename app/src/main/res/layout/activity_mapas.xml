@@ -4,6 +4,13 @@
     android:layout_height="match_parent"
     tools:context="com.example.cristhian.prototipo2.Mapa">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:id="@+id/holi"
+        />
+
     <fragment
 
         android:layout_width="match_parent"

@@ -5,8 +5,14 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
-import com.example.cristhian.prototipo2.StopBusContract.*;
 
+import com.example.cristhian.prototipo2.StopBusContract.Bus;
+import com.example.cristhian.prototipo2.StopBusContract.Paradero;
+import com.example.cristhian.prototipo2.StopBusContract.ParaderoxRuta;
+import com.example.cristhian.prototipo2.StopBusContract.Pasajero;
+import com.example.cristhian.prototipo2.StopBusContract.Recientess;
+import com.example.cristhian.prototipo2.StopBusContract.Ruta;
+import com.example.cristhian.prototipo2.StopBusContract.Waypoints;
 import com.google.android.gms.maps.model.LatLng;
 
 import org.json.JSONObject;
@@ -32,6 +38,7 @@ public class BaseDeDatos {
 
     /**
      * metodo que abre una coneccion con la base de datos
+     *
      * @return un objeto de tipo base de datos
      */
     public BaseDeDatos abrir() {
@@ -77,10 +84,11 @@ public class BaseDeDatos {
             JSONObject objetoPapa = new JSONObject(s);
             JSONObject paraderosxrutas = objetoPapa.getJSONObject("7");
             for (int i = 0; i < paraderosxrutas.length(); i++) {
-                String id_ruta = paraderosxrutas.getJSONObject(i + "").getString("id_ruta");
-                String latitud = paraderosxrutas.getJSONObject(i + "").getString("latitud");
-                String longitud = paraderosxrutas.getJSONObject(i + "").getString("longitud");
-                this.insertarWaypoint(id_ruta, latitud, longitud);
+                String id_ruta = paraderosxrutas.getJSONObject(i + "").getString(Waypoints.WAY_ID_RUTA);
+                int consecutivo = paraderosxrutas.getJSONObject(i + "").getInt(Waypoints.WAY_CONSECUTIVO);
+                String latitud = paraderosxrutas.getJSONObject(i + "").getString(Waypoints.WAY_LATITUD);
+                String longitud = paraderosxrutas.getJSONObject(i + "").getString(Waypoints.WAY_LONGITUD);
+                this.insertarWaypoint(id_ruta, consecutivo, latitud, longitud);
             }
 
         } catch (Exception e) {
@@ -96,10 +104,10 @@ public class BaseDeDatos {
             JSONObject detallesUsuario = lista.getJSONObject("0");
 
             this.insertarUsuario(
-                    detallesUsuario.getString("usuario"),
-                    detallesUsuario.getString("nombre"),
-                    detallesUsuario.getString("correo"),
-                    detallesUsuario.getString("password")
+                    detallesUsuario.getString(Pasajero.P_USUARIO),
+                    detallesUsuario.getString(Pasajero.P_NOMBRE),
+                    detallesUsuario.getString(Pasajero.P_NOMBRE),
+                    detallesUsuario.getString(Pasajero.P_PASSWORD)
             );
 
         } catch (Exception e) {
@@ -113,8 +121,8 @@ public class BaseDeDatos {
             JSONObject objetoPapa = new JSONObject(s);
             JSONObject rutas = objetoPapa.getJSONObject("2");
             for (int i = 0; i < rutas.length(); i++) {
-                String id_ruta = rutas.getJSONObject(i + "").getString("id_ruta");
-                String nombre = rutas.getJSONObject(i + "").getString("nombre");
+                String id_ruta = rutas.getJSONObject(i + "").getString(Ruta.RU_ID_RUTA);
+                String nombre = rutas.getJSONObject(i + "").getString(Ruta.RU_NOMBRE);
                 this.insertarRuta(id_ruta, nombre);
             }
 
@@ -130,11 +138,11 @@ public class BaseDeDatos {
             JSONObject objetoPapa = new JSONObject(s);
             JSONObject paraderos = objetoPapa.getJSONObject("3");
             for (int i = 0; i < paraderos.length(); i++) {
-                String id_paradero = paraderos.getJSONObject(i + "").getString("id_paradero");
-                String nombre = paraderos.getJSONObject(i + "").getString("nombre");
-                String direccion = paraderos.getJSONObject(i + "").getString("direccion");
-                String latitud = paraderos.getJSONObject(i + "").getString("latitud");
-                String longitud = paraderos.getJSONObject(i + "").getString("longitud");
+                String id_paradero = paraderos.getJSONObject(i + "").getString(Paradero.PA_ID);
+                String nombre = paraderos.getJSONObject(i + "").getString(Paradero.PA_NOMBRE);
+                String direccion = paraderos.getJSONObject(i + "").getString(Paradero.PA_DIRECCION);
+                String latitud = paraderos.getJSONObject(i + "").getString(Paradero.PA_LATITUD);
+                String longitud = paraderos.getJSONObject(i + "").getString(Paradero.PA_LONGITUD);
                 this.insertarParadero(id_paradero, nombre, direccion, latitud, longitud);
             }
 
@@ -152,8 +160,8 @@ public class BaseDeDatos {
             JSONObject objetoPapa = new JSONObject(s);
             JSONObject paraderosxrutas = objetoPapa.getJSONObject("4");
             for (int i = 0; i < paraderosxrutas.length(); i++) {
-                String id_paradero = paraderosxrutas.getJSONObject(i + "").getString("id_paradero");
-                String id_ruta = paraderosxrutas.getJSONObject(i + "").getString("id_ruta");
+                String id_paradero = paraderosxrutas.getJSONObject(i + "").getString(ParaderoxRuta.PR_ID_PARADERO);
+                String id_ruta = paraderosxrutas.getJSONObject(i + "").getString(ParaderoxRuta.PR_ID_RUTA);
                 this.insertarParaderoxRuta(id_paradero, id_ruta);
             }
 
@@ -168,10 +176,10 @@ public class BaseDeDatos {
             JSONObject objetoPapa = new JSONObject(s);
             JSONObject buses = objetoPapa.getJSONObject("5");
             for (int i = 0; i < buses.length(); i++) {
-                String placa = buses.getJSONObject(i + "").getString("placa");
-                String conductor = buses.getJSONObject(i + "").getString("conductor");
-                String id_ruta = buses.getJSONObject(i + "").getString("id_ruta");
-                String nit = buses.getJSONObject(i + "").getString("nit");
+                String placa = buses.getJSONObject(i + "").getString(Bus.B_PLACA);
+                String conductor = buses.getJSONObject(i + "").getString(Bus.B_CONDUCTOR);
+                String id_ruta = buses.getJSONObject(i + "").getString(Bus.B_ID_RUTA);
+                String nit = buses.getJSONObject(i + "").getString(Bus.B_NIT);
 
                 this.insertarBus(placa, conductor, id_ruta, nit);
             }
@@ -190,14 +198,14 @@ public class BaseDeDatos {
      */
 
 
-
     //debe ser xq ya estan, borra la app y volvamos a ejecutarlas amor voy amor
-    private void insertarWaypoint(String id_ruta, String latitid, String longitud) {
+    private void insertarWaypoint(String id_ruta, int consecutivo, String latitid, String longitud) {
         ContentValues values = new ContentValues();
 
-        values.put("id_ruta", id_ruta);
-        values.put("latitud", latitid);
-        values.put("longitud", longitud);
+        values.put(Waypoints.WAY_ID_RUTA, id_ruta);
+        values.put(Waypoints.WAY_CONSECUTIVO, consecutivo);
+        values.put(Waypoints.WAY_LATITUD, latitid);
+        values.put(Waypoints.WAY_LONGITUD, longitud);
 
         this.nBaseDatos.insert(Waypoints.NOMBRE_TABLA, null, values);
 
@@ -213,42 +221,42 @@ public class BaseDeDatos {
     private void insertarRuta(String id_ruta, String nombre) {
         ContentValues values = new ContentValues();
 
-        values.put("id_ruta", id_ruta);
-        values.put("nombre", nombre);
+        values.put(Ruta.RU_ID_RUTA, id_ruta);
+        values.put(Ruta.RU_NOMBRE, nombre);
 
-        this.nBaseDatos.insert("ruta", null, values);
+        this.nBaseDatos.insert(Ruta.NOMBRE_TABLA, null, values);
     }
 
     private void insertarUsuario(String usuario, String nombre, String correo, String password) {
         ContentValues values = new ContentValues();
 
-        values.put("usuario", usuario);
-        values.put("nombre", nombre);
-        values.put("correo", correo);
-        values.put("password", password);
+        values.put(Pasajero.P_USUARIO, usuario);
+        values.put(Pasajero.P_NOMBRE, nombre);
+        values.put(Pasajero.P_CORREO, correo);
+        values.put(Pasajero.P_PASSWORD, password);
 
-        this.nBaseDatos.insert("pasajero", null, values);
+        this.nBaseDatos.insert(Pasajero.NOMBRE_TABLA, null, values);
     }
 
     private void insertarParadero(String id_paradero, String nombre, String direccion,
                                   String latitud, String longitud) {
         ContentValues values = new ContentValues();
 
-        values.put("id", id_paradero);
-        values.put("nombre", nombre);
-        values.put("direccion", direccion);
-        values.put("latitud", latitud);
-        values.put("longitud", longitud);
+        values.put(Paradero.PA_ID, id_paradero);
+        values.put(Paradero.PA_NOMBRE, nombre);
+        values.put(Paradero.PA_DIRECCION, direccion);
+        values.put(Paradero.PA_LATITUD, latitud);
+        values.put(Paradero.PA_LONGITUD, longitud);
 
-        this.nBaseDatos.insert("paradero", null, values);
+        this.nBaseDatos.insert(Paradero.NOMBRE_TABLA, null, values);
     }
 
     private void insertarParaderoxRuta(String id_paradero, String id_ruta) {
         ContentValues values = new ContentValues();
 
-        values.put("id_paradero", id_paradero);
-        values.put("id_ruta", id_ruta);
-        this.nBaseDatos.insert("paraderoxruta", null, values);
+        values.put(ParaderoxRuta.PR_ID_PARADERO, id_paradero);
+        values.put(ParaderoxRuta.PR_ID_RUTA, id_ruta);
+        this.nBaseDatos.insert(ParaderoxRuta.NOMBRE_TABLA, null, values);
 
     }
 
@@ -257,11 +265,11 @@ public class BaseDeDatos {
 
         ContentValues values = new ContentValues();
 
-        values.put("placa", placa);
-        values.put("conductor", conductor);
-        values.put("id_ruta", id_ruta);
-        values.put("nit", nit);
-        this.nBaseDatos.insert("bus", null, values);
+        values.put(Bus.B_PLACA, placa);
+        values.put(Bus.B_CONDUCTOR, conductor);
+        values.put(Bus.B_ID_RUTA, id_ruta);
+        values.put(Bus.B_NIT, nit);
+        this.nBaseDatos.insert(Bus.NOMBRE_TABLA, null, values);
 
     }
 
@@ -269,13 +277,13 @@ public class BaseDeDatos {
 
         ContentValues values = new ContentValues();
 
-        values.put("id", id);
-        values.put("nombre", nombre);
-        values.put("direccion", direccion);
-        values.put("latitud", latitud);
-        values.put("longitud", longitud);
+        values.put(Recientess.R_ID, id);
+        values.put(Recientess.R_NOMBRE, nombre);
+        values.put(Recientess.R_DIRECCION, direccion);
+        values.put(Recientess.R_LATITUD, latitud);
+        values.put(Recientess.R_LONGITUD, longitud);
 
-        this.nBaseDatos.insert("recientes", null, values);
+        this.nBaseDatos.insert(Recientess.NOMBRE_TABLA, null, values);
     }
 
     public void agregarReciente(String datos) {
@@ -294,7 +302,7 @@ public class BaseDeDatos {
 
     public void eliminarReciente(String id) {
 
-        this.nBaseDatos.delete("recientes", "id=\'" + id + "\'", null);
+        this.nBaseDatos.delete(Recientess.NOMBRE_TABLA, Recientess.R_ID + "=\'" + id + "\'", null);
     }
 
 
@@ -307,22 +315,22 @@ public class BaseDeDatos {
     public String[] getDatosUsuario() {
 
         String columnas[] = new String[]{
-                "usuario",
-                "nombre",
-                "correo",
-                "password"
+                Pasajero.P_USUARIO,
+                Pasajero.P_NOMBRE,
+                Pasajero.P_CORREO,
+                Pasajero.P_PASSWORD
         };
 
-        Cursor c = this.nBaseDatos.query("pasajero", columnas, null, null, null, null, null);
+        Cursor c = this.nBaseDatos.query(Pasajero.NOMBRE_TABLA, columnas, null, null, null, null, null);
 
         if (c.getCount() == 0) {
             return null;
         }
 
-        int usuario = c.getColumnIndexOrThrow("usuario");
-        int nombre = c.getColumnIndexOrThrow("nombre");
-        int correo = c.getColumnIndexOrThrow("correo");
-        int password = c.getColumnIndexOrThrow("password");
+        int usuario = c.getColumnIndexOrThrow(Pasajero.P_USUARIO);
+        int nombre = c.getColumnIndexOrThrow(Pasajero.P_NOMBRE);
+        int correo = c.getColumnIndexOrThrow(Pasajero.P_CORREO);
+        int password = c.getColumnIndexOrThrow(Pasajero.P_PASSWORD);
 
         c.moveToFirst();
 
@@ -337,22 +345,22 @@ public class BaseDeDatos {
 
     public String getReciente(String id) {
         String columnas[] = new String[]{
-                "id",
-                "nombre",
-                "latitud",
-                "longitud"
+                Recientess.R_ID,
+                Recientess.R_NOMBRE,
+                Recientess.R_LATITUD,
+                Recientess.R_LONGITUD
         };
 
-        Cursor c = this.nBaseDatos.query("recientes", columnas, "id=\'" + id + "\'", null, null, null, null);
+        Cursor c = this.nBaseDatos.query(Recientess.NOMBRE_TABLA, columnas, Recientess.R_ID + "=\'" + id + "\'", null, null, null, null);
 
         if (c.getCount() == 0) {
             return "";
         }
 
-        int id_ = c.getColumnIndexOrThrow("id");
-        int nombre = c.getColumnIndexOrThrow("nombre");
-        int latitud = c.getColumnIndexOrThrow("latitud");
-        int longitud = c.getColumnIndexOrThrow("longitud");
+        int id_ = c.getColumnIndexOrThrow(Recientess.R_ID);
+        int nombre = c.getColumnIndexOrThrow(Recientess.R_NOMBRE);
+        int latitud = c.getColumnIndexOrThrow(Recientess.R_LATITUD);
+        int longitud = c.getColumnIndexOrThrow(Recientess.R_LONGITUD);
         c.moveToFirst();
 
         //Separo el id del nombre ocn un simbolo &
@@ -372,29 +380,29 @@ public class BaseDeDatos {
     public String[] getParaderos(String tipo) {
 
         String columnas[] = new String[]{
-                "id",
-                "nombre",
-                "direccion",
-                "latitud",
-                "longitud"
+                Paradero.PA_ID,
+                Paradero.PA_NOMBRE,
+                Paradero.PA_DIRECCION,
+                Paradero.PA_LATITUD,
+                Paradero.PA_LONGITUD
         };
 
         if (tipo.equals("LR")) {
             return getTodosRecientes();
         }
 
-        Cursor c = this.nBaseDatos.query("paradero", columnas, null, null, null, null, null, null);
+        Cursor c = this.nBaseDatos.query(Paradero.NOMBRE_TABLA, columnas, null, null, null, null, null, null);
 
         if (c.getCount() == 0) {
             return null;
         }
         ArrayList<String> res = new ArrayList<String>();
 
-        int id = c.getColumnIndexOrThrow("id");
-        int nombre = c.getColumnIndexOrThrow("nombre");
-        int direccion = c.getColumnIndexOrThrow("direccion");
-        int latitud = c.getColumnIndexOrThrow("latitud");
-        int longitud = c.getColumnIndexOrThrow("longitud");
+        int id = c.getColumnIndexOrThrow(Paradero.PA_ID);
+        int nombre = c.getColumnIndexOrThrow(Paradero.PA_NOMBRE);
+        int direccion = c.getColumnIndexOrThrow(Paradero.PA_DIRECCION);
+        int latitud = c.getColumnIndexOrThrow(Paradero.PA_LATITUD);
+        int longitud = c.getColumnIndexOrThrow(Paradero.PA_LONGITUD);
 
         for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
             if (c.getString(id).startsWith(tipo + "$")) {
@@ -427,25 +435,25 @@ public class BaseDeDatos {
 
     public String[] getTodosRecientes() {
         String columnas[] = new String[]{
-                "id",
-                "nombre",
-                "direccion",
-                "latitud",
-                "longitud"
+                Recientess.R_ID,
+                Recientess.R_NOMBRE,
+                Recientess.R_DIRECCION,
+                Recientess.R_LATITUD,
+                Recientess.R_LONGITUD
         };
 
-        Cursor c = this.nBaseDatos.query("recientes", columnas, null, null, null, null, null, null);
+        Cursor c = this.nBaseDatos.query(Recientess.NOMBRE_TABLA, columnas, null, null, null, null, null, null);
 
         if (c.getCount() == 0) {
             return null;
         }
         ArrayList<String> res = new ArrayList<String>();
 
-        int id = c.getColumnIndexOrThrow("id");
-        int nombre = c.getColumnIndexOrThrow("nombre");
-        int direccion = c.getColumnIndexOrThrow("direccion");
-        int latitud = c.getColumnIndexOrThrow("latitud");
-        int longitud = c.getColumnIndexOrThrow("longitud");
+        int id = c.getColumnIndexOrThrow(Recientess.R_ID);
+        int nombre = c.getColumnIndexOrThrow(Recientess.R_NOMBRE);
+        int direccion = c.getColumnIndexOrThrow(Recientess.R_DIRECCION);
+        int latitud = c.getColumnIndexOrThrow(Recientess.R_LATITUD);
+        int longitud = c.getColumnIndexOrThrow(Recientess.R_LONGITUD);
 
         for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
             res.add(c.getString(id) + "&" + c.getString(nombre) + "&"
@@ -469,24 +477,24 @@ public class BaseDeDatos {
     public String getParaderoPorId(String id) {
 
         String columnas[] = new String[]{
-                "id",
-                "nombre",
-                "direccion",
-                "latitud",
-                "longitud"
+                Paradero.PA_ID,
+                Paradero.PA_NOMBRE,
+                Paradero.PA_DIRECCION,
+                Paradero.PA_LATITUD,
+                Paradero.PA_LONGITUD
         };
 
-        Cursor c = this.nBaseDatos.query("paradero", columnas, "id=\'" + id + "\'", null, null, null, null);
+        Cursor c = this.nBaseDatos.query(Paradero.NOMBRE_TABLA, columnas, Paradero.PA_ID + "=\'" + id + "\'", null, null, null, null);
 
         if (c.getCount() == 0) {
             return "";
         }
 
-        int id_ = c.getColumnIndexOrThrow("id");
-        int nombre = c.getColumnIndexOrThrow("nombre");
-        int direccion = c.getColumnIndexOrThrow("direccion");
-        int latitud = c.getColumnIndexOrThrow("latitud");
-        int longitud = c.getColumnIndexOrThrow("longitud");
+        int id_ = c.getColumnIndexOrThrow(Paradero.PA_ID);
+        int nombre = c.getColumnIndexOrThrow(Paradero.PA_NOMBRE);
+        int direccion = c.getColumnIndexOrThrow(Paradero.PA_DIRECCION);
+        int latitud = c.getColumnIndexOrThrow(Paradero.PA_LATITUD);
+        int longitud = c.getColumnIndexOrThrow(Paradero.PA_LONGITUD);
 
         c.moveToFirst();
 
@@ -503,16 +511,16 @@ public class BaseDeDatos {
                 Waypoints.WAY_LATITUD,
                 Waypoints.WAY_LONGITUD
         };
+        String orderBy = Waypoints.WAY_CONSECUTIVO + " ASC";
 
         Cursor c = this.nBaseDatos.query(
                 Waypoints.NOMBRE_TABLA,
                 columnas,
                 Waypoints.WAY_ID_RUTA + "=\'" + id_ruta + "\'",
-                null, null, null, null
+                null, null, null, orderBy
         );
 
         if (c.getCount() == 0) {
-            Log.i("cm01", "cero::::" + id_ruta);
             return null;
         }
 
@@ -520,8 +528,8 @@ public class BaseDeDatos {
         int longitud = c.getColumnIndexOrThrow(Waypoints.WAY_LONGITUD);
 
         ArrayList<LatLng> res = new ArrayList<LatLng>();
-
-        for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
+        int i = 0;
+        for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext(), i++) {
             res.add(new LatLng(c.getDouble(latitud), c.getDouble(longitud)));
         }
 
@@ -533,6 +541,7 @@ public class BaseDeDatos {
 
         String columnas[] = new String[]{
                 Waypoints.WAY_ID_RUTA,
+                Waypoints.WAY_CONSECUTIVO,
                 Waypoints.WAY_LATITUD,
                 Waypoints.WAY_LONGITUD
         };
@@ -543,14 +552,15 @@ public class BaseDeDatos {
             return null;
         }
 
-        int id = c.getColumnIndexOrThrow(Waypoints.WAY_ID_RUTA);
+        int id_ruta = c.getColumnIndexOrThrow(Waypoints.WAY_ID_RUTA);
+        int consecutivo = c.getColumnIndexOrThrow(Waypoints.WAY_CONSECUTIVO);
         int latitud = c.getColumnIndexOrThrow(Waypoints.WAY_LATITUD);
         int longitud = c.getColumnIndexOrThrow(Waypoints.WAY_LONGITUD);
 
-        String res [] = new String[c.getCount()];
-        int i = 0 ;
+        String res[] = new String[c.getCount()];
+        int i = 0;
         for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext(), i++) {
-            res[i] = c.getString(id) + "&" + c.getString(latitud) + "&" + c.getString(longitud);
+            res[i] = c.getString(id_ruta) + "&" + c.getString(consecutivo)+ "&" + c.getString(latitud) + "&" + c.getString(longitud);
         }
 
         return res;
