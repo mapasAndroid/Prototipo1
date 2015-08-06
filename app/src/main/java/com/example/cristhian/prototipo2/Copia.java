@@ -48,6 +48,7 @@ public class Copia {
 
         @Override
         protected void onPostExecute(String s) {
+            if (s.isEmpty() || s.equals("nonet")) return;
             BaseDeDatos baseDeDatos = new BaseDeDatos(contexto);
             baseDeDatos.abrir();
             baseDeDatos.duplicarEnLocal(s);

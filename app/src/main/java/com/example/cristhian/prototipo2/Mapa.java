@@ -1,5 +1,6 @@
 package com.example.cristhian.prototipo2;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -9,6 +10,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.ActionBar;
@@ -68,6 +70,7 @@ public class Mapa extends ActionBarActivity {
     LatLng ubicacionParadero;
     String rutaString;
 
+    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,16 +122,13 @@ public class Mapa extends ActionBarActivity {
         );
 
 
-        //agrego los markers en las posiciones a tratar, actual y la del paradero
-        agregarMarker(this.ubicacionActual, BitmapDescriptorFactory.HUE_BLUE, "actual", "actual");
-
-
-
         this.ubicacionParadero = new LatLng(
                 Double.parseDouble(this.datosParadero.split("&")[3]),
                 Double.parseDouble(this.datosParadero.split("&")[4])
         );
 
+        //agrego los markers en las posiciones a tratar, actual y la del paradero
+        agregarMarker(this.ubicacionActual, BitmapDescriptorFactory.HUE_BLUE, "Aqui estas", "actual");
 
         agregarMarker(
                 this.ubicacionParadero,
@@ -137,36 +137,22 @@ public class Mapa extends ActionBarActivity {
                 this.datosParadero.split("&")[2]
         );
 
-        String id_ruta = getRutaApropiada();
+        this.rutaString = getRutaApropiada();
 
+        if (!this.rutaString.isEmpty()) {
 
+            this.baseDeDatos.abrir();
+            ArrayList<LatLng> ruta = baseDeDatos.getWaypointsByRuta(this.rutaString);
+            this.baseDeDatos.cerrar();
 
+            pintarRuta(ruta, new ColorDrawable(Color.parseColor("#3F51B5")).getColor());
 
-        this.rutaString = id_ruta;
-        Log.i("cm01", "ruta que sirve::: " + id_ruta);
-        if (!id_ruta.isEmpty()) {
-            //this.recorridoRuta = this.baseDeDatos.getWaypointsByRuta(id_ruta);
-            //BusuqedaDeBus busuqedaDeBus = new BusuqedaDeBus();
-            //busuqedaDeBus.execute(id_ruta);
         } else {
-            //imprima mensaje
-            Log.i("cm01", "no hay rutas cercanas ");
+            finish();
         }
 
-        this.baseDeDatos.abrir();
-        ArrayList<LatLng> ruta = baseDeDatos.getWaypointsByRuta(id_ruta);
-        this.baseDeDatos.cerrar();
 
-        pintarRuta(ruta, Color.BLUE);
 
-    }
-
-    private String toStringRuta(String[] ruta1) {
-        String res = "";
-        for (String dato : ruta1) {
-            res += dato.toString() + "*";
-        }
-        return res;
     }
 
     public void pintarRuta(ArrayList<LatLng> puntos, int color) {
@@ -207,9 +193,8 @@ public class Mapa extends ActionBarActivity {
 
         if (cercanasPosActual.isEmpty()) {
 
-            return "vacio";
+            return "";
         }
-
 
         Iterator cercanos = cercanasPosActual.iterator();
 
@@ -281,13 +266,13 @@ public class Mapa extends ActionBarActivity {
 
         if (id == R.id.action_acerca_de) {
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse("http://pruebasmais.zz.mu/stopbus/acerca_de.php"));
+            intent.setData(Uri.parse(webHelper.getUrlAcercaDe()));
             startActivity(intent);
         }
 
         if (id == R.id.action_ayuda) {
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse("http://pruebasmais.zz.mu/stopbus/contacto.php"));
+            intent.setData(Uri.parse(webHelper.getUrlContacto()));
             startActivity(intent);
         }
 
@@ -326,7 +311,7 @@ public class Mapa extends ActionBarActivity {
 
         mMap.setMyLocationEnabled(true);
         mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-
+        mMap.setBuildingsEnabled(false);
         mMap.moveCamera(CameraUpdateFactory.newLatLng(CAMARA));
         mMap.animateCamera(CameraUpdateFactory.zoomTo(14));
     }
@@ -334,11 +319,22 @@ public class Mapa extends ActionBarActivity {
     public class BusuqedaDeBus extends AsyncTask<String, String, String> {
 
         @Override
-        protected void onPostExecute(String posBus) {
-            Log.i("cm01", "ubicacionBus::: " + posBus);
-            Log.i("cm01", "ubicacionActual::: " + ubicacionActual);
-            Log.i("cm01", "ubicacionParadero::: " + ubicacionParadero);
-            Log.i("cm01", "id de la ruta apropiada:: " + rutaString);
+        protected void onPostExecute(String respuesta) {
+            if(respuesta.isEmpty()){
+                //asistente.imprimir(getFragmentManager(), "no pudimos encontrar un bus cercano", 1);
+                return;
+            }
+
+            if(respuesta.equals("nonet")){
+                //asistente.imprimir(getFragmentManager(), "no estras conectado a internet", 1);
+                return;
+            }
+
+            String datosMostrar [] = respuesta.split("&");
+            //en la pos 0 placa, 1 conductor, 2 nombre_ruta,
+            // 3 tiempo estimado de demora, 4 distancia aproximada
+
+
 
 
         }
@@ -360,12 +356,13 @@ public class Mapa extends ActionBarActivity {
                 params.add(new BasicNameValuePair("usuario", webHelper.getUsuario()));
                 params.add(new BasicNameValuePair("contrasenia", webHelper.getPass()));
                 params.add(new BasicNameValuePair("id_ruta", id_ruta));
+                params.add(new BasicNameValuePair("ubicacion_actual", ubicacionActual.latitude + "&" + ubicacionActual.longitude));
                 httpPost.setEntity(new UrlEncodedFormEntity(params));
                 response = httpClient.execute(httpPost, localContext);
                 HttpEntity httpEntity = response.getEntity();
                 resultado = EntityUtils.toString(httpEntity, "UTF-8");
             } catch (Exception e) {
-                Log.i("cm01", e.toString());
+                resultado = "nonet";
             }
             return resultado;
 

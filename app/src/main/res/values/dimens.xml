@@ -8,4 +8,9 @@
     <dimen name="navigation_drawer_width">240dp</dimen>
     <dimen name="anchoEditTextRegistroLarge">500dp</dimen>
     <dimen name="tamanio_cuadro_paradero">150dp</dimen>
+
+    <dimen name="fab_size">56dp</dimen>
+
+    <dimen name="button_elevation">2dp</dimen>
+    <dimen name="button_press_elevation">4dp</dimen>
 </resources>
