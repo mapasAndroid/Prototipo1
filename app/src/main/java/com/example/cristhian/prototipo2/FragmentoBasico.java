@@ -149,7 +149,7 @@ public class FragmentoBasico extends Fragment implements SwipeRefreshLayout.OnRe
 
                         //datosParadero es un String con todos los datos del paradero separados por &
                         //
-                        intent.putExtra("datosParadero",datosParadero);
+                        intent.putExtra("datosParadero", datosParadero);
                         //datosUsuario es un VECTOR con los datos, usuario, nombre, correo, password
                         intent.putExtra("datosUsuario", ((Lugares) getActivity()).getDatosUsuario());
 
@@ -184,7 +184,7 @@ public class FragmentoBasico extends Fragment implements SwipeRefreshLayout.OnRe
 
                     viewHolder.getLayoutPosition();
 
-                    LinearLayout linearLayout = (LinearLayout)recyclerView.getChildAt(position);
+                    LinearLayout linearLayout = (LinearLayout) recyclerView.getChildAt(position);
 
                     CardView cardView = (CardView) linearLayout.getChildAt(0);
 
@@ -200,7 +200,7 @@ public class FragmentoBasico extends Fragment implements SwipeRefreshLayout.OnRe
                     baseDeDatos.eliminarReciente(id);
                     baseDeDatos.cerrar();
 
-                    if(recyclerView.getAdapter().getItemCount() == 1){
+                    if (recyclerView.getAdapter().getItemCount() == 1) {
 
                         recyclerView = null;
                         recyclerView = (RecyclerView) rootView.findViewById(R.id.recyclerView);
@@ -208,13 +208,13 @@ public class FragmentoBasico extends Fragment implements SwipeRefreshLayout.OnRe
                         recyclerView.setLayoutManager(new LinearLayoutManager(rootView.getContext()));
                         recyclerView.setAdapter(null);
 
-                    }else{
+                    } else {
                         recyclerView.getAdapter().notifyItemRemoved(position);
                     }
 
                     boolean x = setParaderosEnLista();
 
-                    if( !x ){
+                    if (!x) {
                         rootView = inflater.inflate(R.layout.fragment_fragmento_vacio_recientes, container, false);
                     }
 

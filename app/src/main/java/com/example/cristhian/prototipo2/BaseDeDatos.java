@@ -106,7 +106,7 @@ public class BaseDeDatos {
             this.insertarUsuario(
                     detallesUsuario.getString(Pasajero.P_USUARIO),
                     detallesUsuario.getString(Pasajero.P_NOMBRE),
-                    detallesUsuario.getString(Pasajero.P_NOMBRE),
+                    detallesUsuario.getString(Pasajero.P_CORREO),
                     detallesUsuario.getString(Pasajero.P_PASSWORD)
             );
 
@@ -334,10 +334,12 @@ public class BaseDeDatos {
 
         c.moveToFirst();
 
-        String[] x = new String[]{c.getString(usuario),
+        String[] x = new String[]{
+                c.getString(usuario),
                 c.getString(nombre),
                 c.getString(correo),
-                c.getString(password)};
+                c.getString(password)
+        };
 
         return x;
     }

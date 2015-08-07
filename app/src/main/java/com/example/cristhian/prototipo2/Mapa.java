@@ -13,12 +13,16 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.animation.ScaleAnimation;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -70,6 +74,14 @@ public class Mapa extends ActionBarActivity {
     LatLng ubicacionParadero;
     String rutaString;
 
+
+    /*
+    ====================================
+                ONCREATE
+    ====================================
+     */
+
+
     @TargetApi(Build.VERSION_CODES.HONEYCOMB)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +102,11 @@ public class Mapa extends ActionBarActivity {
         setUpMapIfNeeded();
 
 
-        //=========== LOCALIZACION ============
+        /*
+        ====================================
+                   LOCALIZACION
+        ====================================
+         */
         // Acquire a reference to the system Location Manager
         LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
 
@@ -114,7 +130,13 @@ public class Mapa extends ActionBarActivity {
         // Register the listener with the Location Manager to receive location updates
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
 
-        //============ FIN LOCALIZACION ============
+       /*
+        ====================================
+                FIN DE LOCALIZACION
+        ====================================
+         */
+
+
 
         this.ubicacionActual = new LatLng(
                 7.8928452,-72.5025499
@@ -151,10 +173,33 @@ public class Mapa extends ActionBarActivity {
             finish();
         }
 
+        //Button fab = (Button) findViewById(R.id.fab);
+
+        final LinearLayout panelInfo = (LinearLayout) findViewById(R.id.card_view_info);
+        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
 
-    }
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //final Animation myRotation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.boton);
+                //panelInfo.startAnimation(myRotation);
+                ScaleAnimation scale = new ScaleAnimation((float)1.0, (float)1.5, (float)1.0, (float)1.5);
+                scale.setFillAfter(true);
+                scale.setDuration(500);
+                panelInfo.startAnimation(scale);
 
+            }
+        });
+
+
+    }//fin del metodo oncreate
+
+    /**
+     * metodo que pinta la ruta en el mapa
+     * @param puntos    arraylist de todos los puntos a pintar
+     * @param color     entero con el color a pintar la linea
+     */
     public void pintarRuta(ArrayList<LatLng> puntos, int color) {
         PolylineOptions opciones = new PolylineOptions();
         opciones.addAll(puntos);

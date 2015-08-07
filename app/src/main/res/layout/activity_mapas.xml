@@ -1,23 +1,49 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.cristhian.prototipo2.Mapa">
 
     <TextView
+        android:id="@+id/holi"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text=""
-        android:id="@+id/holi"
-        />
+        android:text="" />
 
     <fragment
 
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/map"
-        tools:context="com.example.cristhian.prototipo2.MapsActivity"
-        android:name="com.google.android.gms.maps.SupportMapFragment" />
+        tools:context="com.example.cristhian.prototipo2.MapsActivity" />
+
+
+    <LinearLayout
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:id="@+id/card_view_info"
+        android:orientation="horizontal"
+        android:background="@color/indigo"
+        >
+
+    </LinearLayout>
+
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_done_all_white_48dp"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        app:backgroundTint="@color/verde_500"
+        app:elevation="6dp"
+        app:pressedTranslationZ="12dp"
+        />
 
 
 

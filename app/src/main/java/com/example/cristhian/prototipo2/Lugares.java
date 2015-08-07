@@ -27,8 +27,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import java.io.File;
@@ -42,35 +40,21 @@ public class Lugares extends ActionBarActivity {
     //          ATRIBUTOS
     //====================================
 
-    private String[] alista;
-
     private DrawerLayout drawerLayout;
-
-    private ListView lista;
 
     private RecyclerView mRecycler;
 
     RecyclerView.LayoutManager mLayoutManager;
 
-    private EditText editable;
-
     private ActionBarDrawerToggle drawerToggle;
 
     AsistenteMensajes asistenteMensajes = new AsistenteMensajes();
 
-    private CharSequence tituloSec;
-
-    private CharSequence tituloApp;
-
-    private String recientes;
-
     private String[] datosUsuario;
 
-    private String nombreUsuario;
-
-    private String correoUsuario;
-
     private MyAdapter myAdapter;
+
+    private WebHelper webHelper = new WebHelper();
 
     protected ProgressDialog progres;
 
@@ -83,20 +67,24 @@ public class Lugares extends ActionBarActivity {
 
 
     public String getNombreUsuario() {
-        return this.nombreUsuario;
+        if(this.datosUsuario != null) return this.datosUsuario[1];
+        return "Usuario";
     }
 
     public String getCorreoUsuario() {
-        return this.correoUsuario;
+        if(this.datosUsuario != null) return this.datosUsuario[2];
+        return "email";
     }
 
-    public String[] getDatosUsuario() {
+    public void setDatosUsuario(){
 
         BaseDeDatos baseDeDatos = new BaseDeDatos(getBaseContext());
         baseDeDatos.abrir();
         this.datosUsuario = baseDeDatos.getDatosUsuario();
         baseDeDatos.cerrar();
+    }
 
+    public String[] getDatosUsuario() {
         return this.datosUsuario;
     }
 
@@ -135,7 +123,7 @@ public class Lugares extends ActionBarActivity {
         drawerLayout = (DrawerLayout) findViewById(R.id.contenedor_principal);
 
         //guardar las imagenes que iran en el menu del drawer layout
-        int imagenes[] = {R.drawable.ic_action_clock, R.drawable.ic_action_bike,
+        int imagenes[] = {R.drawable.ic_action_star_10, R.drawable.ic_action_bike,
                 R.drawable.ic_action_book, R.drawable.ic_action_cart,
                 R.drawable.ic_action_home, R.drawable.ic_action_creditcard,
                 R.drawable.ic_action_dialer, R.drawable.ic_action_restaurant
@@ -148,9 +136,11 @@ public class Lugares extends ActionBarActivity {
         this.mRecycler = (RecyclerView) findViewById(R.id.menuizquierdo);
         this.mRecycler.setHasFixedSize(true);
 
-        //instanciar un nuevo adaprter y agregarlo al recycler view
+        setDatosUsuario();
+
         this.myAdapter = new MyAdapter(titulos, imagenes, this.getNombreUsuario(),
                 this.getCorreoUsuario(), R.drawable.ic_action_user_white);
+
         this.mRecycler.setAdapter(this.myAdapter);
 
         //agregar el layout manager al recycler
@@ -216,9 +206,10 @@ public class Lugares extends ActionBarActivity {
                     //muestra el mensaje de bienvenida, siempre y cuando hayan extras en el intent
                     Bundle extras = getIntent().getExtras();
                     if (extras != null) {
-                        nombreUsuario = extras.get("usuario").toString();
-                        correoUsuario = extras.get("correo").toString();
-                        mostrarMensaje(nombreUsuario, extras.get("desde").toString());
+                        if(datosUsuario == null) datosUsuario = new String[4];
+                        datosUsuario[0] = extras.get("usuario").toString();
+                        datosUsuario[2] = extras.get("correo").toString();
+                        mostrarMensaje(extras.get("usuario").toString(), extras.get("desde").toString());
                     }
                 }
             }
@@ -297,7 +288,6 @@ public class Lugares extends ActionBarActivity {
         Toast.makeText(getBaseContext(), mensaje, Toast.LENGTH_LONG).show();
     }
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         return super.onCreateOptionsMenu(menu);
@@ -334,13 +324,13 @@ public class Lugares extends ActionBarActivity {
 
         if (id == R.id.action_acerca_de) {
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse("http://pruebasmais.zz.mu/stopbus/acerca_de.php"));
+            intent.setData(Uri.parse(webHelper.getUrlAcercaDe()));
             startActivity(intent);
         }
 
         if (id == R.id.action_ayuda) {
             Intent intent = new Intent(Intent.ACTION_VIEW);
-            intent.setData(Uri.parse("http://pruebasmais.zz.mu/stopbus/contacto.php"));
+            intent.setData(Uri.parse(webHelper.getUrlContacto()));
             startActivity(intent);
         }
 
@@ -412,6 +402,11 @@ public class Lugares extends ActionBarActivity {
         }
     }
 
+    /**
+     * agregar lugar a ricientes
+     * @param id
+     * @return
+     */
     public String agregarARecientes(String id) {
         String datos;
         BaseDeDatos baseDeDatos = new BaseDeDatos(this.getBaseContext());
