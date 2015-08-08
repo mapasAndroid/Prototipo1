@@ -12,15 +12,21 @@
             <item
                 android:id="@+id/action_acerca_de"
                 android:title="@string/action_acerca_de"
-                app:showAsAction="never" />
+                app:showAsAction="never"
+                android:icon="@drawable/ic_public_black_24dp"
+                />
             <item
                 android:id="@+id/action_ayuda"
                 android:title="@string/action_ayuda"
-                app:showAsAction="never" />
+                app:showAsAction="never"
+                android:icon="@drawable/ic_info_black_24dp"
+                />
             <item
                 android:id="@+id/action_logout"
                 android:title="@string/action_salir"
-                app:showAsAction="never" />
+                app:showAsAction="never"
+                android:icon="@drawable/ic_exit_to_app_black_24dp"
+                />
         </menu>
     </item>
 </menu>

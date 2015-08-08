@@ -24,7 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:drawableLeft="@drawable/ic_action_user"
+                android:drawableLeft="@drawable/ic_face_black_24dp"
                 android:hint="Usuario"
                 android:inputType="text" />
 
@@ -33,7 +33,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:drawableLeft="@drawable/ic_action_edit"
+                android:drawableLeft="@drawable/ic_create_black_24dp"
                 android:hint="Nombre"
                 android:inputType="text" />
 
@@ -43,7 +43,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:drawableLeft="@drawable/ic_action_mail"
+                android:drawableLeft="@drawable/ic_mail_black_24dp"
                 android:hint="Correo Electronico"
                 android:inputType="textEmailAddress" />
 
@@ -52,7 +52,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:drawableLeft="@drawable/ic_action_key"
+                android:drawableLeft="@drawable/ic_lock_black_24dp"
                 android:hint="Contraseña"
                 android:inputType="textPassword" />
 
@@ -61,7 +61,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:drawableLeft="@drawable/ic_action_phone_start"
+                android:drawableLeft="@drawable/ic_local_phone_black_24dp"
                 android:hint="Telefono"
                 android:inputType="text" />
 

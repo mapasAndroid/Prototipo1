@@ -143,8 +143,8 @@ public class Splash extends Activity {
     private void animacionLogo() {
 
         final ImageView myImage = (ImageView) findViewById(R.id.logoLocale);
-        final Animation myRotation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.iniciar);
-        myImage.startAnimation(myRotation);
+        final Animation myAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.iniciar);
+        myImage.startAnimation(myAnimation);
 
     }
 

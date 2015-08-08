@@ -1,24 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <set xmlns:android="http://schemas.android.com/apk/res/android">
-    <!--
-    <scale
-        android:duration="1000"
-        android:fromXScale="0"
-        android:fromYScale="0"
+
+    <alpha xmlns:android="http://schemas.android.com/apk/res/android"
+        android:interpolator="@android:anim/accelerate_interpolator"
+        android:fromAlpha="0.0"
+        android:toAlpha="1.0"
+        android:duration="700" >
+    </alpha>
+
+    <scale xmlns:android="http://schemas.android.com/apk/res/android"
+        android:interpolator="@android:anim/linear_interpolator"
+        android:fromXScale="0.0"
         android:toXScale="1.0"
-        android:toYScale="1.0" />
-        -->
+        android:fromYScale="0.0"
+        android:toYScale="1.0"
+        android:fillAfter="false"
+        android:duration="700"
+        android:pivotX = "100%"
+        android:pivotY = "100%"/>
 
-    <translate  xmlns:android="http://schemas.android.com/apk/res/android"
-        android:startOffset="800"
-        android:fromYDelta="100%p"
-        android:toYDelta="0"
-
-        android:fromXDelta="100%p"
-        android:toXDelta="0"
-
-        android:duration="1500" >
-
-    </translate>
 </set>

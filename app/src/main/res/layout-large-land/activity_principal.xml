@@ -51,7 +51,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
-                        android:drawableLeft="@drawable/ic_action_user"
+                        android:drawableLeft="@drawable/ic_face_black_24dp"
                         android:hint="Email o Usuario"
                         android:inputType="text" />
 
@@ -60,7 +60,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
-                        android:drawableLeft="@drawable/ic_action_key"
+                        android:drawableLeft="@drawable/ic_lock_black_24dp"
                         android:hint="Contraseña"
                         android:inputType="textPassword" />
 

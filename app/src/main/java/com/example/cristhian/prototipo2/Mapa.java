@@ -20,8 +20,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.view.animation.ScaleAnimation;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -51,6 +49,7 @@ import java.util.Iterator;
 import java.util.List;
 
 
+@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class Mapa extends ActionBarActivity {
 
     private GoogleMap mMap;
@@ -73,6 +72,9 @@ public class Mapa extends ActionBarActivity {
     LatLng ubicacionActual;
     LatLng ubicacionParadero;
     String rutaString;
+
+    FloatingActionButton fab;
+    LinearLayout panelInfo;
 
 
     /*
@@ -173,27 +175,13 @@ public class Mapa extends ActionBarActivity {
             finish();
         }
 
-        //Button fab = (Button) findViewById(R.id.fab);
-
-        final LinearLayout panelInfo = (LinearLayout) findViewById(R.id.card_view_info);
-        final FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-
-
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //final Animation myRotation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.boton);
-                //panelInfo.startAnimation(myRotation);
-                ScaleAnimation scale = new ScaleAnimation((float)1.0, (float)1.5, (float)1.0, (float)1.5);
-                scale.setFillAfter(true);
-                scale.setDuration(500);
-                panelInfo.startAnimation(scale);
-
-            }
-        });
+        //FrameLayout frame = (FrameLayout) findViewById(R.id.fab_container);
+        //Animation myAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.alpha);
+        //frame.startAnimation(myAnimation);
 
 
     }//fin del metodo oncreate
+
 
     /**
      * metodo que pinta la ruta en el mapa
@@ -213,7 +201,7 @@ public class Mapa extends ActionBarActivity {
         this.baseDeDatos.abrir();
         String waypoints[] = this.baseDeDatos.getTodosWaypoints();
         this.baseDeDatos.cerrar();
-        String b = calcularRuta(waypoints, new LatLng(7.8928452,-72.5025499), this.ubicacionParadero);
+        String b = calcularRuta(waypoints, new LatLng(7.8928452, -72.5025499), this.ubicacionParadero);
         return b;
     }
 
@@ -380,8 +368,6 @@ public class Mapa extends ActionBarActivity {
             // 3 tiempo estimado de demora, 4 distancia aproximada
 
 
-
-
         }
 
         protected String doInBackground(String... params) {
@@ -413,6 +399,6 @@ public class Mapa extends ActionBarActivity {
 
         }
 
-    }//fin de async task
+    }//fin de async tasks
 
 }//fin de la clase

@@ -46,7 +46,7 @@ public class AdapterCardView extends RecyclerView.Adapter<AdapterCardView.ViewHo
         if(itemsData[position].esReciente()){
             viewHolder.imageViewFav.setImageResource(R.drawable.ic_action_star_10_yellow);
         }else{
-            viewHolder.imageViewFav.setImageResource(R.drawable.ic_action_star_10);
+            viewHolder.imageViewFav.setImageResource(R.drawable.ic_star_black_24dp);
         }
 
     }

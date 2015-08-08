@@ -28,7 +28,7 @@
                 android:id="@+id/editTextUsuario1"
                 android:layout_marginTop="10dp"
                 android:inputType="text"
-                android:drawableLeft="@drawable/ic_action_user"
+                android:drawableLeft="@drawable/ic_face_black_24dp"
                 />
 
             <EditText
@@ -38,7 +38,7 @@
                 android:id="@+id/editTextUsuario2"
                 android:layout_marginTop="10dp"
                 android:inputType="text"
-                android:drawableLeft="@drawable/ic_action_edit"
+                android:drawableLeft="@drawable/ic_create_black_24dp"
                 />
 
 
@@ -49,7 +49,7 @@
                 android:id="@+id/editTextUsuario3"
                 android:layout_marginTop="10dp"
                 android:inputType="textEmailAddress"
-                android:drawableLeft="@drawable/ic_action_mail"
+                android:drawableLeft="@drawable/ic_mail_black_24dp"
                 />
 
             <EditText
@@ -59,7 +59,7 @@
                 android:id="@+id/editTextUsuario4"
                 android:layout_marginTop="10dp"
                 android:inputType="textPassword"
-                android:drawableLeft="@drawable/ic_action_key"
+                android:drawableLeft="@drawable/ic_lock_black_24dp"
                 />
 
             <EditText
@@ -69,7 +69,7 @@
                 android:id="@+id/editTextUsuario5"
                 android:layout_marginTop="10dp"
                 android:inputType="text"
-                android:drawableLeft="@drawable/ic_action_phone_start"
+                android:drawableLeft="@drawable/ic_local_phone_black_24dp"
                 />
 
             <Button

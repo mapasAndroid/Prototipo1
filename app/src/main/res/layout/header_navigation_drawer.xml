@@ -43,10 +43,11 @@
     </LinearLayout>
 
     <ImageView
-        android:layout_width="70dp"
-        android:layout_height="70dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginTop="18dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginLeft="25dp"
+        android:layout_marginTop="35dp"
         android:id="@+id/circleView"
+        android:src="@drawable/ic_account_circle_white_48dp"
         />
 </RelativeLayout>

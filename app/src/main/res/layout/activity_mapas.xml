@@ -1,15 +1,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:clipToPadding="false"
     tools:context="com.example.cristhian.prototipo2.Mapa">
-
-    <TextView
-        android:id="@+id/holi"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="" />
 
     <fragment
 
@@ -17,34 +11,51 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.example.cristhian.prototipo2.MapsActivity" />
-
-
-    <LinearLayout
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:id="@+id/card_view_info"
-        android:orientation="horizontal"
-        android:background="@color/indigo"
-        >
-
-    </LinearLayout>
-
-
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/fab"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@drawable/ic_done_all_white_48dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        app:backgroundTint="@color/verde_500"
-        app:elevation="6dp"
-        app:pressedTranslationZ="12dp"
+        tools:context="com.example.cristhian.prototipo2.MapsActivity"
         />
 
 
+
+    <FrameLayout
+        android:id="@+id/fab_container"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_alignParentBottom="true"
+        android:elevation="10dp"
+        android:background="@color/indigo"
+        >
+
+        <LinearLayout
+            android:id="@+id/media_controls_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_directions_bus_white_24dp"
+                android:onClick="onPressPrimerIcono"
+                />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="72dp"
+                android:layout_marginRight="72dp"
+                android:src="@drawable/ic_action_refresh"
+                android:onClick="onPressSegundoIcono"
+                />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/ic_done_all_white_48dp"
+                android:onClick="onPressTercerIcono"
+                />
+        </LinearLayout>
+
+    </FrameLayout>
 
 </RelativeLayout>
