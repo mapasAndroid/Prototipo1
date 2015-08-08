@@ -69,7 +69,7 @@
                 android:id="@+id/editTextUsuario5"
                 android:layout_marginTop="10dp"
                 android:inputType="text"
-                android:drawableLeft="@drawable/ic_local_phone_black_24dp"
+                android:drawableLeft="@drawable/ic_call_black_24dp"
                 />
 
             <Button

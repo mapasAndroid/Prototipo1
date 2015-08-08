@@ -25,7 +25,7 @@
             android:textColor="#ffffff"
             android:textSize="18sp"
             android:textStyle="bold"
-            android:text="hola"
+            android:text="buenas"
 
             />
 
@@ -38,7 +38,7 @@
             android:layout_marginTop="5dp"
             android:textSize="15sp"
             android:textStyle="normal"
-            android:text="hola"
+            android:text="buenas"
             />
     </LinearLayout>
 
@@ -48,6 +48,6 @@
         android:layout_marginLeft="25dp"
         android:layout_marginTop="35dp"
         android:id="@+id/circleView"
-        android:src="@drawable/ic_account_circle_white_48dp"
+        android:src="@drawable/ic_face_white_24dp"
         />
 </RelativeLayout>

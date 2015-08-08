@@ -125,8 +125,8 @@ public class Lugares extends ActionBarActivity {
         //guardar las imagenes que iran en el menu del drawer layout
         int imagenes[] = {R.drawable.ic_star_black_24dp, R.drawable.ic_nature_people_black_24dp,
                 R.drawable.ic_school_black_24dp, R.drawable.ic_shopping_cart_black_24dp,
-                R.drawable.ic_local_hotel_black_24dp, R.drawable.ic_payment_black_24dp,
-                R.drawable.ic_dialpad_black_24dp, R.drawable.ic_restaurant_menu_black_24dp
+                R.drawable.ic_hotel_black_24dp, R.drawable.ic_payment_black_24dp,
+                R.drawable.ic_dialpad_black_24dp, R.drawable.ic_local_dining_black_24dp
         };
 
         //guardar el texto que va a tener cada item del menu del drawer layout
@@ -139,7 +139,7 @@ public class Lugares extends ActionBarActivity {
         setDatosUsuario();
 
         this.myAdapter = new MyAdapter(titulos, imagenes, this.getNombreUsuario(),
-                this.getCorreoUsuario(), R.drawable.ic_account_circle_white_48dp);
+                this.getCorreoUsuario(), R.drawable.ic_face_white_24dp);
 
         this.mRecycler.setAdapter(this.myAdapter);
 

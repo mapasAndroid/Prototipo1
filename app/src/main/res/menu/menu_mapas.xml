@@ -4,7 +4,7 @@
     tools:context="com.example.cristhian.prototipo2.Mapa">
     <item
         android:id="@+id/opciones"
-        android:icon="@drawable/ic_action_overflow"
+        android:icon="@drawable/ic_more_vert_white_48dp"
         android:orderInCategory="100"
         android:title="@string/action_salir"
         app:showAsAction="always">

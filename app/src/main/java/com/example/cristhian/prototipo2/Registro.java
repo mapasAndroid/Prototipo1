@@ -47,6 +47,8 @@ public class Registro extends ActionBarActivity{
     //Ventana de espera para el usuario
     protected ProgressDialog progres;
 
+    private Inicio inicio = new Inicio();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,6 +126,7 @@ public class Registro extends ActionBarActivity{
             activityLugares.putExtra("desde", "registro");
             startActivity(activityLugares);
             finish();
+            inicio.cerrarInicio.finish();
 
         }
 

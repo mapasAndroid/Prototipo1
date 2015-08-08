@@ -1,6 +1,7 @@
 package com.example.cristhian.prototipo2;
 
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Typeface;
@@ -50,6 +51,8 @@ public class Inicio extends ActionBarActivity {
 
     Typeface roboto;
 
+    public static Activity cerrarInicio;
+
 
     /**
      * METODO PRINCIPAL ONCREATE
@@ -60,7 +63,7 @@ public class Inicio extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_principal);
-
+        this.cerrarInicio = this;
         progres = new ProgressDialog(this);
 
         //ocultar barra de iconos

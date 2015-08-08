@@ -61,7 +61,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:drawableLeft="@drawable/ic_local_phone_black_24dp"
+                android:drawableLeft="@drawable/ic_call_black_24dp"
                 android:hint="Telefono"
                 android:inputType="text" />
 
