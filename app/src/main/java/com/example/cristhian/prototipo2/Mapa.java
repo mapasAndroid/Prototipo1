@@ -13,14 +13,15 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -56,15 +57,14 @@ public class Mapa extends ActionBarActivity {
     private ActionBarDrawerToggle drawerToggle;
     private Lugares cx = new Lugares();
 
-    private String datosParadero;
+    private String[] datosParadero;
     private String[] datosUsuario;
+
     private BaseDeDatos baseDeDatos;
     private final double MARGEN_DE_ERROR = 753.9047315860873;
     private final double MARGEN_DE_ERROR_LUGAR = 700.9047315860873;
     public static final LatLng CAMARA = new LatLng(7.885067, -72.500351);
 
-    //Atributo que encripta las contrasenias en sha1
-    private Encriptador encriptador = new Encriptador();
     //Atributo que gestiona las conexiones a datos web
     private WebHelper webHelper = new WebHelper();
 
@@ -72,9 +72,7 @@ public class Mapa extends ActionBarActivity {
     LatLng ubicacionActual;
     LatLng ubicacionParadero;
     String rutaString;
-
-    FloatingActionButton fab;
-    LinearLayout panelInfo;
+    String [] datosBus;
 
 
     /*
@@ -98,9 +96,10 @@ public class Mapa extends ActionBarActivity {
 
         Bundle datosFragmento = getIntent().getExtras();
         if (datosFragmento != null) {
-            datosParadero = datosFragmento.get("datosParadero").toString();
+            datosParadero = datosFragmento.get("datosParadero").toString().split("&");
             datosUsuario = datosFragmento.getStringArray("datosUsuario");
         }
+
         setUpMapIfNeeded();
 
 
@@ -147,8 +146,8 @@ public class Mapa extends ActionBarActivity {
 
 
         this.ubicacionParadero = new LatLng(
-                Double.parseDouble(this.datosParadero.split("&")[3]),
-                Double.parseDouble(this.datosParadero.split("&")[4])
+                Double.parseDouble(this.datosParadero[3]),
+                Double.parseDouble(this.datosParadero[4])
         );
 
         //agrego los markers en las posiciones a tratar, actual y la del paradero
@@ -157,8 +156,8 @@ public class Mapa extends ActionBarActivity {
         agregarMarker(
                 this.ubicacionParadero,
                 BitmapDescriptorFactory.HUE_ORANGE,
-                this.datosParadero.split("&")[1],
-                this.datosParadero.split("&")[2]
+                this.datosParadero[1],
+                this.datosParadero[2]
         );
 
         this.rutaString = getRutaApropiada();
@@ -175,9 +174,9 @@ public class Mapa extends ActionBarActivity {
             finish();
         }
 
-        //FrameLayout frame = (FrameLayout) findViewById(R.id.fab_container);
-        //Animation myAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.alpha);
-        //frame.startAnimation(myAnimation);
+        FrameLayout frame = (FrameLayout) findViewById(R.id.fab_container);
+        Animation myAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.alpha);
+        frame.startAnimation(myAnimation);
 
 
     }//fin del metodo oncreate
@@ -196,6 +195,10 @@ public class Mapa extends ActionBarActivity {
         this.mMap.addPolyline(opciones);
     }
 
+    /**
+     * metodo que
+     * @return
+     */
     private String getRutaApropiada() {
 
         this.baseDeDatos.abrir();

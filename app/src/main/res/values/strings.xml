@@ -1,7 +1,6 @@
 <resources>
-    <string name="app_name">StopBus</string>
 
-    <string name="action_settings">Settings</string>
+    <string name="app_name">StopBus</string>
 
     <string name="Registro">Registrarse</string>
 
@@ -11,9 +10,9 @@
 
     <string name="Sitios">Lugares recientes</string>
 
-    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_open">Abrir navigation drawer</string>
 
-    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="navigation_drawer_close">Cerrar navigation drawer</string>
 
     <string name="action_example">Example action</string>
 
@@ -59,8 +58,26 @@
         <item>Cajeros</item>
         <item>Restaurantes</item>
     </string-array>
-    <string name="title_activity_mapas">Mapas</string>
 
-    <string name="hello_world">Hello world!</string>
+    <string name="title_activity_mapas">Mi Bus</string>
+
+    <string name="hint_contrasena">Contraseña</string>
+
+    <string name="email_usuario">Email o Usuario</string>
+
+    <string name="logo_azul_pequenio">logo_azul_pequenio</string>
+
+    <string name="campo_usuario">Usuario</string>
+
+    <string name="action_settings">settings</string>
+
+    <string name="campo_email">Correo Electronico</string>
+
+    <string name="campo_nombre">Nombre</string>
+
+    <string name="campo_telefono">Telefono</string>
+
+    <string name="boton_registrar">Registrar</string>
+
 
 </resources>

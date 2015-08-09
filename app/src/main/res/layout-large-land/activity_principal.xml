@@ -52,7 +52,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="20dp"
                         android:drawableLeft="@drawable/ic_face_black_24dp"
-                        android:hint="Email o Usuario"
+                        android:hint="@string/email_usuario"
                         android:inputType="text" />
 
                     <EditText
@@ -61,7 +61,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginTop="10dp"
                         android:drawableLeft="@drawable/ic_lock_black_24dp"
-                        android:hint="Contraseña"
+                        android:hint="@string/hint_contrasena"
                         android:inputType="textPassword" />
 
 

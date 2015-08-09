@@ -11,19 +11,15 @@
         android:name="com.google.android.gms.maps.SupportMapFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context="com.example.cristhian.prototipo2.MapsActivity"
-        />
-
-
+        tools:context="com.example.cristhian.prototipo2.MapsActivity" />
 
     <FrameLayout
         android:id="@+id/fab_container"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="80dp"
         android:layout_alignParentBottom="true"
-        android:elevation="10dp"
         android:background="@color/indigo"
-        >
+        android:elevation="10dp">
 
         <LinearLayout
             android:id="@+id/media_controls_container"
@@ -35,25 +31,22 @@
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_directions_bus_white_24dp"
                 android:onClick="onPressPrimerIcono"
-                />
+                android:src="@drawable/ic_place_white_24dp" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="72dp"
                 android:layout_marginRight="72dp"
-                android:src="@drawable/ic_done_all_white_24dp"
                 android:onClick="onPressSegundoIcono"
-                />
+                android:src="@drawable/ic_directions_bus_white_24dp" />
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_directions_bus_white_24dp"
                 android:onClick="onPressTercerIcono"
-                />
+                android:src="@drawable/ic_done_all_white_24dp" />
         </LinearLayout>
 
     </FrameLayout>

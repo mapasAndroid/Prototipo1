@@ -1,10 +1,12 @@
 package com.example.cristhian.prototipo2;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 /**
@@ -14,9 +16,14 @@ public class AdapterCardView extends RecyclerView.Adapter<AdapterCardView.ViewHo
 
     private ItemParaderos[] itemsData;
 
+    private Context context;
 
-    public AdapterCardView(ItemParaderos[] itemsData) {
+    private int lastPosition = -1;
+
+
+    public AdapterCardView(ItemParaderos[] itemsData, Context context) {
         this.itemsData = itemsData;
+        this.context = context;
     }
 
     // crear nuevas vistas (invocado por el layout manager)
@@ -49,11 +56,23 @@ public class AdapterCardView extends RecyclerView.Adapter<AdapterCardView.ViewHo
             viewHolder.imageViewFav.setImageResource(R.drawable.ic_star_black_24dp);
         }
 
+        setAnimation(viewHolder.contenedor, position);
+
+    }
+
+    private void setAnimation(View contenedor, int position) {
+        if (position > lastPosition)
+        {
+            //Animation animation = AnimationUtils.loadAnimation(context, android.R.anim.slide_in_left);
+            //contenedor.startAnimation(animation);
+            //lastPosition = position;
+        }
     }
 
     //calse embebida para referenciar a cada elemento de recycler
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
+        public LinearLayout contenedor;
         public TextView txtViewTitle;
         public TextView txtViewLatLong;
         public ImageView imageViewFav;
@@ -65,6 +84,7 @@ public class AdapterCardView extends RecyclerView.Adapter<AdapterCardView.ViewHo
             txtViewLatLong = (TextView) itemLayoutView.findViewById(R.id.latLonParadero);
             texto_oculto = (TextView) itemLayoutView.findViewById(R.id.id_oculto);
             imageViewFav = (ImageView) itemLayoutView.findViewById(R.id.boton_favoritos);
+            contenedor = (LinearLayout) itemLayoutView.findViewById(R.id.linear_contenedor_cardview);
         }
     }
 

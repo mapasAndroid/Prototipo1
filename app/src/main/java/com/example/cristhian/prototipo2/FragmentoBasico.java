@@ -250,7 +250,7 @@ public class FragmentoBasico extends Fragment implements SwipeRefreshLayout.OnRe
 
             }
             //le pone el adapter personalizado a el recycle view
-            this.myAdapter = new AdapterCardView(itemsData);
+            this.myAdapter = new AdapterCardView(itemsData, rootView.getContext());
             this.recyclerView.setAdapter(this.myAdapter);
             this.recyclerView.setItemAnimator(new DefaultItemAnimator());
             return true;

@@ -25,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:drawableLeft="@drawable/ic_face_black_24dp"
-                android:hint="Usuario"
+                android:hint="@string/campo_usuario"
                 android:inputType="text" />
 
             <EditText
@@ -34,7 +34,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:drawableLeft="@drawable/ic_create_black_24dp"
-                android:hint="Nombre"
+                android:hint="@string/campo_nombre"
                 android:inputType="text" />
 
 
@@ -44,7 +44,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:drawableLeft="@drawable/ic_mail_black_24dp"
-                android:hint="Correo Electronico"
+                android:hint="@string/campo_email"
                 android:inputType="textEmailAddress" />
 
             <EditText
@@ -53,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:drawableLeft="@drawable/ic_lock_black_24dp"
-                android:hint="Contraseña"
+                android:hint="@string/hint_contrasena"
                 android:inputType="textPassword" />
 
             <EditText
@@ -62,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:drawableLeft="@drawable/ic_call_black_24dp"
-                android:hint="Telefono"
+                android:hint="@string/campo_telefono"
                 android:inputType="text" />
 
             <Button
@@ -71,7 +71,7 @@
                 android:layout_gravity="center"
                 android:layout_marginTop="20dp"
                 android:onClick="Enviar"
-                android:text="Registrar" />
+                android:text="@string/boton_registrar" />
         </LinearLayout>
     </ScrollView>
 
