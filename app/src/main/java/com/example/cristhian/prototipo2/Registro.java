@@ -10,9 +10,13 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
+import android.text.Html;
+import android.text.method.LinkMovementMethod;
 import android.util.Log;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -49,6 +53,8 @@ public class Registro extends ActionBarActivity{
 
     private Inicio inicio = new Inicio();
 
+    private CheckBox checkBox;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +63,14 @@ public class Registro extends ActionBarActivity{
         ActionBar bar = getSupportActionBar();
         bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#3F51B5")));
 
-        progres = new ProgressDialog(this);
+        this.progres = new ProgressDialog(this);
+
+        this.checkBox = (CheckBox) findViewById(R.id.checkBox_registro);
+
+        String checkBoxText = "Acepto los <a href='http://pruebasmais.zz.mu/stopbus/terminos_y_condiciones.php' > Terminos y condiciones</a>";
+        TextView text_view_terminos_condiciones = (TextView) findViewById(R.id.text_view_terminos_condiciones);
+        text_view_terminos_condiciones.setText(Html.fromHtml(checkBoxText));
+        text_view_terminos_condiciones.setMovementMethod(LinkMovementMethod.getInstance());
 
     }
 
@@ -80,6 +93,11 @@ public class Registro extends ActionBarActivity{
         if(usuario.isEmpty() || nombre.isEmpty()
                 || correo.isEmpty() || pass.isEmpty()|| telef.isEmpty()){
             asistente.imprimir(getFragmentManager(), "Campos vacios, verifica nuevamente", 2);
+            return;
+        }
+
+        if(!this.checkBox.isChecked()){
+            asistente.imprimir(getFragmentManager(), "Recuerda que debes aceptar los terminos y condiciones", 2);
             return;
         }
 
