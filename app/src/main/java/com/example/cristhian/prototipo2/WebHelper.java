@@ -49,7 +49,7 @@ public class WebHelper {
     }
 
     public String getUrlBuscarBus(){
-        return  this.urlBuscarBus;
+        return urlBuscarBus;
     }
 
     public String getUrlAcercaDe(){

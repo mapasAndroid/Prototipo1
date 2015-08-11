@@ -1,6 +1,8 @@
 package com.example.cristhian.prototipo2;
 
 import android.annotation.TargetApi;
+import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -16,12 +18,14 @@ import android.os.Handler;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.util.Log;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.FrameLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -29,6 +33,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
 
@@ -46,7 +51,7 @@ import org.apache.http.util.EntityUtils;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -57,7 +62,11 @@ public class Mapa extends ActionBarActivity {
     private ActionBarDrawerToggle drawerToggle;
     private Lugares cx = new Lugares();
 
+
+
     private String[] datosParadero;
+
+    //usuario, nombre, correo , password
     private String[] datosUsuario;
 
     private BaseDeDatos baseDeDatos;
@@ -68,11 +77,23 @@ public class Mapa extends ActionBarActivity {
     //Atributo que gestiona las conexiones a datos web
     private WebHelper webHelper = new WebHelper();
 
+    protected ProgressDialog progres;
+
+    //Atributo que pinta los mensajes en la pantalla
+    private AsistenteMensajes asistente = new AsistenteMensajes();
+
     //datos globales para usar desde el Async Task
     LatLng ubicacionActual;
     LatLng ubicacionParadero;
-    String rutaString;
-    String [] datosBus;
+    String id_ruta_string;
+
+    //en la pos 0 placa, 1 conductor, 2 nombre_ruta,
+    // 3 tiempo estimado de demora, 4 posicion bus
+    String [] datosAmostrar;
+
+    //markes actual, paradero, bus APB
+    Marker [] markersAPB = {null, null, null};
+
 
 
     /*
@@ -88,6 +109,7 @@ public class Mapa extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mapas);
 
+        progres = new ProgressDialog(this);
 
         ActionBar bar = getSupportActionBar();
         bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#3F51B5")));
@@ -151,32 +173,50 @@ public class Mapa extends ActionBarActivity {
         );
 
         //agrego los markers en las posiciones a tratar, actual y la del paradero
-        agregarMarker(this.ubicacionActual, BitmapDescriptorFactory.HUE_BLUE, "Aqui estas", "actual");
+        markersAPB[0] = agregarMarker(this.ubicacionActual, R.drawable.person_marker, "Aqui estas", "estas cerca a tu paradero");
 
-        agregarMarker(
-                this.ubicacionParadero,
-                BitmapDescriptorFactory.HUE_ORANGE,
+        markersAPB[1] = agregarMarker(this.ubicacionParadero,
+                R.drawable.parada_marker,
                 this.datosParadero[1],
                 this.datosParadero[2]
         );
 
-        this.rutaString = getRutaApropiada();
+        //muestro el snippet del marker actual para guiar al usuario
+        markersAPB[0].showInfoWindow();
 
-        if (!this.rutaString.isEmpty()) {
 
-            this.baseDeDatos.abrir();
-            ArrayList<LatLng> ruta = baseDeDatos.getWaypointsByRuta(this.rutaString);
-            this.baseDeDatos.cerrar();
+        this.id_ruta_string = getRutaApropiada();
 
-            pintarRuta(ruta, new ColorDrawable(Color.parseColor("#3F51B5")).getColor());
-
-        } else {
+        if(this.id_ruta_string.equalsIgnoreCase("no_cercanas_actual")){
+            //this.asistente.imprimir(getFragmentManager(), "Lo sentimos, pero no hay buses cerca a ti", 4);
+            Toast.makeText(getBaseContext(), "Lo sentimos, pero no hay buses cerca a ti", Toast.LENGTH_LONG).show();
             finish();
+            return;
         }
 
+        if(this.id_ruta_string.equalsIgnoreCase("no_cercanas_paradero")){
+            //this.asistente.imprimir(getFragmentManager(), "Lo sentimos, pero no hay buses que se acerquen a tu parada", 4);
+            Toast.makeText(getBaseContext(), "Lo sentimos, pero no hay buses que se acerquen a tu parada", Toast.LENGTH_LONG).show();
+            finish();
+            return;
+        }
+
+
+        //busco los waypoints de la ruta segun el id de la ruta
+        this.baseDeDatos.abrir();
+        ArrayList<LatLng> ruta = baseDeDatos.getWaypointsByRuta(this.id_ruta_string);
+        this.baseDeDatos.cerrar();
+
+        //pinto la ruta en color azul
+        pintarRuta(ruta, new ColorDrawable(Color.parseColor("#3F51B5")).getColor());
+
+        //animar la barra inferior de los comandos
         FrameLayout frame = (FrameLayout) findViewById(R.id.fab_container);
         Animation myAnimation = AnimationUtils.loadAnimation(getApplicationContext(), R.anim.alpha);
         frame.startAnimation(myAnimation);
+
+        BusuqedaDeBus buscarBus = new BusuqedaDeBus();
+        buscarBus.execute(this.id_ruta_string);
 
 
     }//fin del metodo oncreate
@@ -204,52 +244,58 @@ public class Mapa extends ActionBarActivity {
         this.baseDeDatos.abrir();
         String waypoints[] = this.baseDeDatos.getTodosWaypoints();
         this.baseDeDatos.cerrar();
+        //todo: cambiar por la posicion actual
         String b = calcularRuta(waypoints, new LatLng(7.8928452, -72.5025499), this.ubicacionParadero);
         return b;
     }
 
     private String calcularRuta(String[] waypoints, LatLng posicionActual, LatLng posicionParadero) {
 
-        ArrayList<String[]> cercanasPosActual = new ArrayList<>();
+        //0 id ruta, 1 consecutivo, 2 lat, 3 long
+        HashMap<String,String[]> cercanasPosActual = new HashMap<>();
+        HashMap<String, String[]> cercanasParadero = new HashMap<>();
 
         for (int i = 0; i < waypoints.length; i++) {
 
             String[] waypointActual = waypoints[i].split("&");
 
-            double dif = diferencia(
+            double dif1 = diferencia(
                     new LatLng(Double.parseDouble(waypointActual[2]), Double.parseDouble(waypointActual[3])),
                     posicionActual
             );
-
-
-            if (dif <= this.MARGEN_DE_ERROR) {
-                cercanasPosActual.add(waypointActual);
+            if (dif1 <= this.MARGEN_DE_ERROR) {
+                cercanasPosActual.put(waypointActual[0], waypointActual);
             }
-        }
 
-        if (cercanasPosActual.isEmpty()) {
-
-            return "";
-        }
-
-        Iterator cercanos = cercanasPosActual.iterator();
-
-        while (cercanos.hasNext()) {
-            String datosWaypoint[] = (String[]) cercanos.next();
-
-            double dif = diferencia(
-                    new LatLng(Double.parseDouble(datosWaypoint[2]), Double.parseDouble(datosWaypoint[3])),
+            double dif2 = diferencia(
+                    new LatLng(Double.parseDouble(waypointActual[2]), Double.parseDouble(waypointActual[3])),
                     posicionParadero
-
             );
+            if (dif2 <= this.MARGEN_DE_ERROR_LUGAR) {
+                cercanasParadero.put(waypointActual[0],waypointActual);
+            }
+        }//termina el ciclo
 
-            if (dif <= this.MARGEN_DE_ERROR_LUGAR) {
-                return datosWaypoint[0];
+        if(cercanasParadero.isEmpty() || cercanasPosActual.isEmpty()){
+            return "no_cercanas_actual";
+        }
+
+        for (Object key : cercanasPosActual.keySet()){
+            if(cercanasParadero.containsKey(key)){
+                return key.toString();
             }
         }
-        return "";
+
+        return "no_cercanas_paradero";
     }
 
+
+    /**
+     * metodo que calcula la diferencia entre dos coordenadas
+     * @param x
+     * @param y
+     * @return
+     */
     private double diferencia(LatLng x, LatLng y) {
         double r = 6371000;
         double c = Math.PI / 180;
@@ -257,14 +303,18 @@ public class Mapa extends ActionBarActivity {
                 Math.cos(c * x.latitude) * Math.cos(c * y.latitude) * Math.pow(Math.sin(c * (y.longitude - x.longitude) / 2), 2))));
     }
 
-    private void agregarMarker(LatLng posicion, float color, String titulo, String snippet) {
+    private Marker agregarMarker(LatLng posicion, int imagen, String titulo, String snippet) {
+
+        MarkerOptions marker = new MarkerOptions().position(posicion)
+                .title(titulo)
+                .snippet(snippet)
+                .icon(BitmapDescriptorFactory.fromResource(imagen));
+
         if (mMap != null) {
-            mMap.addMarker(new MarkerOptions().position(posicion)
-                            .title(titulo)
-                            .snippet(snippet)
-                            .icon(BitmapDescriptorFactory.defaultMarker(color))
-            );
+
+            return mMap.addMarker(marker);
         }
+        return null;
     }
 
 
@@ -352,24 +402,115 @@ public class Mapa extends ActionBarActivity {
         mMap.animateCamera(CameraUpdateFactory.zoomTo(14));
     }
 
+    public void onPressPrimerIcono(View view) {
+
+        // tiene 7 posiciones
+        //en la pos 0 placa, 1 conductor, 2 nombre_ruta,
+        // 3 tiempo estimado de demora, 4 posicion bus, 5 direccion bus, 6 direccion actual
+
+        if(datosAmostrar == null || VacioDatosMostrar()){
+            return;
+        }
+
+        Dialog dialogo = new Dialog(this);
+        dialogo.setContentView(R.layout.fragme_mensaje_basico);
+        TextView texto = (TextView)dialogo.findViewById(R.id.text_mensaje_basico);
+        texto.setText(datosAmostrar[6]);
+        dialogo.setTitle("Ubicación");
+        dialogo.show();
+
+    }
+
+    private boolean VacioDatosMostrar() {
+        for (String dato: this.datosAmostrar){
+            if(dato.isEmpty()){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void onPressSegundoIcono(View view) {
+
+        //en la pos 0 placa, 1 conductor, 2 nombre_ruta,
+        // 3 tiempo estimado de demora, 4 posicion bus, 5 direccion bus, 6 direccion actual
+
+        if(datosAmostrar == null || VacioDatosMostrar()){
+            return;
+        }
+
+        Dialog dialogo = new Dialog(this);
+        dialogo.setContentView(R.layout.fragment_fragmento_mensaje);
+
+        //textviews
+        TextView placa = (TextView)dialogo.findViewById(R.id.txt_placa);
+        TextView ubicacion = (TextView)dialogo.findViewById(R.id.txt_ubicacion);
+        TextView conductor = (TextView)dialogo.findViewById(R.id.txt_conductor);
+        TextView ruta = (TextView)dialogo.findViewById(R.id.txt_ruta);
+        TextView tiempo_esperado = (TextView)dialogo.findViewById(R.id.txt_tiempo_estimado);
+
+        placa.setText(Html.fromHtml("<b>Placa : </b>" + datosAmostrar[0]));
+        conductor.setText(Html.fromHtml("<b>Conductor : </b>" + datosAmostrar[1]));
+        ruta.setText(Html.fromHtml("<b>Ruta : </b>" + datosAmostrar[2]));
+        tiempo_esperado.setText(Html.fromHtml("<b>Se demora aprox. : </b>" + datosAmostrar[3]));
+        ubicacion.setText(Html.fromHtml("<b>Ubicación actual : </b>" + datosAmostrar[5]));
+
+        dialogo.setTitle("Bus");
+        dialogo.show();
+    }
+    public void onPressTercerIcono(View view) {
+    }
+
+
+
+    //clase que maneja la busqueda del bus indicado en la web, "asycn task"
+
     public class BusuqedaDeBus extends AsyncTask<String, String, String> {
 
         @Override
+        protected void onPreExecute() {
+            progres.setMessage("Buscando tu bus mas cercano...");
+            progres.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            progres.setIndeterminate(true);
+            progres.show();
+            super.onPreExecute();
+        }
+
+        @Override
         protected void onPostExecute(String respuesta) {
+
+            //oculta la barra de progreso
+            progres.hide();
+
             if(respuesta.isEmpty()){
                 //asistente.imprimir(getFragmentManager(), "no pudimos encontrar un bus cercano", 1);
+                Toast.makeText(getBaseContext(), "Lo sentimos no encontramos un bus cerca a ti", Toast.LENGTH_LONG).show();
+                finish();
                 return;
             }
 
-            if(respuesta.equals("nonet")){
-                //asistente.imprimir(getFragmentManager(), "no estras conectado a internet", 1);
+            if (respuesta.equals("nonet")){
+                asistente.imprimir(getFragmentManager(), "no estras conectado a internet", 4);
+                finish();
                 return;
             }
 
-            String datosMostrar [] = respuesta.split("&");
+            datosAmostrar = respuesta.split("/");
+
             //en la pos 0 placa, 1 conductor, 2 nombre_ruta,
-            // 3 tiempo estimado de demora, 4 distancia aproximada
+            // 3 tiempo estimado de demora, 4 posicion bus, 5 direccion bus, 6 direccion actual
 
+
+            LatLng posicion_bus = new LatLng(
+                    Double.parseDouble(datosAmostrar[4].split("&")[0]),
+                    Double.parseDouble(datosAmostrar[4].split("&")[1])
+            );
+            //agregarMarker()
+            markersAPB[2] = agregarMarker(posicion_bus, R.drawable.bus_marker, "Tu bus" , datosAmostrar[5]);
+            markersAPB[2].showInfoWindow();
+
+            //cambiar la direccion del marker
+            markersAPB[0].setSnippet(datosAmostrar[6]);
 
         }
 
@@ -382,9 +523,8 @@ public class Mapa extends ActionBarActivity {
             HttpClient httpClient = new DefaultHttpClient();
             HttpContext localContext = new BasicHttpContext();
             HttpPost httpPost = new HttpPost(webHelper.getUrl() + webHelper.getUrlBuscarBus());
-            Log.i("cm01", webHelper.getUrl() + webHelper.getUrlBuscarBus());
             HttpResponse response = null;
-            String resultado = "";
+            String resultado;
             try {
                 List<NameValuePair> params = new ArrayList<NameValuePair>();
                 params.add(new BasicNameValuePair("usuario", webHelper.getUsuario()));

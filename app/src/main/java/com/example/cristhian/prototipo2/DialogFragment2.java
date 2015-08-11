@@ -63,6 +63,9 @@ public class DialogFragment2 extends DialogFragment{
                                 break;
                             case 4:
                                 break;
+                            case 5:
+                                getActivity().finish();
+                                break;
 
                         }
                     }
