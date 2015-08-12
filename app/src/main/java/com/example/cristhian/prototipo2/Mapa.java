@@ -18,7 +18,7 @@ import android.os.Handler;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
-import android.text.Html;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -87,14 +87,14 @@ public class Mapa extends ActionBarActivity {
     LatLng ubicacionParadero;
     String id_ruta_string;
 
+    String [] id_waypoint_encontrado;
+
     //en la pos 0 placa, 1 conductor, 2 nombre_ruta,
     // 3 tiempo estimado de demora, 4 posicion bus
     String [] datosAmostrar;
 
     //markes actual, paradero, bus APB
     Marker [] markersAPB = {null, null, null};
-
-
 
     /*
     ====================================
@@ -282,9 +282,12 @@ public class Mapa extends ActionBarActivity {
 
         for (Object key : cercanasPosActual.keySet()){
             if(cercanasParadero.containsKey(key)){
+                id_waypoint_encontrado = (String[])cercanasPosActual.get(key);
                 return key.toString();
             }
         }
+
+
 
         return "no_cercanas_paradero";
     }
@@ -415,7 +418,7 @@ public class Mapa extends ActionBarActivity {
         Dialog dialogo = new Dialog(this);
         dialogo.setContentView(R.layout.fragme_mensaje_basico);
         TextView texto = (TextView)dialogo.findViewById(R.id.text_mensaje_basico);
-        texto.setText(datosAmostrar[6]);
+        texto.setText(datosAmostrar[0]);
         dialogo.setTitle("Ubicación");
         dialogo.show();
 
@@ -449,16 +452,33 @@ public class Mapa extends ActionBarActivity {
         TextView ruta = (TextView)dialogo.findViewById(R.id.txt_ruta);
         TextView tiempo_esperado = (TextView)dialogo.findViewById(R.id.txt_tiempo_estimado);
 
-        placa.setText(Html.fromHtml("<b>Placa : </b>" + datosAmostrar[0]));
-        conductor.setText(Html.fromHtml("<b>Conductor : </b>" + datosAmostrar[1]));
-        ruta.setText(Html.fromHtml("<b>Ruta : </b>" + datosAmostrar[2]));
-        tiempo_esperado.setText(Html.fromHtml("<b>Se demora aprox. : </b>" + datosAmostrar[3]));
-        ubicacion.setText(Html.fromHtml("<b>Ubicación actual : </b>" + datosAmostrar[5]));
-
         dialogo.setTitle("Bus");
         dialogo.show();
     }
     public void onPressTercerIcono(View view) {
+        asistente.imprimir(getFragmentManager(), "Ya tomaste tu bus??, nos veremos la proxima vez!!", 4);
+        finish();
+    }
+
+    public void pintarTodosBuses(){
+        Log.i("cm01", "json buses : " + datosAmostrar[1]);
+        try {
+/*
+            JSONObject objetoPapa = new JSONObject(datosAmostrar[1]);
+            JSONObject rutas = objetoPapa.getJSONObject("7");
+            for (int i = 0; i < rutas.length(); i++) {
+                String id_ruta = rutas.getJSONObject(i + "").getString(StopBusContract.Waypoints.WAY_ID_RUTA);
+                int consecutivo = rutas.getJSONObject(i + "").getInt(StopBusContract.Waypoints.WAY_CONSECUTIVO);
+                String latitud = rutas.getJSONObject(i + "").getString(StopBusContract.Waypoints.WAY_LATITUD);
+                String longitud = rutas.getJSONObject(i + "").getString(StopBusContract.Waypoints.WAY_LONGITUD);
+                this.insertarWaypoint(id_ruta, consecutivo, latitud, longitud);
+
+            }*/
+
+        } catch (Exception e) {
+            Log.i("cm01", "error insertando:: " + e.toString());
+        }
+
     }
 
 
@@ -469,7 +489,7 @@ public class Mapa extends ActionBarActivity {
 
         @Override
         protected void onPreExecute() {
-            progres.setMessage("Buscando tu bus mas cercano...");
+            progres.setMessage("Estamos buscando los buses... Danos unos segundos");
             progres.setProgressStyle(ProgressDialog.STYLE_SPINNER);
             progres.setIndeterminate(true);
             progres.show();
@@ -484,7 +504,7 @@ public class Mapa extends ActionBarActivity {
 
             if(respuesta.isEmpty()){
                 //asistente.imprimir(getFragmentManager(), "no pudimos encontrar un bus cercano", 1);
-                Toast.makeText(getBaseContext(), "Lo sentimos no encontramos un bus cerca a ti", Toast.LENGTH_LONG).show();
+                Toast.makeText(getBaseContext(), "Lo sentimos no encontramos un buses en la ruta", Toast.LENGTH_LONG).show();
                 finish();
                 return;
             }
@@ -497,20 +517,11 @@ public class Mapa extends ActionBarActivity {
 
             datosAmostrar = respuesta.split("/");
 
-            //en la pos 0 placa, 1 conductor, 2 nombre_ruta,
-            // 3 tiempo estimado de demora, 4 posicion bus, 5 direccion bus, 6 direccion actual
-
-
-            LatLng posicion_bus = new LatLng(
-                    Double.parseDouble(datosAmostrar[4].split("&")[0]),
-                    Double.parseDouble(datosAmostrar[4].split("&")[1])
-            );
-            //agregarMarker()
-            markersAPB[2] = agregarMarker(posicion_bus, R.drawable.bus_marker, "Tu bus" , datosAmostrar[5]);
-            markersAPB[2].showInfoWindow();
-
-            //cambiar la direccion del marker
-            markersAPB[0].setSnippet(datosAmostrar[6]);
+            //datos mostrar
+            //pos 0 la direeccin de la posicion actual,
+            markersAPB[0].setSnippet(datosAmostrar[0]);
+            pintarTodosBuses();
+            Log.i("cm01", "direccion : " + respuesta);
 
         }
 
@@ -529,8 +540,14 @@ public class Mapa extends ActionBarActivity {
                 List<NameValuePair> params = new ArrayList<NameValuePair>();
                 params.add(new BasicNameValuePair("usuario", webHelper.getUsuario()));
                 params.add(new BasicNameValuePair("contrasenia", webHelper.getPass()));
+
                 params.add(new BasicNameValuePair("id_ruta", id_ruta));
+                params.add(new BasicNameValuePair("usuario_usuario", datosUsuario[0]));
+                params.add(new BasicNameValuePair("nombre_usuario", datosUsuario[1]));
                 params.add(new BasicNameValuePair("ubicacion_actual", ubicacionActual.latitude + "&" + ubicacionActual.longitude));
+                params.add(new BasicNameValuePair("ubicacion_paradero", ubicacionParadero.latitude + "&" + ubicacionParadero.longitude));
+                params.add(new BasicNameValuePair("id_waypoint_encontrado", id_waypoint_encontrado[1]));
+
                 httpPost.setEntity(new UrlEncodedFormEntity(params));
                 response = httpClient.execute(httpPost, localContext);
                 HttpEntity httpEntity = response.getEntity();
