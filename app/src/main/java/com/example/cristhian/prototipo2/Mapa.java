@@ -24,7 +24,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
+import android.widget.ArrayAdapter;
 import android.widget.FrameLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,6 +50,7 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -87,14 +90,15 @@ public class Mapa extends ActionBarActivity {
     LatLng ubicacionParadero;
     String id_ruta_string;
 
-    String [] id_waypoint_encontrado;
+    ArrayList<Marker> busesMarkers = new ArrayList<>();
+    ArrayList<String> busesDatos = new ArrayList<>();
 
     //en la pos 0 placa, 1 conductor, 2 nombre_ruta,
     // 3 tiempo estimado de demora, 4 posicion bus
     String [] datosAmostrar;
 
     //markes actual, paradero, bus APB
-    Marker [] markersAPB = {null, null, null};
+    Marker [] markersActual_paradero = {null, null};
 
     /*
     ====================================
@@ -159,8 +163,7 @@ public class Mapa extends ActionBarActivity {
         ====================================
          */
 
-
-
+        //todo: cambiar a ubicacion actual gps
         this.ubicacionActual = new LatLng(
                 7.8928452,-72.5025499
 
@@ -173,29 +176,27 @@ public class Mapa extends ActionBarActivity {
         );
 
         //agrego los markers en las posiciones a tratar, actual y la del paradero
-        markersAPB[0] = agregarMarker(this.ubicacionActual, R.drawable.person_marker, "Aqui estas", "estas cerca a tu paradero");
+        markersActual_paradero[0] = agregarMarker(this.ubicacionActual, R.drawable.person_marker, "Aqui estas", "estas cerca a tu paradero");
 
-        markersAPB[1] = agregarMarker(this.ubicacionParadero,
+        markersActual_paradero[1] = agregarMarker(this.ubicacionParadero,
                 R.drawable.parada_marker,
                 this.datosParadero[1],
                 this.datosParadero[2]
         );
 
         //muestro el snippet del marker actual para guiar al usuario
-        markersAPB[0].showInfoWindow();
+        markersActual_paradero[0].showInfoWindow();
 
 
         this.id_ruta_string = getRutaApropiada();
 
         if(this.id_ruta_string.equalsIgnoreCase("no_cercanas_actual")){
-            //this.asistente.imprimir(getFragmentManager(), "Lo sentimos, pero no hay buses cerca a ti", 4);
             Toast.makeText(getBaseContext(), "Lo sentimos, pero no hay buses cerca a ti", Toast.LENGTH_LONG).show();
             finish();
             return;
         }
 
         if(this.id_ruta_string.equalsIgnoreCase("no_cercanas_paradero")){
-            //this.asistente.imprimir(getFragmentManager(), "Lo sentimos, pero no hay buses que se acerquen a tu parada", 4);
             Toast.makeText(getBaseContext(), "Lo sentimos, pero no hay buses que se acerquen a tu parada", Toast.LENGTH_LONG).show();
             finish();
             return;
@@ -236,7 +237,7 @@ public class Mapa extends ActionBarActivity {
     }
 
     /**
-     * metodo que
+     * metodo que busca la ruta mas apropiada para la posicion
      * @return
      */
     private String getRutaApropiada() {
@@ -244,11 +245,17 @@ public class Mapa extends ActionBarActivity {
         this.baseDeDatos.abrir();
         String waypoints[] = this.baseDeDatos.getTodosWaypoints();
         this.baseDeDatos.cerrar();
-        //todo: cambiar por la posicion actual
-        String b = calcularRuta(waypoints, new LatLng(7.8928452, -72.5025499), this.ubicacionParadero);
+        String b = calcularRuta(waypoints, this.ubicacionActual, this.ubicacionParadero);
         return b;
     }
 
+    /**
+     * calcula la ruta ideal
+     * @param waypoints
+     * @param posicionActual
+     * @param posicionParadero
+     * @return
+     */
     private String calcularRuta(String[] waypoints, LatLng posicionActual, LatLng posicionParadero) {
 
         //0 id ruta, 1 consecutivo, 2 lat, 3 long
@@ -282,12 +289,9 @@ public class Mapa extends ActionBarActivity {
 
         for (Object key : cercanasPosActual.keySet()){
             if(cercanasParadero.containsKey(key)){
-                id_waypoint_encontrado = (String[])cercanasPosActual.get(key);
                 return key.toString();
             }
         }
-
-
 
         return "no_cercanas_paradero";
     }
@@ -306,6 +310,14 @@ public class Mapa extends ActionBarActivity {
                 Math.cos(c * x.latitude) * Math.cos(c * y.latitude) * Math.pow(Math.sin(c * (y.longitude - x.longitude) / 2), 2))));
     }
 
+    /**
+     * agregar un marker en el mapa
+     * @param posicion
+     * @param imagen
+     * @param titulo
+     * @param snippet
+     * @return
+     */
     private Marker agregarMarker(LatLng posicion, int imagen, String titulo, String snippet) {
 
         MarkerOptions marker = new MarkerOptions().position(posicion)
@@ -368,6 +380,9 @@ public class Mapa extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    /**
+     * borra el archivo de base de datos
+     */
     private void borrarBd() {
         File database = getApplicationContext().getDatabasePath("stopbus.db");
 
@@ -405,11 +420,14 @@ public class Mapa extends ActionBarActivity {
         mMap.animateCamera(CameraUpdateFactory.zoomTo(14));
     }
 
+    /**
+     * cuando se presiona el icono de ubicacion
+     * @param view
+     */
     public void onPressPrimerIcono(View view) {
 
         // tiene 7 posiciones
-        //en la pos 0 placa, 1 conductor, 2 nombre_ruta,
-        // 3 tiempo estimado de demora, 4 posicion bus, 5 direccion bus, 6 direccion actual
+        //en la pos 0 ubicacion actual , 1 buses en formato JSON
 
         if(datosAmostrar == null || VacioDatosMostrar()){
             return;
@@ -424,6 +442,10 @@ public class Mapa extends ActionBarActivity {
 
     }
 
+    /**
+     * verifica que no haya nulos en los datos a mostrar
+     * @return
+     */
     private boolean VacioDatosMostrar() {
         for (String dato: this.datosAmostrar){
             if(dato.isEmpty()){
@@ -433,6 +455,10 @@ public class Mapa extends ActionBarActivity {
         return false;
     }
 
+    /**
+     * cuando se presiona el icono del bus
+     * @param view
+     */
     public void onPressSegundoIcono(View view) {
 
         //en la pos 0 placa, 1 conductor, 2 nombre_ruta,
@@ -445,35 +471,37 @@ public class Mapa extends ActionBarActivity {
         Dialog dialogo = new Dialog(this);
         dialogo.setContentView(R.layout.fragment_fragmento_mensaje);
 
-        //textviews
-        TextView placa = (TextView)dialogo.findViewById(R.id.txt_placa);
-        TextView ubicacion = (TextView)dialogo.findViewById(R.id.txt_ubicacion);
-        TextView conductor = (TextView)dialogo.findViewById(R.id.txt_conductor);
-        TextView ruta = (TextView)dialogo.findViewById(R.id.txt_ruta);
-        TextView tiempo_esperado = (TextView)dialogo.findViewById(R.id.txt_tiempo_estimado);
+        ListView lv = (ListView) dialogo.findViewById(R.id.lista_buses);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
+                this,
+                android.R.layout.simple_list_item_1,
+                busesDatos );
 
-        dialogo.setTitle("Bus");
+        lv.setAdapter(arrayAdapter);
+
+        dialogo.setTitle("Buses");
         dialogo.show();
     }
     public void onPressTercerIcono(View view) {
-        asistente.imprimir(getFragmentManager(), "Ya tomaste tu bus??, nos veremos la proxima vez!!", 4);
         finish();
     }
 
+    /**
+     * metodo que pinta los buses basandose en la respuesta de los buses en formato JSON
+     */
     public void pintarTodosBuses(){
-        Log.i("cm01", "json buses : " + datosAmostrar[1]);
-        try {
-/*
-            JSONObject objetoPapa = new JSONObject(datosAmostrar[1]);
-            JSONObject rutas = objetoPapa.getJSONObject("7");
-            for (int i = 0; i < rutas.length(); i++) {
-                String id_ruta = rutas.getJSONObject(i + "").getString(StopBusContract.Waypoints.WAY_ID_RUTA);
-                int consecutivo = rutas.getJSONObject(i + "").getInt(StopBusContract.Waypoints.WAY_CONSECUTIVO);
-                String latitud = rutas.getJSONObject(i + "").getString(StopBusContract.Waypoints.WAY_LATITUD);
-                String longitud = rutas.getJSONObject(i + "").getString(StopBusContract.Waypoints.WAY_LONGITUD);
-                this.insertarWaypoint(id_ruta, consecutivo, latitud, longitud);
 
-            }*/
+        try {
+
+            JSONObject rutas = new JSONObject(datosAmostrar[1]);
+            for (int i = 0; i < rutas.length(); i++) {
+
+                String placa = rutas.getJSONObject(i + "").getString("placa");
+                String conductor = rutas.getJSONObject(i + "").getString("conductor");
+                String pos_actual= rutas.getJSONObject(i + "").getString("pos_actual");
+                agregarMarkerBus(placa, conductor, pos_actual);
+                busesDatos.add("Placa: " + placa + "\nConductor: " + conductor);
+            }
 
         } catch (Exception e) {
             Log.i("cm01", "error insertando:: " + e.toString());
@@ -481,6 +509,19 @@ public class Mapa extends ActionBarActivity {
 
     }
 
+    /**
+     * agrega un marker de un bus y guarda su referencia en una lista de de markers
+     * @param placa
+     * @param conductor
+     * @param pos_actual
+     */
+    private void agregarMarkerBus(String placa, String conductor, String pos_actual) {
+        LatLng posicion = new LatLng(
+                Double.parseDouble(pos_actual.split("&")[0]),
+                Double.parseDouble(pos_actual.split("&")[1])
+        );
+        busesMarkers.add(agregarMarker(posicion, R.drawable.bus_marker, "Placa:" + placa, "Conductor: " + conductor));
+    }
 
 
     //clase que maneja la busqueda del bus indicado en la web, "asycn task"
@@ -519,9 +560,9 @@ public class Mapa extends ActionBarActivity {
 
             //datos mostrar
             //pos 0 la direeccin de la posicion actual,
-            markersAPB[0].setSnippet(datosAmostrar[0]);
+            markersActual_paradero[0].setSnippet(datosAmostrar[0]);
+            markersActual_paradero[0].showInfoWindow();
             pintarTodosBuses();
-            Log.i("cm01", "direccion : " + respuesta);
 
         }
 
@@ -546,7 +587,6 @@ public class Mapa extends ActionBarActivity {
                 params.add(new BasicNameValuePair("nombre_usuario", datosUsuario[1]));
                 params.add(new BasicNameValuePair("ubicacion_actual", ubicacionActual.latitude + "&" + ubicacionActual.longitude));
                 params.add(new BasicNameValuePair("ubicacion_paradero", ubicacionParadero.latitude + "&" + ubicacionParadero.longitude));
-                params.add(new BasicNameValuePair("id_waypoint_encontrado", id_waypoint_encontrado[1]));
 
                 httpPost.setEntity(new UrlEncodedFormEntity(params));
                 response = httpClient.execute(httpPost, localContext);
