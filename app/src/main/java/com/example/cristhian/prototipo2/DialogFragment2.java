@@ -9,9 +9,6 @@ import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.widget.EditText;
 
-/**
- * Created by CRISTHIAN and MAITE
- */
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 public class DialogFragment2 extends DialogFragment{
 

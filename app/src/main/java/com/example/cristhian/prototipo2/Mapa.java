@@ -606,6 +606,7 @@ public class Mapa extends ActionBarActivity {
                 params.add(new BasicNameValuePair("usuario_usuario", datosUsuario[0]));
                 params.add(new BasicNameValuePair("nombre_usuario", datosUsuario[1]));
                 params.add(new BasicNameValuePair("ubicacion_actual", ubicacionActual.latitude + "&" + ubicacionActual.longitude));
+                //manda los dtos en la posicion "ubicacion_actal" asi: lat&long
                 params.add(new BasicNameValuePair("ubicacion_paradero", ubicacionParadero.latitude + "&" + ubicacionParadero.longitude));
 
                 httpPost.setEntity(new UrlEncodedFormEntity(params));

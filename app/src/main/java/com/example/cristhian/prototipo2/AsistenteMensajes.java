@@ -4,9 +4,6 @@ import android.annotation.TargetApi;
 import android.app.FragmentManager;
 import android.os.Build;
 
-/**
- * Created by CRISTHIAN and MAITE
- */
 public class AsistenteMensajes {
 
     DialogFragment2 mensajeria;

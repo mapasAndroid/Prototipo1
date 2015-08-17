@@ -3,9 +3,6 @@ package com.example.cristhian.prototipo2;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-/**
- * Created by CRISTHIAN and MAITE
- */
 public class Encriptador {
 
     public String getSha1(String cadena){

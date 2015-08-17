@@ -16,9 +16,6 @@ import android.widget.TextView;
 
 import com.example.cristhian.prototipo2.util.SystemUiHider;
 
-/**
- * Created by CRISTHIAN and MAITE
- */
 public class Splash extends Activity {
 
     //fuente roboto

@@ -36,9 +36,6 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.io.File;
 
-/**
- * Created by CRISTHIAN and MAITE
- */
 public class Lugares extends ActionBarActivity {
 
     //====================================

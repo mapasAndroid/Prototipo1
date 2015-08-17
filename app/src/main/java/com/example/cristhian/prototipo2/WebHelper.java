@@ -1,9 +1,6 @@
 
 package com.example.cristhian.prototipo2;
 
-/**
- * Created by CRISTHIAN and MAITE
- */
 public class WebHelper {
 
     private Encriptador encriptador = new Encriptador();

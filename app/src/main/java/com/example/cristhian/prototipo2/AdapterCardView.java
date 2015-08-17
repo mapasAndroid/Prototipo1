@@ -9,9 +9,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-/**
- * Created by CRISTHIAN and MAITE
- */
 public class AdapterCardView extends RecyclerView.Adapter<AdapterCardView.ViewHolder> {
 
     private ItemParaderos[] itemsData;

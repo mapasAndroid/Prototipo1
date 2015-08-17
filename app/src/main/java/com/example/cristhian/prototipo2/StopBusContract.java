@@ -2,9 +2,6 @@ package com.example.cristhian.prototipo2;
 
 import android.provider.BaseColumns;
 
-/**
- * Created by CRISTHIAN and MAITE
- */
 public class StopBusContract {
 
     public static final class Empresa implements BaseColumns {

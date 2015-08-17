@@ -31,9 +31,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by CRISTHIAN and MAITE
- */
 public class Inicio extends ActionBarActivity {
 
     /**
@@ -131,7 +128,6 @@ public class Inicio extends ActionBarActivity {
 
 
     public class Validador extends AsyncTask<String, String, String> {
-
         @Override
         protected void onPreExecute() {
             //barra de progreso
@@ -174,8 +170,8 @@ public class Inicio extends ActionBarActivity {
         }
 
         @Override
-        protected String doInBackground(String... params) {
-            return enviarPost(params[0], params[1]);
+        protected String doInBackground(String... datosUsuario) {
+            return enviarPost(datosUsuario[0], datosUsuario[1]);
         }
 
         public String enviarPost(String usuario, String contrasenia) {

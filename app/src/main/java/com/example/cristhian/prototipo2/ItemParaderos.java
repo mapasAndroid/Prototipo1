@@ -1,8 +1,5 @@
 package com.example.cristhian.prototipo2;
 
-/**
- * Created by CRISTHIAN and MAITE
- */
 public class ItemParaderos {
     private String nombreParadero;
     private String idParadero;

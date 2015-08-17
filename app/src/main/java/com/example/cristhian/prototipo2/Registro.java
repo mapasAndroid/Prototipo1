@@ -33,9 +33,6 @@ import org.apache.http.util.EntityUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by CRISTHIAN and MAITE
- */
 public class Registro extends ActionBarActivity{
 
     /**

@@ -23,9 +23,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-/**
- * Created by CRISTHIAN and MAITE
- */
 public class FragmentoBasico extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
 
     View rootView;

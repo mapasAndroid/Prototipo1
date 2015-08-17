@@ -19,9 +19,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-/**
- * Created by CRISTHIAN and MAITE
- */
 public class BaseDeDatos {
 
 
