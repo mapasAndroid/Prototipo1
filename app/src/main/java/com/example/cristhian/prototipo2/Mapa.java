@@ -66,7 +66,6 @@ public class Mapa extends ActionBarActivity {
     private Lugares cx = new Lugares();
 
 
-
     private String[] datosParadero;
 
     //usuario, nombre, correo , password
@@ -95,10 +94,10 @@ public class Mapa extends ActionBarActivity {
 
     //en la pos 0 placa, 1 conductor, 2 nombre_ruta,
     // 3 tiempo estimado de demora, 4 posicion bus
-    String [] datosAmostrar;
+    String[] datosAmostrar;
 
     //markes actual, paradero, bus APB
-    Marker [] markersActual_paradero = {null, null};
+    Marker[] markersActual_paradero = {null, null};
 
     /*
     ====================================
@@ -120,13 +119,6 @@ public class Mapa extends ActionBarActivity {
 
         this.baseDeDatos = new BaseDeDatos(getBaseContext());
 
-        Bundle datosFragmento = getIntent().getExtras();
-        if (datosFragmento != null) {
-            datosParadero = datosFragmento.get("datosParadero").toString().split("&");
-            datosUsuario = datosFragmento.getStringArray("datosUsuario");
-        }
-
-        setUpMapIfNeeded();
 
 
         /*
@@ -141,7 +133,7 @@ public class Mapa extends ActionBarActivity {
         LocationListener locationListener = new LocationListener() {
             public void onLocationChanged(Location location) {
                 // Called when a new location is found by the network location provider.
-                Toast.makeText(getBaseContext(), location.toString(), Toast.LENGTH_LONG).show();
+                ubicacionActual = new LatLng(location.getLatitude(), location.getLongitude());
             }
 
             public void onStatusChanged(String provider, int status, Bundle extras) {
@@ -163,12 +155,30 @@ public class Mapa extends ActionBarActivity {
         ====================================
          */
 
-        //todo: cambiar a ubicacion actual gps
-        this.ubicacionActual = new LatLng(
-                7.8928452,-72.5025499
+        Bundle datosFragmento = getIntent().getExtras();
+        if (datosFragmento != null) {
+            datosParadero = datosFragmento.get("datosParadero").toString().split("&");
+            datosUsuario = datosFragmento.getStringArray("datosUsuario");
 
-        );
+            String temp = datosFragmento.getString("ubicacionActual");
 
+            if (temp.equals("none")) {
+
+                if(this.ubicacionActual == null){
+                    finish();
+                    return;
+                }
+            } else {
+                Double v[] = {Double.parseDouble(temp.split("&")[0]), Double.parseDouble(temp.split("&")[1])};
+                this.ubicacionActual = new LatLng(
+                        v[0],
+                        v[1]
+                );
+            }
+
+        }
+
+        setUpMapIfNeeded();
 
         this.ubicacionParadero = new LatLng(
                 Double.parseDouble(this.datosParadero[3]),
@@ -190,13 +200,13 @@ public class Mapa extends ActionBarActivity {
 
         this.id_ruta_string = getRutaApropiada();
 
-        if(this.id_ruta_string.equalsIgnoreCase("no_cercanas_actual")){
+        if (this.id_ruta_string.equalsIgnoreCase("no_cercanas_actual")) {
             Toast.makeText(getBaseContext(), "Lo sentimos, pero no hay buses cerca a ti", Toast.LENGTH_LONG).show();
             finish();
             return;
         }
 
-        if(this.id_ruta_string.equalsIgnoreCase("no_cercanas_paradero")){
+        if (this.id_ruta_string.equalsIgnoreCase("no_cercanas_paradero")) {
             Toast.makeText(getBaseContext(), "Lo sentimos, pero no hay buses que se acerquen a tu parada", Toast.LENGTH_LONG).show();
             finish();
             return;
@@ -225,8 +235,9 @@ public class Mapa extends ActionBarActivity {
 
     /**
      * metodo que pinta la ruta en el mapa
-     * @param puntos    arraylist de todos los puntos a pintar
-     * @param color     entero con el color a pintar la linea
+     *
+     * @param puntos arraylist de todos los puntos a pintar
+     * @param color  entero con el color a pintar la linea
      */
     public void pintarRuta(ArrayList<LatLng> puntos, int color) {
         PolylineOptions opciones = new PolylineOptions();
@@ -238,6 +249,7 @@ public class Mapa extends ActionBarActivity {
 
     /**
      * metodo que busca la ruta mas apropiada para la posicion
+     *
      * @return
      */
     private String getRutaApropiada() {
@@ -251,6 +263,7 @@ public class Mapa extends ActionBarActivity {
 
     /**
      * calcula la ruta ideal
+     *
      * @param waypoints
      * @param posicionActual
      * @param posicionParadero
@@ -259,7 +272,7 @@ public class Mapa extends ActionBarActivity {
     private String calcularRuta(String[] waypoints, LatLng posicionActual, LatLng posicionParadero) {
 
         //0 id ruta, 1 consecutivo, 2 lat, 3 long
-        HashMap<String,String[]> cercanasPosActual = new HashMap<>();
+        HashMap<String, String[]> cercanasPosActual = new HashMap<>();
         HashMap<String, String[]> cercanasParadero = new HashMap<>();
 
         for (int i = 0; i < waypoints.length; i++) {
@@ -279,16 +292,16 @@ public class Mapa extends ActionBarActivity {
                     posicionParadero
             );
             if (dif2 <= this.MARGEN_DE_ERROR_LUGAR) {
-                cercanasParadero.put(waypointActual[0],waypointActual);
+                cercanasParadero.put(waypointActual[0], waypointActual);
             }
         }//termina el ciclo
 
-        if(cercanasParadero.isEmpty() || cercanasPosActual.isEmpty()){
+        if (cercanasParadero.isEmpty() || cercanasPosActual.isEmpty()) {
             return "no_cercanas_actual";
         }
 
-        for (Object key : cercanasPosActual.keySet()){
-            if(cercanasParadero.containsKey(key)){
+        for (Object key : cercanasPosActual.keySet()) {
+            if (cercanasParadero.containsKey(key)) {
                 return key.toString();
             }
         }
@@ -299,6 +312,7 @@ public class Mapa extends ActionBarActivity {
 
     /**
      * metodo que calcula la diferencia entre dos coordenadas
+     *
      * @param x
      * @param y
      * @return
@@ -312,6 +326,7 @@ public class Mapa extends ActionBarActivity {
 
     /**
      * agregar un marker en el mapa
+     *
      * @param posicion
      * @param imagen
      * @param titulo
@@ -422,6 +437,7 @@ public class Mapa extends ActionBarActivity {
 
     /**
      * cuando se presiona el icono de ubicacion
+     *
      * @param view
      */
     public void onPressPrimerIcono(View view) {
@@ -429,13 +445,13 @@ public class Mapa extends ActionBarActivity {
         // tiene 7 posiciones
         //en la pos 0 ubicacion actual , 1 buses en formato JSON
 
-        if(datosAmostrar == null || VacioDatosMostrar()){
+        if (datosAmostrar == null || VacioDatosMostrar()) {
             return;
         }
 
         Dialog dialogo = new Dialog(this);
         dialogo.setContentView(R.layout.fragme_mensaje_basico);
-        TextView texto = (TextView)dialogo.findViewById(R.id.text_mensaje_basico);
+        TextView texto = (TextView) dialogo.findViewById(R.id.text_mensaje_basico);
         texto.setText(datosAmostrar[0]);
         dialogo.setTitle("Ubicación");
         dialogo.show();
@@ -444,11 +460,12 @@ public class Mapa extends ActionBarActivity {
 
     /**
      * verifica que no haya nulos en los datos a mostrar
+     *
      * @return
      */
     private boolean VacioDatosMostrar() {
-        for (String dato: this.datosAmostrar){
-            if(dato.isEmpty()){
+        for (String dato : this.datosAmostrar) {
+            if (dato.isEmpty()) {
                 return true;
             }
         }
@@ -457,6 +474,7 @@ public class Mapa extends ActionBarActivity {
 
     /**
      * cuando se presiona el icono del bus
+     *
      * @param view
      */
     public void onPressSegundoIcono(View view) {
@@ -464,7 +482,7 @@ public class Mapa extends ActionBarActivity {
         //en la pos 0 placa, 1 conductor, 2 nombre_ruta,
         // 3 tiempo estimado de demora, 4 posicion bus, 5 direccion bus, 6 direccion actual
 
-        if(datosAmostrar == null || VacioDatosMostrar()){
+        if (datosAmostrar == null || VacioDatosMostrar()) {
             return;
         }
 
@@ -475,13 +493,14 @@ public class Mapa extends ActionBarActivity {
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
                 this,
                 android.R.layout.simple_list_item_1,
-                busesDatos );
+                busesDatos);
 
         lv.setAdapter(arrayAdapter);
 
         dialogo.setTitle("Buses");
         dialogo.show();
     }
+
     public void onPressTercerIcono(View view) {
         finish();
     }
@@ -489,7 +508,7 @@ public class Mapa extends ActionBarActivity {
     /**
      * metodo que pinta los buses basandose en la respuesta de los buses en formato JSON
      */
-    public void pintarTodosBuses(){
+    public void pintarTodosBuses() {
 
         try {
 
@@ -498,7 +517,7 @@ public class Mapa extends ActionBarActivity {
 
                 String placa = rutas.getJSONObject(i + "").getString("placa");
                 String conductor = rutas.getJSONObject(i + "").getString("conductor");
-                String pos_actual= rutas.getJSONObject(i + "").getString("pos_actual");
+                String pos_actual = rutas.getJSONObject(i + "").getString("pos_actual");
                 agregarMarkerBus(placa, conductor, pos_actual);
                 busesDatos.add("Placa: " + placa + "\nConductor: " + conductor);
             }
@@ -511,6 +530,7 @@ public class Mapa extends ActionBarActivity {
 
     /**
      * agrega un marker de un bus y guarda su referencia en una lista de de markers
+     *
      * @param placa
      * @param conductor
      * @param pos_actual
@@ -543,14 +563,14 @@ public class Mapa extends ActionBarActivity {
             //oculta la barra de progreso
             progres.hide();
 
-            if(respuesta.isEmpty()){
+            if (respuesta.isEmpty()) {
                 //asistente.imprimir(getFragmentManager(), "no pudimos encontrar un bus cercano", 1);
                 Toast.makeText(getBaseContext(), "Lo sentimos no encontramos un buses en la ruta", Toast.LENGTH_LONG).show();
                 finish();
                 return;
             }
 
-            if (respuesta.equals("nonet")){
+            if (respuesta.equals("nonet")) {
                 asistente.imprimir(getFragmentManager(), "no estras conectado a internet", 4);
                 finish();
                 return;

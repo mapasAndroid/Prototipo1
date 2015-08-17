@@ -153,6 +153,16 @@ public class FragmentoBasico extends Fragment implements SwipeRefreshLayout.OnRe
                         //datosUsuario es un VECTOR con los datos, usuario, nombre, correo, password
                         intent.putExtra("datosUsuario", ((Lugares) getActivity()).getDatosUsuario());
 
+                        //ubicacion actual dada por lugares
+
+                        String ubicacionActual = ((Lugares) (getActivity())).getUbicacionActual();
+                        if (ubicacionActual.isEmpty()) {
+                            intent.putExtra("ubicacionActual", "none");
+
+                        } else {
+                            intent.putExtra("ubicacionActual", ubicacionActual);
+                        }
+
                         startActivity(intent);
 
                     }

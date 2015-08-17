@@ -8,6 +8,9 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -28,6 +31,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+
+import com.google.android.gms.maps.model.LatLng;
 
 import java.io.File;
 
@@ -59,6 +64,8 @@ public class Lugares extends ActionBarActivity {
     protected ProgressDialog progres;
 
     public static Activity cerrarlugar;
+
+    public LatLng ubicacionActual;
 
 
     //====================================
@@ -198,6 +205,43 @@ public class Lugares extends ActionBarActivity {
 
         this.progres = ProgressDialog.show(this, "Copiando datos", "Espera unos segundos...", true, false);
 
+
+
+        /*
+        ====================================
+                   LOCALIZACION
+        ====================================
+         */
+        // Acquire a reference to the system Location Manager
+        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+
+        // Define a listener that responds to location updates
+        LocationListener locationListener = new LocationListener() {
+            public void onLocationChanged(Location location) {
+                // Called when a new location is found by the network location provider.
+                ubicacionActual = new LatLng(location.getLatitude(), location.getLongitude());
+            }
+
+            public void onStatusChanged(String provider, int status, Bundle extras) {
+            }
+
+            public void onProviderEnabled(String provider) {
+            }
+
+            public void onProviderDisabled(String provider) {
+            }
+        };
+
+        // Register the listener with the Location Manager to receive location updates
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
+
+       /*
+        ====================================
+                FIN DE LOCALIZACION
+        ====================================
+         */
+
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -206,16 +250,27 @@ public class Lugares extends ActionBarActivity {
                     //muestra el mensaje de bienvenida, siempre y cuando hayan extras en el intent
                     Bundle extras = getIntent().getExtras();
                     if (extras != null) {
-                        if(datosUsuario == null) datosUsuario = new String[4];
+                        if (datosUsuario == null) datosUsuario = new String[4];
                         datosUsuario[0] = extras.get("usuario").toString();
                         datosUsuario[2] = extras.get("correo").toString();
                         mostrarMensaje(extras.get("usuario").toString(), extras.get("desde").toString());
                     }
                 }
+
             }
         }, 3000);
 
     }
+
+
+    public String getUbicacionActual(){
+        if(ubicacionActual != null)
+            return (ubicacionActual.latitude + "&" + ubicacionActual.longitude);
+        return "";
+    }
+
+
+
 
     /**
      * metodo que isntancia un fragmento dependiendo de la posicion recibida y
