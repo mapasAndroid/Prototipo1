@@ -565,13 +565,13 @@ public class Mapa extends ActionBarActivity {
 
             if (respuesta.isEmpty()) {
                 //asistente.imprimir(getFragmentManager(), "no pudimos encontrar un bus cercano", 1);
-                Toast.makeText(getBaseContext(), "Lo sentimos no encontramos un buses en la ruta", Toast.LENGTH_LONG).show();
+                Toast.makeText(getBaseContext(), "Lo sentimos no encontramos buses en la ruta", Toast.LENGTH_LONG).show();
                 finish();
                 return;
             }
 
             if (respuesta.equals("nonet")) {
-                asistente.imprimir(getFragmentManager(), "no estras conectado a internet", 4);
+                asistente.imprimir(getFragmentManager(), "no estas conectado a internet", 4);
                 finish();
                 return;
             }
