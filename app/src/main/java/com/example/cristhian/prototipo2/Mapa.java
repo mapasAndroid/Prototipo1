@@ -3,13 +3,9 @@ package com.example.cristhian.prototipo2;
 import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -119,42 +115,6 @@ public class Mapa extends ActionBarActivity {
 
         this.baseDeDatos = new BaseDeDatos(getBaseContext());
 
-
-
-        /*
-        ====================================
-                   LOCALIZACION
-        ====================================
-         */
-        // Acquire a reference to the system Location Manager
-        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-
-        // Define a listener that responds to location updates
-        LocationListener locationListener = new LocationListener() {
-            public void onLocationChanged(Location location) {
-                // Called when a new location is found by the network location provider.
-                ubicacionActual = new LatLng(location.getLatitude(), location.getLongitude());
-            }
-
-            public void onStatusChanged(String provider, int status, Bundle extras) {
-            }
-
-            public void onProviderEnabled(String provider) {
-            }
-
-            public void onProviderDisabled(String provider) {
-            }
-        };
-
-        // Register the listener with the Location Manager to receive location updates
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-
-       /*
-        ====================================
-                FIN DE LOCALIZACION
-        ====================================
-         */
-
         Bundle datosFragmento = getIntent().getExtras();
         if (datosFragmento != null) {
             datosParadero = datosFragmento.get("datosParadero").toString().split("&");
@@ -163,8 +123,9 @@ public class Mapa extends ActionBarActivity {
             String temp = datosFragmento.getString("ubicacionActual");
 
             if (temp.equals("none")) {
-
+                Log.i("pruebas", "temp equals none");
                 if(this.ubicacionActual == null){
+                    Log.i("pruebas", "ubicacion null");
                     finish();
                     return;
                 }

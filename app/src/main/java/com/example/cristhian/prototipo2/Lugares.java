@@ -8,9 +8,6 @@ import android.content.Intent;
 import android.content.res.Configuration;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
@@ -27,6 +24,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -71,16 +69,16 @@ public class Lugares extends ActionBarActivity {
 
 
     public String getNombreUsuario() {
-        if(this.datosUsuario != null) return this.datosUsuario[1];
+        if (this.datosUsuario != null) return this.datosUsuario[1];
         return "Usuario";
     }
 
     public String getCorreoUsuario() {
-        if(this.datosUsuario != null) return this.datosUsuario[2];
+        if (this.datosUsuario != null) return this.datosUsuario[2];
         return "email";
     }
 
-    public void setDatosUsuario(){
+    public void setDatosUsuario() {
 
         BaseDeDatos baseDeDatos = new BaseDeDatos(getBaseContext());
         baseDeDatos.abrir();
@@ -91,7 +89,6 @@ public class Lugares extends ActionBarActivity {
     public String[] getDatosUsuario() {
         return this.datosUsuario;
     }
-
 
 
     //====================================
@@ -109,11 +106,38 @@ public class Lugares extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sitios);
-        cerrarlugar=this;
+        cerrarlugar = this;
 
         //pintar el action bar de color azul indigo
         ActionBar bar = getSupportActionBar();
         bar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#3F51B5")));
+
+
+        /*
+        ====================================
+                   LOCALIZACION
+        ====================================
+        */
+
+        GPSTracker gps = new GPSTracker(this);
+
+        //gps.showSettingsAlert();
+
+        if (gps.canGetLocation()) {
+            Log.i("pruebas", "latitude :: " + gps.getLatitude());
+            Log.i("pruebas", "longitude :: " + gps.getLongitude());
+            this.ubicacionActual = new LatLng(gps.getLatitude(), gps.getLongitude());
+            Log.i("pruebas", "true");
+        } else {
+            Log.i("pruebas", "false");
+        }
+
+        /*
+        ====================================
+                FIN DE LOCALIZACION
+        ====================================
+         */
+
 
         //verificar si hay conexion a internet para notificarle al usuario
         //que va a trabajar con datos posiblemente antiguos
@@ -202,43 +226,6 @@ public class Lugares extends ActionBarActivity {
 
         this.progres = ProgressDialog.show(this, "Copiando datos", "Espera unos segundos...", true, false);
 
-
-
-        /*
-        ====================================
-                   LOCALIZACION
-        ====================================
-         */
-        // Acquire a reference to the system Location Manager
-        LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-
-        // Define a listener that responds to location updates
-        LocationListener locationListener = new LocationListener() {
-            public void onLocationChanged(Location location) {
-                // Called when a new location is found by the network location provider.
-                ubicacionActual = new LatLng(location.getLatitude(), location.getLongitude());
-            }
-
-            public void onStatusChanged(String provider, int status, Bundle extras) {
-            }
-
-            public void onProviderEnabled(String provider) {
-            }
-
-            public void onProviderDisabled(String provider) {
-            }
-        };
-
-        // Register the listener with the Location Manager to receive location updates
-        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, locationListener);
-
-       /*
-        ====================================
-                FIN DE LOCALIZACION
-        ====================================
-         */
-
-
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -258,15 +245,6 @@ public class Lugares extends ActionBarActivity {
         }, 3000);
 
     }
-
-
-    public String getUbicacionActual(){
-        if(ubicacionActual != null)
-            return (ubicacionActual.latitude + "&" + ubicacionActual.longitude);
-        return "";
-    }
-
-
 
 
     /**
@@ -456,6 +434,7 @@ public class Lugares extends ActionBarActivity {
 
     /**
      * agregar lugar a ricientes
+     *
      * @param id
      * @return
      */
@@ -467,5 +446,11 @@ public class Lugares extends ActionBarActivity {
         baseDeDatos.agregarReciente(datos);
         baseDeDatos.cerrar();
         return datos;
+    }
+
+    public String getUbicacionActual() {
+        if (ubicacionActual != null)
+            return ubicacionActual.latitude + "&" + ubicacionActual.longitude;
+        return "";
     }
 }

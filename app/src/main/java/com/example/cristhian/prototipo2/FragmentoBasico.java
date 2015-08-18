@@ -16,6 +16,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -153,9 +154,9 @@ public class FragmentoBasico extends Fragment implements SwipeRefreshLayout.OnRe
                         //ubicacion actual dada por lugares
 
                         String ubicacionActual = ((Lugares) (getActivity())).getUbicacionActual();
+                        Log.i("pruebas", "ubica_ac = " + ubicacionActual);
                         if (ubicacionActual.isEmpty()) {
                             intent.putExtra("ubicacionActual", "none");
-
                         } else {
                             intent.putExtra("ubicacionActual", ubicacionActual);
                         }
