@@ -24,7 +24,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -121,15 +120,13 @@ public class Lugares extends ActionBarActivity {
 
         GPSTracker gps = new GPSTracker(this);
 
-        //gps.showSettingsAlert();
-
         if (gps.canGetLocation()) {
-            Log.i("pruebas", "latitude :: " + gps.getLatitude());
-            Log.i("pruebas", "longitude :: " + gps.getLongitude());
             this.ubicacionActual = new LatLng(gps.getLatitude(), gps.getLongitude());
-            Log.i("pruebas", "true");
-        } else {
-            Log.i("pruebas", "false");
+        }
+
+        GPSTracker gps2 = new GPSTracker(this);
+        if (gps2.canGetLocation()) {
+            this.ubicacionActual = new LatLng(gps2.getLatitude(), gps2.getLongitude());
         }
 
         /*
