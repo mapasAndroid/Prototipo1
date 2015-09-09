@@ -5,7 +5,7 @@ android {
         debug {
             keyAlias 'prueb'
             keyPassword 'Alejandra1'
-            storeFile file('/home/cristhian/Downloads/prueba.keystore')
+            storeFile file('C:/Program Files/Java/jdk1.8.0_31/bin/prueba.keystore')
             storePassword 'Alejandra1'
         }
     }
@@ -32,7 +32,7 @@ android {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile fileTree(include: ['*.jar'], dir: 'libs')
     compile 'com.android.support:appcompat-v7:22.2.1'
     compile 'com.android.support:support-v4:22.2.1'
     compile 'com.google.android.gms:play-services:7.3.0'

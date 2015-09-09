@@ -64,7 +64,7 @@ public class Registro extends ActionBarActivity{
 
         this.checkBox = (CheckBox) findViewById(R.id.checkBox_registro);
 
-        String checkBoxText = "Acepto los <a href='http://pruebasmais.zz.mu/stopbus/terminos_y_condiciones.php' > Terminos y condiciones</a>";
+        String checkBoxText = "Acepto los <a href='http://maitebobrek.eshost.com.ar/stopbus/terminos_y_condiciones.php' > Terminos y condiciones</a>";
         TextView text_view_terminos_condiciones = (TextView) findViewById(R.id.text_view_terminos_condiciones);
         text_view_terminos_condiciones.setText(Html.fromHtml(checkBoxText));
         text_view_terminos_condiciones.setMovementMethod(LinkMovementMethod.getInstance());

@@ -132,8 +132,9 @@ public class Mapa extends ActionBarActivity {
             } else {
                 Double v[] = {Double.parseDouble(temp.split("&")[0]), Double.parseDouble(temp.split("&")[1])};
                 this.ubicacionActual = new LatLng(
-                        v[0],
-                        v[1]
+                     //   v[0],
+                       // v[1]
+                        7.8902781,-72.4984817
                 );
             }
 
@@ -471,6 +472,8 @@ public class Mapa extends ActionBarActivity {
      */
     public void pintarTodosBuses() {
 
+        Log.i("cm02", datosAmostrar[1]);
+
         try {
 
             JSONObject rutas = new JSONObject(datosAmostrar[1]);
@@ -484,7 +487,7 @@ public class Mapa extends ActionBarActivity {
             }
 
         } catch (Exception e) {
-            Log.i("cm01", "error insertando:: " + e.toString());
+            Log.i("cm02", "error insertando:: " + e.toString());
         }
 
     }
@@ -523,6 +526,8 @@ public class Mapa extends ActionBarActivity {
 
             //oculta la barra de progreso
             progres.hide();
+
+            Log.i("respuesta del servidor", respuesta);
 
             if (respuesta.isEmpty()) {
                 //asistente.imprimir(getFragmentManager(), "no pudimos encontrar un bus cercano", 1);
@@ -565,10 +570,8 @@ public class Mapa extends ActionBarActivity {
 
                 params.add(new BasicNameValuePair("id_ruta", id_ruta));
                 params.add(new BasicNameValuePair("usuario_usuario", datosUsuario[0]));
-                params.add(new BasicNameValuePair("nombre_usuario", datosUsuario[1]));
                 params.add(new BasicNameValuePair("ubicacion_actual", ubicacionActual.latitude + "&" + ubicacionActual.longitude));
                 //manda los dtos en la posicion "ubicacion_actal" asi: lat&long
-                params.add(new BasicNameValuePair("ubicacion_paradero", ubicacionParadero.latitude + "&" + ubicacionParadero.longitude));
 
                 httpPost.setEntity(new UrlEncodedFormEntity(params));
                 response = httpClient.execute(httpPost, localContext);

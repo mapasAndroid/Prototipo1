@@ -5,7 +5,7 @@ public class WebHelper {
 
     private Encriptador encriptador = new Encriptador();
 
-    private final String url = "http://www.pruebasmais.zz.mu/stopbus/";
+    private final String url = "http://sandbox1.ufps.edu.co/~ufps_61/stopbus/";
 
     private final String usuario = "stopbus";
 
@@ -19,9 +19,9 @@ public class WebHelper {
 
     private final String urlBuscarBus = "servicios/buscarBus.php";
 
-    private final String urlAcercaDe = "http://pruebasmais.zz.mu/stopbus/acerca_de.php";
+    private final String urlAcercaDe = "http://maitebobrek.eshost.com.ar/stopbus/acerca_de.php";
 
-    private String urlContacto = "http://pruebasmais.zz.mu/stopbus/contacto.php";
+    private String urlContacto = "http://maitebobrek.eshost.com.ar/stopbus/contacto.php";
 
 
     public WebHelper(){
