@@ -189,6 +189,7 @@ public class Mapa extends ActionBarActivity {
         frame.startAnimation(myAnimation);
 
         BusuqedaDeBus buscarBus = new BusuqedaDeBus();
+        //manda a llamar la tare buscarBus
         buscarBus.execute(this.id_ruta_string);
 
 
@@ -524,6 +525,7 @@ public class Mapa extends ActionBarActivity {
         @Override
         protected void onPostExecute(String respuesta) {
 
+            Log.i("doggy", respuesta);
             //oculta la barra de progreso
             progres.hide();
 
@@ -543,6 +545,9 @@ public class Mapa extends ActionBarActivity {
             }
 
             datosAmostrar = respuesta.split("/");
+            if(datosAmostrar[0].isEmpty()){
+                datosAmostrar[0] = "direccion exacta no identificada";
+            }
 
             //datos mostrar
             //pos 0 la direeccin de la posicion actual,
